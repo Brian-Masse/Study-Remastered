@@ -10,11 +10,15 @@ import SwiftUI
 
 let setViewModel = SetViewModel(SetModel())
 
+
+
+let card1ViewModel = CardViewModel(CardModel("FRONT", "BACK"), CardTextViewModel("this is one piece of tex") )
+
 struct ContentView: View {
     var body: some View {
-        
-        SetView(viewModel: setViewModel)
-        
+    
+        CardView( card1ViewModel )
+
     }
 }
 

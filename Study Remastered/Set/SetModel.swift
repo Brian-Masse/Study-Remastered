@@ -26,7 +26,7 @@ class SetViewModel: ObservableObject {
     
     func createNewCard() -> CardViewModel {
         
-        let newCardViewModel = CardViewModel(CardModel("term", "definition"))
+        let newCardViewModel = CardViewModel(CardModel("term", "definition"), CardTextViewModel("penis") )
         
 //        model.cards.append(newCardViewModel)
         print("creating new card")

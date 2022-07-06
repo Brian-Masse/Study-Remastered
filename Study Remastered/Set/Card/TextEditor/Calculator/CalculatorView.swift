@@ -10,17 +10,19 @@ import SwiftUI
 
 struct Calculator: View {
     
-    @StateObject var viewModel: CalculatorViewModel
+    @ObservedObject var viewModel: CalculatorViewModel
+    let shouldDisplayText: Bool
     
     var body: some View {
         
         GeometryReader { geo in
             
             VStack {
-                EquationTextView(text: viewModel.handler.equationText)
-                    .padding()
-                    .frame(height: geo.size.height / 3 )
-                
+                if shouldDisplayText {
+                    EquationTextView(text: viewModel.handler.equationText)
+                        .padding()
+                        .frame(height: geo.size.height / 3 )
+                }
                 
                 HStack {
                     ForEach( Array(viewModel.primaryFunctions.enumerated()), id: \.offset ) { enumeration in

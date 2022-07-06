@@ -12,17 +12,13 @@ import SwiftUI
 
 
 struct EquationString: View {
-    var text: String
-    
-    init(_ text: String) {
-        self.text = text
-        if text.contains("_") { self.text.removeAll(where: {$0 == "_"}) }
-    }
-    
+        
+    @EnvironmentObject var equationText: EquationText
+
     var body: some View {
-        Text( text )
+        RichTextField()
+            .environmentObject( equationText.textFieldViewModel )
     }
-    
 }
 
 @ViewBuilder func component(_ index: Int, primative: EquationText) -> some View {

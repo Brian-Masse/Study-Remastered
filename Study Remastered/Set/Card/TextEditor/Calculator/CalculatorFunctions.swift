@@ -2,8 +2,6 @@ import SwiftUI
 import Swift
 import Combine
 
-var globalID = 0
-
 class EquationTextHandler: ObservableObject {
     
     static let cursorJumps = [ "[", "]", "\\", "#", ":", "<", ">"]
@@ -13,9 +11,9 @@ class EquationTextHandler: ObservableObject {
     }
     
     @Published var equationText: EquationText
+    var textFieldViewModel: RichTextFieldViewModel
     
     lazy var cursorPos: String.Index = text.startIndex
-    
     var observer: AnyCancellable!
     
     var text: String {
@@ -26,14 +24,26 @@ class EquationTextHandler: ObservableObject {
         }set { equationText.text = newValue }
     }
     
+    init(_ textFieldViewModel: RichTextFieldViewModel) {
     
-    init(_ equationText: EquationText) {
-        
-        self.equationText = equationText
+        self.textFieldViewModel = textFieldViewModel
+        self.equationText = EquationText(textFieldViewModel, with: textFieldViewModel.viewController.text, type: "", isPrimative: false)
+    
         self.observer = equationText.objectWillChange.sink(){self.objectWillChange.send()}
         self.text = prepareText()
         moveCursor(direction: .left)
+        
+        self.setupObserver()
     }
+    
+    deinit { NotificationCenter.default.removeObserver(self) }
+    
+    func setupObserver() {
+        let name = NSNotification.Name(rawValue: RichTextFieldViewModel.attributeDidChangeKey)
+        NotificationCenter.default.addObserver(self, selector: #selector(setupEquationText), name: name, object: nil)
+    }
+    
+    @objc func setupEquationText() { equationText.setup() }
     
     //MARK: Spacer function
     
@@ -308,6 +318,9 @@ class EquationTextHandler: ObservableObject {
     
 }
 
+
+
+
 // MARK: EquationText
 class EquationText: Hashable, ObservableObject {
     
@@ -318,6 +331,8 @@ class EquationText: Hashable, ObservableObject {
                              "(": ")",
                              ")": "("
     ]
+    
+    var textFieldViewModel: RichTextFieldViewModel
     
     @Published var text: String = "" {                  //this contains all of the text for the line. It does not contain wehether its wrapper
         didSet { setup() }
@@ -330,16 +345,22 @@ class EquationText: Hashable, ObservableObject {
     var hasComponent: Bool = false
     @Published var components: [EquationText] = []      //these are seperated groups of data for things such as fractions and integrals
     
-    var identifier: Int
-    var observer: AnyCancellable!
-    
-    init ( _ identifier: Int,  text: String, type: String, hasComponent: Bool = false, isPrimative: Bool = true) {
-        
-        self.identifier = identifier
+    init (text: String, type: String, hasComponent: Bool = false, isPrimative: Bool = true, textFieldViewModel: RichTextFieldViewModel) {
         self.text = text
         self.type = type
         
-        globalID += 1
+        self.textFieldViewModel = textFieldViewModel
+        
+        self.hasComponent = hasComponent
+        self.isPrimative = !isPrimative ? false : self.isPrimative(text: text)
+        self.setup()
+    }
+    
+    init (_ textFieldViewModel: RichTextFieldViewModel, with text: String, type: String, hasComponent: Bool = false, isPrimative: Bool = true) {
+        
+        self.textFieldViewModel = textFieldViewModel
+        self.text = text
+        self.type = type
         
         self.hasComponent = hasComponent
         self.isPrimative = !isPrimative ? false : self.isPrimative(text: text)
@@ -347,23 +368,43 @@ class EquationText: Hashable, ObservableObject {
     }
     
     func setup() {
+        
         components.removeAll()
         primatives.removeAll()
         
         if hasComponent { searchForComponents(in: text) }
         else if !self.isPrimative { splitIntoPrimatives(in: text) }
+        
+        guard let function = textFieldViewModel.setActiveViewModel else { return }
+        function( textFieldViewModel )
+//        print("setting up: \( TextFieldViewController.getMemoryAdress(of: textFieldViewModel) )")
+        
+        
     }
     
     @ViewBuilder static func wrapEquationText(primative: EquationText, primatives: [EquationText]) -> some View {
         HStack(spacing: 0) {
             if primative.isPrimative {
-                EquationString(primative.text)
+                EquationString()
+                    .environmentObject(primative)
             }else {
                 ForEach(primatives, id:\.self.hashValue) { primative in
                     EquationTextView(text: primative)
                 }
             }
         }
+    }
+    
+    func createNewViewModel(with text: String) -> RichTextFieldViewModel {
+        var mutableText = text
+        mutableText.removeAll(where: { $0 == "_" })
+        let mutableAttributedString = NSMutableAttributedString(string: mutableText)
+        mutableAttributedString.setAttributes( textFieldViewModel.activeAttributes, range: NSRange(location: 0, length: mutableText.count))
+        
+        let viewModel = RichTextFieldViewModel(mutableAttributedString, editable: false, with: textFieldViewModel.activeAttributes, setActiveViewModel: textFieldViewModel.setActiveViewModel)
+        viewModel.viewController.toggleAttributes(textFieldViewModel.activeAttributes)
+        
+        return viewModel
     }
     
     func splitIntoPrimatives(in text: String) {
@@ -380,7 +421,8 @@ class EquationText: Hashable, ObservableObject {
                     let space = text.count == 1 ? text : String(text[ text.startIndex...text.index(text.startIndex, offsetBy: offset) ])
                     if !space.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                         
-                        let newPrimative = EquationText(globalID, text: space, type: "")
+//                        let newPrimative = EquationText(text: space, type: "" )
+                        let newPrimative = EquationText(createNewViewModel(with: space), with: space, type: "")
                         self.primatives.append(newPrimative)
                     }
                 }
@@ -394,7 +436,8 @@ class EquationText: Hashable, ObservableObject {
                     let content = String(stringSubSection[ EquationText.findClosure(type: "[", in: stringSubSection) ])
                     let type = String(stringSubSection[ EquationText.findClosure(type: "<", in: stringSubSection) ])
                     
-                    let newPrimative = EquationText(globalID, text: content, type: type, hasComponent: true)
+//                    let newPrimative = EquationText(text: content, type: type, hasComponent: true)
+                    let newPrimative = EquationText(createNewViewModel(with: content), with: content, type: type, hasComponent: true)
                     self.primatives.append( newPrimative )
                     
                     let remainingText = String( text[ text.index(start, offsetBy: content.count + type.count + 5    )... ]  )
@@ -415,7 +458,8 @@ class EquationText: Hashable, ObservableObject {
                 
                 if enumeration.element == "\\"  {
                     let content = String(stringSubSection[ closure ] )
-                    let newComponent = EquationText(globalID, text: content, type: "comp")
+//                    let newComponent = EquationText(text: content, type: "comp")
+                    let newComponent = EquationText(createNewViewModel(with: content), with: content, type: "comp")
                     components.append(newComponent)
                 }else {
                     let remainingText = String( stringSubSection[ text.index(closure.upperBound, offsetBy: 2)... ])
@@ -451,7 +495,7 @@ class EquationText: Hashable, ObservableObject {
     }
 
     func hash(into hasher: inout Hasher) {
-        hasher.combine(identifier)
+        hasher.combine( TextFieldViewController.getMemoryAdress(of: self) )
     }
     
     static func == (lhs: EquationText, rhs: EquationText) -> Bool {
@@ -489,7 +533,10 @@ struct EquationTextView: View  {
             InvsereTrig(primative: text, primatives: text.primatives, function: temp ) }
         
         
-        else if text.isPrimative && text.type == "" { EquationString(text.text) }
+        else if text.isPrimative && text.type == "" {
+            EquationString()
+                .environmentObject(text)
+        }
         else {
             HStack(spacing: 0) {
                 ForEach(text.primatives, id: \.self.hashValue) { primative in

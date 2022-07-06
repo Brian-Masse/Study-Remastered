@@ -10,24 +10,12 @@ import SwiftUI
 import Introspect
 
 
-class CardTextModel {
-    
-    var texts: [ Binding<String> ] = []
-    
-    func addMathEquation( at index: String.Index, in string: String ) {
-        
-        
-        
-    }
-    
-}
+var globalCounter = 0
 
 struct CardView: View {
     
     @ObservedObject var viewModel: CardViewModel
-    
     @State var editingText: String = ""
-    
     
     let commitEdits: (String) -> Void
     let editing: Bool
@@ -39,28 +27,85 @@ struct CardView: View {
     }
     
     var body: some View {
-        
-        CardText(commitEdits: commitEdits, editingText: $editingText )
-        
-        HStack {
-            Side(text: viewModel.frontContent)
-            Side(text: viewModel.backContent)
-        }.environmentObject(viewModel)
-        
+        CardText()
+            .environmentObject(viewModel)
+            .environmentObject(viewModel.frontTextViewModel)
     }
     
     struct CardText: View {
         
-        let commitEdits: (String) -> Void
+        @State var editingEquation = false
+        @State var handlerIndex = 0
         
-        @Binding var editingText: String
+        @EnvironmentObject var cardViewModel: CardViewModel
+        @EnvironmentObject var cardTextViewModel: CardTextViewModel
         
         var body: some View {
             
-            TextField("edit text here", text: $editingText) {
-                commitEdits(editingText)
-            }
+            VStack {
+                
+                RichTextEditorControls()
+                    .environmentObject( cardTextViewModel.activeViewModel )
+                
+                
+                HStack(spacing: 0) {
+                    ForEach( 0..<cardTextViewModel.componentCount, id: \.self ) { index in
+                           
+                        let handlerIndex = Int(floor(Double(index / 2)))
+                        if (index % 2) == 0 {
             
+                            let viewModel = cardTextViewModel.textFieldViewModels[ handlerIndex ]
+                            let textField = RichTextField()
+                            
+                            textField
+                                .environmentObject(viewModel)
+                                .onTapGesture() {
+                                    cardTextViewModel.activeViewModel = viewModel
+                                    
+                                    editingEquation = false
+                                }
+                        }else{
+                            let handler = cardTextViewModel.equationHandlers[ handlerIndex ]
+
+                            EquationTextView(text: handler.equationText)
+                                .padding(3)
+                                .overlay(GeometryReader { geo in
+                                    Rectangle()
+                                        .stroke(style: StrokeStyle(lineWidth: 2,
+                                                                   lineCap: .round,
+                                                                   lineJoin: .round,
+                                                                   miterLimit: 5))
+
+                                })
+                                .onTapGesture() {
+                                    editingEquation = true
+                                    self.handlerIndex = handlerIndex
+                                    
+                                    cardTextViewModel.activeViewModel = handler.textFieldViewModel
+                                }
+                                .contextMenu {
+                                    Button(role: .destructive) {
+                                        cardTextViewModel.deleteMathEquation(at: handlerIndex)
+                                        editingEquation = false
+                                    } label: {  Label("Delete Math Equation", systemImage: "delete.backward") }
+                                }
+                        }
+                    }
+                }
+                
+                Text( "add Math Equation" )
+                    .background {
+                        Rectangle()
+                            .foregroundColor(.green)
+                    }
+                    .onTapGesture { cardTextViewModel.addMathEquation(at: cardTextViewModel.activeViewModel ) }
+                
+                if editingEquation {
+                    Calculator(viewModel: CalculatorViewModel( CalculatorModel( cardTextViewModel.equationHandlers[handlerIndex] ) ), shouldDisplayText: false)
+                }
+                
+                
+            }
         }
     }
     
