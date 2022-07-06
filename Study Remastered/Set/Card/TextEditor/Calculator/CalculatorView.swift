@@ -31,6 +31,7 @@ struct Calculator: View {
                     }
                 }
                 let width = (geo.size.width - ( 5 * 6)) / 5
+            
                 LazyVGrid(columns: [ GridItem(.adaptive(minimum: width, maximum: width), spacing: 5) ], spacing: 2 ) {
                     ForEach( Array(viewModel.functions.enumerated()), id: \.offset ) { enumeration in
                         CalculatorButton(function: enumeration.element!, shiftFunction: viewModel.shiftFuntions[enumeration.offset] ?? enumeration.element!, alphaFunction: viewModel.alphaFunctions[enumeration.offset] ?? enumeration.element! )

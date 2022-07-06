@@ -51,12 +51,9 @@ class CardTextViewModel: ObservableObject {
     func updateComponentCount() { model.componentCount = textFieldViewModels.count + equationHandlers.count }
     
     func addMathEquation( at textFieldViewModel: RichTextFieldViewModel) {
-        
         let index = textFieldViewModels.firstIndex(where: { $0 == textFieldViewModel })!
-        
-        let handlerIndex = Int(floor(Double(index / 2)))
-        let text = textFieldViewModels[ handlerIndex ].viewController.text
-        let attributedText = textFieldViewModels[ handlerIndex ].viewController.textView.attributedText
+        let text = textFieldViewModel.viewController.text
+        let attributedText = textFieldViewModels[ index ].viewController.textView.attributedText
         guard let range = Range( textFieldViewModel.viewController.getCursorRange(), in: text ) else { return }
         
         let leadingText: NSAttributedString = {
@@ -77,19 +74,19 @@ class CardTextViewModel: ObservableObject {
         }()
         
         let mathMutableAttributedString = NSMutableAttributedString(string: "MT")
-        mathMutableAttributedString.setAttributes(textFieldViewModels[ handlerIndex ].activeAttributes, range: NSRange(location: 0, length: 2))
-        let viewModel = RichTextFieldViewModel(mathMutableAttributedString, editable: false, with: textFieldViewModels[ handlerIndex ].activeAttributes)
+        mathMutableAttributedString.setAttributes(textFieldViewModels[ index ].activeAttributes, range: NSRange(location: 0, length: 2))
+        let viewModel = RichTextFieldViewModel(mathMutableAttributedString, editable: false, with: textFieldViewModels[ index ].activeAttributes)
         
         let handler = EquationTextHandler( viewModel  )
     
-        equationHandlers.insert(handler, at: handlerIndex)
+        equationHandlers.insert(handler, at: index)
         
     
-        textFieldViewModels[ handlerIndex ].observer.cancel()
-        textFieldViewModels[ handlerIndex ] = RichTextFieldViewModel( leadingText, with: textFieldViewModels[ handlerIndex ].activeAttributes )
-        textFieldViewModels.insert( RichTextFieldViewModel(trailingText, with: textFieldViewModels[ handlerIndex ].activeAttributes), at: handlerIndex + 1 )
+        textFieldViewModels[ index ].observer.cancel()
+        textFieldViewModels[ index ] = RichTextFieldViewModel( leadingText, with: textFieldViewModels[ index ].activeAttributes )
+        textFieldViewModels.insert( RichTextFieldViewModel(trailingText, with: textFieldViewModels[ index ].activeAttributes), at: index + 1 )
     
-        for index in handlerIndex + 1...textFieldViewModels.count - 1 {
+        for index in index + 1...textFieldViewModels.count - 1 {
             textFieldViewModels[index].observer.cancel()
             textFieldViewModels[index] = RichTextFieldViewModel( textFieldViewModels[index].viewController.textView.attributedText, with: textFieldViewModels[index].activeAttributes )
         }

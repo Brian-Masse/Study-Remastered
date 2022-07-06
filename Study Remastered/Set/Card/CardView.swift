@@ -41,70 +41,87 @@ struct CardView: View {
         @EnvironmentObject var cardTextViewModel: CardTextViewModel
         
         var body: some View {
-            
-            VStack {
-                
-                RichTextEditorControls()
-                    .environmentObject( cardTextViewModel.activeViewModel )
-                
-                
-                HStack(spacing: 0) {
-                    ForEach( 0..<cardTextViewModel.componentCount, id: \.self ) { index in
-                           
-                        let handlerIndex = Int(floor(Double(index / 2)))
-                        if (index % 2) == 0 {
-            
-                            let viewModel = cardTextViewModel.textFieldViewModels[ handlerIndex ]
-                            let textField = RichTextField()
+            GeometryReader { geo in
+                VStack {
+                    
+                    RichTextEditorControls()
+                        .environmentObject( cardTextViewModel.activeViewModel )
+                    
+                    
+    //                HStack(spacing: 0)
+    //                LazyVGrid(columns: [ GridItem(.adaptive(minimum: width, maximum: width), spacing: 5) ], spacing: 2 )
+//                    LazyVGrid(columns: [ GridItem(.adaptive(minimum: 5, maximum: geo.size.width), spacing: 5) ], alignment: .leading, spacing: 2 ) {
+//                    HStack {
+//
+//                        Text("hello")
+////                            .alignmentGuide(.trailing, computeValue: { _ in  50 })
+
+//                        ForEach( 0..<cardTextViewModel.componentCount, id: \.self ) { index in
                             
-                            textField
-                                .environmentObject(viewModel)
-                                .onTapGesture() {
-                                    cardTextViewModel.activeViewModel = viewModel
-                                    
-                                    editingEquation = false
-                                }
-                        }else{
-                            let handler = cardTextViewModel.equationHandlers[ handlerIndex ]
-
-                            EquationTextView(text: handler.equationText)
-                                .padding(3)
-                                .overlay(GeometryReader { geo in
-                                    Rectangle()
-                                        .stroke(style: StrokeStyle(lineWidth: 2,
-                                                                   lineCap: .round,
-                                                                   lineJoin: .round,
-                                                                   miterLimit: 5))
-
-                                })
-                                .onTapGesture() {
-                                    editingEquation = true
-                                    self.handlerIndex = handlerIndex
-                                    
-                                    cardTextViewModel.activeViewModel = handler.textFieldViewModel
-                                }
-                                .contextMenu {
-                                    Button(role: .destructive) {
-                                        cardTextViewModel.deleteMathEquation(at: handlerIndex)
-                                        editingEquation = false
-                                    } label: {  Label("Delete Math Equation", systemImage: "delete.backward") }
-                                }
+                    WrappedHStack(cardTextViewModel.componentCount, in: geo) { index in
+                                
+                               createStringPiece(at: index)
+//                    }
+//                        }
+                    }
+//                    .background(Rectangle().foregroundColor( .blue ))
+                    
+                    Text( "add Math Equation" )
+                        .background {
+                            Rectangle()
+                                .foregroundColor(.green)
                         }
+                        .onTapGesture { cardTextViewModel.addMathEquation(at: cardTextViewModel.activeViewModel ) }
+                    
+                    if editingEquation {
+                        Calculator(viewModel: CalculatorViewModel( CalculatorModel( cardTextViewModel.equationHandlers[handlerIndex] ) ), shouldDisplayText: false)
                     }
+                    
+                    
                 }
+            }
+        }
+        
+        func createStringPiece(at index: Int) -> some View {
+            let handlerIndex = Int(floor(Double(index / 2)))
+            if (index % 2) == 0 {
+
+                let viewModel = cardTextViewModel.textFieldViewModels[ handlerIndex ]
+                let textField = RichTextField()
                 
-                Text( "add Math Equation" )
-                    .background {
+                return AnyView(textField
+                    .environmentObject(viewModel)
+                    .onTapGesture() {
+                        cardTextViewModel.activeViewModel = viewModel
+                        editingEquation = false
+                    })
+                    
+            }else{
+                let handler = cardTextViewModel.equationHandlers[ handlerIndex ]
+
+                return AnyView(EquationTextView(text: handler.equationText)
+                    .fixedSize()
+                    .padding(3)
+                    .overlay(GeometryReader { geo in
                         Rectangle()
-                            .foregroundColor(.green)
+                            .stroke(style: StrokeStyle(lineWidth: 2,
+                                                       lineCap: .round,
+                                                       lineJoin: .round,
+                                                       miterLimit: 5))
+
+                    })
+                    .onTapGesture() {
+                        editingEquation = true
+                        self.handlerIndex = handlerIndex
+                        
+                        cardTextViewModel.activeViewModel = handler.textFieldViewModel
                     }
-                    .onTapGesture { cardTextViewModel.addMathEquation(at: cardTextViewModel.activeViewModel ) }
-                
-                if editingEquation {
-                    Calculator(viewModel: CalculatorViewModel( CalculatorModel( cardTextViewModel.equationHandlers[handlerIndex] ) ), shouldDisplayText: false)
-                }
-                
-                
+                    .contextMenu {
+                        Button(role: .destructive) {
+                            cardTextViewModel.deleteMathEquation(at: handlerIndex)
+                            editingEquation = false
+                        } label: {  Label("Delete Math Equation", systemImage: "delete.backward") }
+                    })
             }
         }
     }

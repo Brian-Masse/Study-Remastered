@@ -87,6 +87,7 @@ struct RichTextField: View {
             .frame(width: viewModel.viewController.size.width, height: viewModel.viewController.size.height)
             .padding(.horizontal, -4)
             .padding(.vertical, -7)
+            .background(Rectangle().foregroundColor(.red))
         }
     }
 }
