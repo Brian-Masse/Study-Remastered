@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import Combine
 
-//MARK: RichTextField
+//MARK: RichTextFieldViewModel
 class RichTextFieldViewModel: ObservableObject, Equatable {
     
     static let attributeDidChangeKey: String = "Masse.Brian.attributeDidChange"
@@ -24,6 +24,8 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
         NotificationCenter.default.post(name: name, object: nil)
     } }
     
+    @Published var activeFont: String = GlobalTextConstants.fontFamily
+    @Published var activeFontSize: CGFloat = GlobalTextConstants.fontSize
     
     var observer: AnyCancellable!
     var setActiveViewModel: ((RichTextFieldViewModel) -> Void)?
@@ -87,7 +89,7 @@ struct RichTextField: View {
             .frame(width: viewModel.viewController.size.width, height: viewModel.viewController.size.height)
             .padding(.horizontal, -4)
             .padding(.vertical, -7)
-            .background(Rectangle().foregroundColor(.red))
+//            .background(Rectangle().foregroundColor(.red))
         }
     }
 }

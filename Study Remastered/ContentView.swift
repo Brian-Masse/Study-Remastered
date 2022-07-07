@@ -21,12 +21,9 @@ struct ContentView: View {
     var body: some View {
     
         CardView( card1ViewModel )
-//        GeometryReader { geo in
-//            WrappedHStack(texts.count, in: geo) { i in
-//                Text(texts[i])
-//                    .background(Rectangle().foregroundColor(.green))
-//            }
-//        }
+            .background(GeometryReader { _ in
+                TextureFill().ignoresSafeArea()
+            })
         
     }
 }

@@ -8,12 +8,6 @@
 import Foundation
 import UIKit
 
-struct GlobalTextConstants {
-    static let fontFamily = "Helvetica"
-    static let fontSize: CGFloat = 12
-}
-
-
 class EditableTextUtilities {
     
     static func consolodateFonts( _ fonts: [UIFont] ) -> UIFont {
@@ -34,6 +28,34 @@ class EditableTextUtilities {
         var font = UIFont(name: fontFamily, size: fontSize)
         for trait in commonTraits { font = font?.withTraits(trait) }
         return font!
+    }
+    
+    static func setFont( _ viewController: TextFieldViewController, with fontString: String? = nil, and fontSize: CGFloat? = nil ) -> (NSAttributedString, UIFont)  {
+        
+        let mutableAttributedString = NSMutableAttributedString(attributedString: viewController.textView.attributedText)
+        let subString = NSMutableAttributedString( attributedString: mutableAttributedString.attributedSubstring(from: viewController.textView.selectedRange) )
+        
+        let startIndex = viewController.textView.selectedRange.lowerBound
+        var range = NSRange()
+        
+        var returningFont: UIFont? = nil
+        
+        while range.upperBound != subString.length {
+            guard let font: UIFont = subString.attribute(.font, at: range.upperBound, effectiveRange: &range) as? UIFont else { break }
+        
+            returningFont = UIFont(name:  fontString == nil ? font.familyName : fontString!, size: fontSize == nil ? font.pointSize : fontSize!)!
+            returningFont = returningFont!.withTraits( font.fontDescriptor.symbolicTraits )
+            
+            let fullRange = NSRange(location: startIndex + range.lowerBound, length: range.length)
+            mutableAttributedString.addAttributes([.font: returningFont as Any ], range: fullRange)
+        }
+
+        var font = returningFont
+        if returningFont == nil {
+            font = UIFont(name:  fontString == nil ? viewController.getFont()!.familyName : fontString!, size: fontSize == nil ? viewController.getFont()!.pointSize : fontSize!)!
+            font = font?.withTraits( viewController.getFont()!.fontDescriptor.symbolicTraits )
+        }
+        return (mutableAttributedString, font!)
     }
     
     static func addTraitTo( _ viewController: TextFieldViewController, with trait: UIFontDescriptor.SymbolicTraits ) -> NSAttributedString  {

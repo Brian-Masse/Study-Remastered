@@ -25,6 +25,8 @@
 		C92EEFF528752F4D00D6A81E /* RichTextEditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92EEFF428752F4D00D6A81E /* RichTextEditorViewModel.swift */; };
 		C92F30A02875FAD700A7AA87 /* UIUinversal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92F309F2875FAD700A7AA87 /* UIUinversal.swift */; };
 		C92F30A22876079600A7AA87 /* CardTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92F30A12876079600A7AA87 /* CardTextView.swift */; };
+		C92F30A528760A4700A7AA87 /* Goku.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C92F30A428760A4700A7AA87 /* Goku.ttf */; };
+		C92F30A828760CC000A7AA87 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92F30A728760CC000A7AA87 /* Color.swift */; };
 		C9CE53E7285ACB9E0028A2FF /* RichTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9CE53E6285ACB9E0028A2FF /* RichTextEditor.swift */; };
 		C9CE53E9285ACE8E0028A2FF /* UIKitTextUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9CE53E8285ACE8E0028A2FF /* UIKitTextUtilities.swift */; };
 		E1B3849BD112820E3E9161E7 /* Pods_Study_Remastered.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 726A778CB0712E74C23EAF75 /* Pods_Study_Remastered.framework */; };
@@ -53,6 +55,9 @@
 		C92EEFF428752F4D00D6A81E /* RichTextEditorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RichTextEditorViewModel.swift; sourceTree = "<group>"; };
 		C92F309F2875FAD700A7AA87 /* UIUinversal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIUinversal.swift; sourceTree = "<group>"; };
 		C92F30A12876079600A7AA87 /* CardTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTextView.swift; sourceTree = "<group>"; };
+		C92F30A428760A4700A7AA87 /* Goku.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Goku.ttf; sourceTree = "<group>"; };
+		C92F30A628760AE800A7AA87 /* Study-Remastered-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Study-Remastered-Info.plist"; sourceTree = SOURCE_ROOT; };
+		C92F30A728760CC000A7AA87 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		C9CE53E6285ACB9E0028A2FF /* RichTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RichTextEditor.swift; sourceTree = "<group>"; };
 		C9CE53E8285ACE8E0028A2FF /* UIKitTextUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKitTextUtilities.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -107,8 +112,11 @@
 		C919CFA228569F62008135C8 /* Study Remastered */ = {
 			isa = PBXGroup;
 			children = (
+				C92F30A628760AE800A7AA87 /* Study-Remastered-Info.plist */,
+				C92F30A328760A1F00A7AA87 /* Fonts */,
 				C919CFA328569F62008135C8 /* Study_RemasteredApp.swift */,
 				C92F309F2875FAD700A7AA87 /* UIUinversal.swift */,
+				C92F30A728760CC000A7AA87 /* Color.swift */,
 				C919CFA528569F62008135C8 /* ContentView.swift */,
 				C919CFC52856A85A008135C8 /* Set */,
 				C919CFA728569F63008135C8 /* Assets.xcassets */,
@@ -179,6 +187,14 @@
 			path = RichTextEditor;
 			sourceTree = "<group>";
 		};
+		C92F30A328760A1F00A7AA87 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				C92F30A428760A4700A7AA87 /* Goku.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -239,6 +255,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C92F30A528760A4700A7AA87 /* Goku.ttf in Resources */,
 				C919CFAB28569F63008135C8 /* Preview Assets.xcassets in Resources */,
 				C919CFA828569F63008135C8 /* Assets.xcassets in Resources */,
 			);
@@ -304,6 +321,7 @@
 				C919CFA428569F62008135C8 /* Study_RemasteredApp.swift in Sources */,
 				C92F30A02875FAD700A7AA87 /* UIUinversal.swift in Sources */,
 				C92D21BA286E960000FA586C /* RichTextEditorView.swift in Sources */,
+				C92F30A828760CC000A7AA87 /* Color.swift in Sources */,
 				C919CFB828569FAA008135C8 /* CalculatorModel.swift in Sources */,
 				C919CFBE2856A079008135C8 /* CardModel.swift in Sources */,
 				C919CFBA28569FAA008135C8 /* Math Components.swift in Sources */,
@@ -443,6 +461,7 @@
 				DEVELOPMENT_TEAM = LN4JU8GNV7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Study-Remastered-Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -474,6 +493,7 @@
 				DEVELOPMENT_TEAM = LN4JU8GNV7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Study-Remastered-Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

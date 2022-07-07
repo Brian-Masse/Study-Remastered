@@ -204,6 +204,7 @@ class EquationTextHandler: ObservableObject {
         
         self.text = fillWithSpace(text)
         self.text = prepareText()
+//        equationText.setup()
     }
     
     func deleteParenthesis(_ type: Character) -> String {
@@ -281,6 +282,7 @@ class EquationTextHandler: ObservableObject {
         addString(code)
         moveCursor(direction: .left)
         text = prepareText()
+//        equationText.setup()
     }
     
     func insertParenthesis(_ type: String) {
@@ -334,7 +336,8 @@ class EquationText: Hashable, ObservableObject {
     
     var textFieldViewModel: RichTextFieldViewModel
     
-    @Published var text: String = "" {                  //this contains all of the text for the line. It does not contain wehether its wrapper
+    @Published var text: String = ""
+    {                  //this contains all of the text for the line. It does not contain wehether its wrapper
         didSet { setup() }
     }
     

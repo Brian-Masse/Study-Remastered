@@ -31,13 +31,13 @@ struct SetView: View {
                         .shadow(radius: 5)
                 }
                 .onTapGesture { showingCardCreator = true }
-                .sheet(isPresented: $showingCardCreator) {
-                    
-                    CardView(viewModel.createNewCard(), editing: true ) { string in
-                        
-                        print("this is the text being edited \( string )")
-                    }
-                }
+//                .sheet(isPresented: $showingCardCreator) {
+//                    
+////                    CardView(viewModel.createNewCard(), editing: true ) { string in
+//                        
+//                        
+//                    }
+//                }
         }
         
         
