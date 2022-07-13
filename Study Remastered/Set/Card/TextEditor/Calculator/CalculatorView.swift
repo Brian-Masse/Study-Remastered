@@ -12,25 +12,25 @@ struct Calculator: View {
     
     @ObservedObject var viewModel: CalculatorViewModel
     let shouldDisplayText: Bool
+    let geo: GeometryProxy
     
     var body: some View {
-        
-        GeometryReader { geo in
+            
+        VStack {
+            if shouldDisplayText {
+                EquationTextView(text: viewModel.handler.equationText)
+                    .padding()
+                    .frame(height: geo.size.height / 3 )
+            }
             
             VStack {
-                if shouldDisplayText {
-                    EquationTextView(text: viewModel.handler.equationText)
-                        .padding()
-                        .frame(height: geo.size.height / 3 )
-                }
-                
                 HStack {
                     ForEach( Array(viewModel.primaryFunctions.enumerated()), id: \.offset ) { enumeration in
                         PrimaryCalculatorButton(function: enumeration.element)
                             .environmentObject(viewModel)
                     }
                 }
-                let width = (geo.size.width - ( 5 * 6)) / 5
+                let width = (geo.size.width - ( 6 * 6)) / 5
             
                 LazyVGrid(columns: [ GridItem(.adaptive(minimum: width, maximum: width), spacing: 5) ], spacing: 2 ) {
                     ForEach( Array(viewModel.functions.enumerated()), id: \.offset ) { enumeration in
@@ -38,7 +38,9 @@ struct Calculator: View {
                             .environmentObject(viewModel)
                     }
                 }
-            }
+            }.background(Rectangle()
+                .foregroundColor(Colors.UIprimaryGrey)
+                .frame(maxHeight: geo.size.height ))
         }
     }
 }

@@ -22,7 +22,7 @@ class TextFieldViewController: UIViewController, UITextViewDelegate, ObservableO
     var parentViewModel: RichTextFieldViewModel!
     
     @Published var currentlyEditing: Bool = false
-    @Published var size: CGSize = .zero
+    @Published var size: CGSize = .zero // when the viewController lays out the textView and shit, it will take this value, which is the correct size
     @Published var text: String = "" { didSet { SetViewFrames() } }
     
     init() { super.init(nibName: nil, bundle: nil) }
@@ -35,69 +35,43 @@ class TextFieldViewController: UIViewController, UITextViewDelegate, ObservableO
     }
     
     override func viewDidAppear(_ animated: Bool) { }
-    override func viewDidLayoutSubviews() { view.frame.size = textView.frame.size }
+    override func viewDidLayoutSubviews() { SetViewFrames() }
     
     override func viewDidLoad() {
-
-        SetViewFrames()
-        
         textView.text = text
         textView.isEditable = editable
         textView.allowsEditingTextAttributes = editable
-        textView.isScrollEnabled = false
         textView.delegate = self
         textView.backgroundColor = .clear
+        
+        textView.isScrollEnabled = false
         textView.translatesAutoresizingMaskIntoConstraints = false
         
         textView.textColor = UIColor( Colors.UIprimaryCream )
         textView.font = EditableTextUtilities.setFont(self, with: GlobalTextConstants.UIFontFamily, and: 30).1
         
-        textView.backgroundColor = UIColor(red: 0, green: 0, blue: 1, alpha: 0.5)
-        view.backgroundColor = .red
+//        textView.backgroundColor = UIColor(red: 0, green: 0, blue: 1, alpha: 0.5)
+//        view.backgroundColor = .red
         
         view.addSubview(textView)
         SetViewFrames()
     }
     
     func SetViewFrames() {
-//        let fixedHeight = textView.frame.size.height
+        let fixedHeight = size.height
         
-//        let newSize: CGSize = {
-//            print("before: \(textView.bounds)")
-//            print("before: \(textView.frame.size.width): \(textView.text)")
-            
-//            if textView.bounds.maxX >= globalFrame.maxX - 50 {
-////                print("after: \(textView.sizeThatFits(CGSize(width: globalFrame.size.width - 200, height: CGFloat.greatestFiniteMagnitude)))")
-//                return textView.sizeThatFits(CGSize(width: 300, height: CGFloat.greatestFiniteMagnitude))
-                
-//            }
-//            return textView.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: fixedHeight ))
-//        }()
-//
-//        print(newSize)
-//    let frameSize = CGSize(width: min( 300, newSize.width), height:  textView.frame.size.height)
+        let updatedSize = textView.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: fixedHeight ))
         
-        
-        let fixedHeight = textView.frame.size.height
-        let fixedWidth = textView.frame.size.width
-        
-        
-        let newSize: CGSize = {
-           
-            if fixedWidth >= 300 {
-                let newSize = textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
-                print("the sixe shudl wrap")
-                return CGSize(width: max(newSize.width, fixedWidth), height: newSize.height )
-            }else {
-                let newSize = textView.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: fixedHeight))
-                return CGSize(width: newSize.width, height:  max(newSize.height, fixedHeight))
+        var newSize: CGSize = {
+            if updatedSize.width >= 350 {
+                return textView.sizeThatFits(CGSize(width: 350, height: CGFloat.greatestFiniteMagnitude))
             }
+            return textView.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: fixedHeight ))
         }()
-        
+    
+        newSize = CGSize(width: newSize.width, height:  newSize.height)
         textView.frame.size = newSize
-        view.frame.size     = newSize
         size                = newSize
-        
     }
     
     
@@ -134,7 +108,6 @@ class TextFieldViewController: UIViewController, UITextViewDelegate, ObservableO
     
     func textViewDidChange(_ textView: UITextView) {
         changeStoredText(with: textView)
-        SetViewFrames()
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) { currentlyEditing = true }
@@ -188,7 +161,7 @@ class TextFieldViewController: UIViewController, UITextViewDelegate, ObservableO
     
     func getFont() -> UIFont? {
         if textView.text.count == 0 { return UIFont(name: GlobalTextConstants.fontFamily, size: GlobalTextConstants.fontSize ) }
-        guard let font = textView.attributedText.attribute(.font, at: textView.selectedRange.upperBound - 1, effectiveRange: nil) as? UIFont else {return nil}
+        guard let font = textView.attributedText.attribute(.font, at: max(textView.selectedRange.upperBound - 1, 0), effectiveRange: nil) as? UIFont else {return nil}
         return font
     }
     

@@ -106,7 +106,6 @@ struct VCRep: UIViewControllerRepresentable {
     func updateUIViewController(_ vc: TextFieldViewController, context: Context) {
         
         if TextFieldViewController.getMemoryAdress(of: vc) != TextFieldViewController.getMemoryAdress(of: self.viewController) {
-        
             vc.changeStoredText(with: viewController.textView)
             updateVC(vc)
             vc.SetViewFrames()

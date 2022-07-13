@@ -97,7 +97,6 @@ struct StyledUIText: View {
 }
 
 struct TextureFill: View {
-    
     var body: some View {
         ZStack {
             Rectangle().foregroundColor(Colors.fillPrimaryGrey)
@@ -117,6 +116,16 @@ extension Image {
             .frame(width: geo.size.width, height: geo.size.height)
             .clipped()
         }
+    }
+}
+
+struct VerticalSpace: View {
+    let size: CGFloat
+    
+    var body: some View {
+        Rectangle()
+            .frame(height: size)
+            .foregroundColor(.clear)
     }
 }
 

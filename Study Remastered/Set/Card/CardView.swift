@@ -33,7 +33,6 @@ struct CardView: View {
                 Side(geo: geo)
                     .environmentObject( viewModel )
                     .environmentObject( activeCardText )
-                    .offset(y: 100)
                 Spacer()
             }
         }
@@ -49,24 +48,41 @@ struct CardView: View {
         let cornerRadius: CGFloat = 30
         
         var body: some View {
-            ZStack(alignment: .center) {
-                
-                TextureFill().cornerRadius(cornerRadius)
-                RoundedRectangle(cornerRadius: cornerRadius)
-                    .stroke(style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
-                    .foregroundColor(Colors.UIprimaryCream)
-                
+            ZStack {
                 VStack {
-                    RichTextEditorControls(geo: geo)
-                        .environmentObject( cardTextViewModel.activeViewModel )
-                        .offset(y: -cornerRadius)
-                    Spacer()
+                    ZStack(alignment: .center) {
+                        
+                        TextureFill().cornerRadius(cornerRadius)
+                        RoundedRectangle(cornerRadius: cornerRadius)
+                            .stroke(style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
+                            .foregroundColor(Colors.UIprimaryCream)
+
+                        VStack {
+                            RichTextEditorControls(geo: geo)
+                                .environmentObject( cardTextViewModel.activeViewModel )
+                                .offset(y: -cornerRadius)
+                            Spacer()
+                        }
+
+                        CardText()
+                            .environmentObject( cardTextViewModel )
+                            .frame(maxHeight: geo.size.height * 0.6)
+                    }
+                    .frame(width: geo.size.width * 0.95, height: geo.size.height * 0.8)
+                    .padding(.top)
                 }
                 
-                CardText()
-                    .environmentObject( cardTextViewModel )
-                
-            }.frame(width: geo.size.width * 0.95, height: geo.size.height * 0.8)
+                if cardTextViewModel.editingEquation {
+                    VStack {
+                        Spacer()
+                        let handler = cardTextViewModel.equationHandlers[cardTextViewModel.handlerIndex]
+                        StyledUIText("done", symbol: "checkmark.rectangle").onTapGesture { cardTextViewModel.editingEquation = false }
+                            .frame(width: geo.size.width - 10, height: 20)
+                        Calculator(viewModel: CalculatorViewModel( CalculatorModel( handler ) ), shouldDisplayText: false, geo: geo)
+                    }
+                }
+                Rectangle().foregroundColor(.clear)
+            }
         }
     }
 }

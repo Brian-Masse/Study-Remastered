@@ -27,6 +27,8 @@ class CardTextViewModel: ObservableObject {
     @Published var activeViewModel: RichTextFieldViewModel!
     
     @Published var editingEquation = false
+    @Published var handlerIndex = 0
+    @Published var viewModelIndex = 0
     
     init( _ model: CardTextModel) {
         self.model = model
@@ -55,7 +57,7 @@ class CardTextViewModel: ObservableObject {
     func addMathEquation( at textFieldViewModel: RichTextFieldViewModel) {
         if editingEquation { return }
         
-        let index = textFieldViewModels.firstIndex(where: { $0 == textFieldViewModel })!
+        let index = viewModelIndex
         let text = textFieldViewModel.viewController.text
         let attributedText = textFieldViewModels[ index ].viewController.textView.attributedText
         guard let range = Range( textFieldViewModel.viewController.getCursorRange(), in: text ) else { return }
@@ -100,6 +102,8 @@ class CardTextViewModel: ObservableObject {
                                                                                    with: equationHandlers[index].textFieldViewModel.activeAttributes) )
         }
         
+        handlerIndex = index
+        editingEquation = true
         updateComponentCount()
     }
     
