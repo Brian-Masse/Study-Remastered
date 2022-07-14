@@ -8,18 +8,14 @@
 import Foundation
 import SwiftUI
 
-struct CardText: View {
+struct CardTextView: View {
     
     @EnvironmentObject var cardTextViewModel: CardTextViewModel
     
+    let geo: GeometryProxy
+    
     var body: some View {
-        
-        GeometryReader { geo in
-            ZStack() {
-                WrappedHStack(cardTextViewModel.componentCount, in: geo) { index in createStringPiece(at: index) }
-                Rectangle().foregroundColor(.clear)
-            }
-        }
+        WrappedHStack(cardTextViewModel.componentCount, in: geo) { index in createStringPiece(at: index) }
     }
     
     func createStringPiece(at index: Int) -> some View {
@@ -31,11 +27,11 @@ struct CardText: View {
                 
                 return AnyView(textField
                     .environmentObject(viewModel)
-                    .onTapGesture() {
+                    .onTapGesture() { if cardTextViewModel.editing {
                         cardTextViewModel.activeViewModel = viewModel
                         cardTextViewModel.viewModelIndex = handlerIndex
                         cardTextViewModel.editingEquation = false
-                    })
+                    }})
             }
         }else{
             if !cardTextViewModel.editingEquation || cardTextViewModel.handlerIndex == handlerIndex {
@@ -52,16 +48,19 @@ struct CardText: View {
                                     .stroke(style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round, miterLimit: 5))
                                     .foregroundColor(Colors.UIprimaryCream)
                             })
-                            .onTapGesture() {
+                            .onTapGesture() { if cardTextViewModel.editing {
                                 cardTextViewModel.editingEquation = true
                                 cardTextViewModel.handlerIndex = handlerIndex
                                 cardTextViewModel.activeViewModel = handler.textFieldViewModel
-                            }
+                                
+                                ContentView.calculator.viewModel = CalculatorViewModel( CalculatorModel(handler ))
+                                ContentView.calculatorIsActive = true
+                            }}
                             .contextMenu {
-                                Button(role: .destructive) {
+                                Button(role: .destructive) { if cardTextViewModel.editing {
                                     cardTextViewModel.deleteMathEquation(at: handlerIndex)
                                     cardTextViewModel.editingEquation = false
-                                } label: {  Label("Delete Math Equation", systemImage: "delete.backward") }
+                                }} label: {  Label("Delete Math Equation", systemImage: "delete.backward") }
                             }
                         if cardTextViewModel.editingEquation { Spacer() }
                     })

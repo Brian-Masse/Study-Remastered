@@ -15,11 +15,11 @@ class TextFieldViewController: UIViewController, UITextViewDelegate, ObservableO
     
     let textView = UITextView()
     
-    var editable: Bool = true
     var selectedRange: NSRange = .init()
     var textViewInsertedElement: Bool = false
-    
+     
     var parentViewModel: RichTextFieldViewModel!
+    var width: CGFloat = 0
     
     @Published var currentlyEditing: Bool = false
     @Published var size: CGSize = .zero // when the viewController lays out the textView and shit, it will take this value, which is the correct size
@@ -27,31 +27,27 @@ class TextFieldViewController: UIViewController, UITextViewDelegate, ObservableO
     
     init() { super.init(nibName: nil, bundle: nil) }
     
-    init( _ text: String, parent: RichTextFieldViewModel, editable: Bool = true) {
+    init( _ text: String, parent: RichTextFieldViewModel, in width: CGFloat) {
         super.init(nibName: nil, bundle: nil)
-        self.editable = editable
+        self.width = width
         self.text = text
         self.parentViewModel = parent
+        self.textView.text = text
     }
     
     override func viewDidAppear(_ animated: Bool) { }
     override func viewDidLayoutSubviews() { SetViewFrames() }
     
     override func viewDidLoad() {
-        textView.text = text
-        textView.isEditable = editable
-        textView.allowsEditingTextAttributes = editable
+        
         textView.delegate = self
         textView.backgroundColor = .clear
         
         textView.isScrollEnabled = false
         textView.translatesAutoresizingMaskIntoConstraints = false
         
-        textView.textColor = UIColor( Colors.UIprimaryCream )
-        textView.font = EditableTextUtilities.setFont(self, with: GlobalTextConstants.UIFontFamily, and: 30).1
-        
-//        textView.backgroundColor = UIColor(red: 0, green: 0, blue: 1, alpha: 0.5)
-//        view.backgroundColor = .red
+//        textView.textColor = UIColor( Colors.UIprimaryCream )
+//        textView.font = EditableTextUtilities.setFont(self, with: GlobalTextConstants.UIFontFamily, and: 30).1
         
         view.addSubview(textView)
         SetViewFrames()
@@ -63,8 +59,8 @@ class TextFieldViewController: UIViewController, UITextViewDelegate, ObservableO
         let updatedSize = textView.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: fixedHeight ))
         
         var newSize: CGSize = {
-            if updatedSize.width >= 350 {
-                return textView.sizeThatFits(CGSize(width: 350, height: CGFloat.greatestFiniteMagnitude))
+            if updatedSize.width >= width {
+                return textView.sizeThatFits(CGSize(width: width, height: CGFloat.greatestFiniteMagnitude))
             }
             return textView.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: fixedHeight ))
         }()
@@ -72,6 +68,11 @@ class TextFieldViewController: UIViewController, UITextViewDelegate, ObservableO
         newSize = CGSize(width: newSize.width, height:  newSize.height)
         textView.frame.size = newSize
         size                = newSize
+    }
+    
+    func setEditability(with allowsEdits: Bool) {
+        textView.isSelectable = allowsEdits
+        textView.isEditable = allowsEdits
     }
     
     

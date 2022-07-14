@@ -11,19 +11,17 @@ import SwiftUI
 
 struct CardModel {
     enum MatchType {
-        
         case perfect
         case assumedCorrect
         case incorrect
     }
     
-    let frontContent: String
-    let backContent: String
+    var frontTextViewModel: CardTextViewModel
+    var backTextViewModel: CardTextViewModel
     
-    init( _ frontContent: String, _ backContent: String ) {
-        
-        self.frontContent = frontContent
-        self.backContent = backContent
+    init( _ frontTextViewModel: CardTextViewModel, _ backTextViewModel: CardTextViewModel ) {
+        self.frontTextViewModel = frontTextViewModel
+        self.backTextViewModel = backTextViewModel
     }   
 }
 
@@ -31,17 +29,21 @@ struct CardModel {
 class CardViewModel: ObservableObject {
 
     @Published var model: CardModel
-    @Published var frontTextViewModel: CardTextViewModel
     
-    init( _ model: CardModel, _ frontTextViewModel: CardTextViewModel) {
-        self.model = model
-        self.frontTextViewModel = frontTextViewModel
+    var frontTextViewModel: CardTextViewModel {
+        get { model.frontTextViewModel }
+        set { model.frontTextViewModel = newValue }
+    }
+    var backTextViewModel: CardTextViewModel {
+        get { model.backTextViewModel }
+        set { model.backTextViewModel = newValue }
     }
     
-    var frontContent: String { model.frontContent }
-    var backContent: String { model.backContent }
+    init( _ frontTextViewModel: CardTextViewModel, _ backTextViewModel: CardTextViewModel) {
+        self.model = CardModel(frontTextViewModel, backTextViewModel)
+    }
     
-    func checkMatch() { }
+    func copy(in width: CGFloat? = nil) -> CardViewModel { CardViewModel(frontTextViewModel.copy(with: width), backTextViewModel.copy(with: width)) }
 }
 
 

@@ -45,6 +45,16 @@ class EquationTextHandler: ObservableObject {
     
     @objc func setupEquationText() { equationText.setup() }
     
+    func returnDisplayabledText() -> String {
+        var copy = text
+        copy.removeAll(where: { $0 == "_" || $0 == "|" })
+        return copy
+    }
+    
+    func copy() -> EquationTextHandler {
+        return EquationTextHandler(self.textFieldViewModel.copy())
+    }
+    
     //MARK: Spacer function
     
     func fillWithSpace(_ value: String) -> String {
@@ -404,7 +414,8 @@ class EquationText: Hashable, ObservableObject {
         let mutableAttributedString = NSMutableAttributedString(string: mutableText)
         mutableAttributedString.setAttributes( textFieldViewModel.activeAttributes, range: NSRange(location: 0, length: mutableText.count))
         
-        let viewModel = RichTextFieldViewModel(mutableAttributedString, editable: false, with: textFieldViewModel.activeAttributes, setActiveViewModel: textFieldViewModel.setActiveViewModel)
+        let viewModel = RichTextFieldViewModel(mutableAttributedString, with: textFieldViewModel.activeAttributes, in: 100, setActiveViewModel: textFieldViewModel.setActiveViewModel)
+        viewModel.viewController.setEditability(with: false)
         viewModel.viewController.toggleAttributes(textFieldViewModel.activeAttributes)
         
         return viewModel

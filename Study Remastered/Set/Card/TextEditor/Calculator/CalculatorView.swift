@@ -11,36 +11,40 @@ import SwiftUI
 struct Calculator: View {
     
     @ObservedObject var viewModel: CalculatorViewModel
+    @State var active: Bool = false
+    
     let shouldDisplayText: Bool
-    let geo: GeometryProxy
     
     var body: some View {
             
-        VStack {
-            if shouldDisplayText {
-                EquationTextView(text: viewModel.handler.equationText)
-                    .padding()
-                    .frame(height: geo.size.height / 3 )
+        if ContentView.calculatorIsActive {
+            GeometryReader { geo in
+                VStack {
+                    Spacer()
+                    if shouldDisplayText {
+                        EquationTextView(text: viewModel.handler.equationText)
+                            .padding()
+                            .frame(height: geo.size.height / 3 )
+                    }
+                    
+                    VStack {
+                        HStack {
+                            ForEach( Array(viewModel.primaryFunctions.enumerated()), id: \.offset ) { enumeration in
+                                PrimaryCalculatorButton(function: enumeration.element)
+                                    .environmentObject(viewModel)
+                            }
+                        }
+                        let width = (geo.size.width - ( 6 * 6)) / 5
+                    
+                        LazyVGrid(columns: [ GridItem(.adaptive(minimum: width, maximum: width), spacing: 5) ], spacing: 2 ) {
+                            ForEach( Array(viewModel.functions.enumerated()), id: \.offset ) { enumeration in
+                                CalculatorButton(function: enumeration.element!, shiftFunction: viewModel.shiftFuntions[enumeration.offset] ?? enumeration.element!, alphaFunction: viewModel.alphaFunctions[enumeration.offset] ?? enumeration.element! )
+                                    .environmentObject(viewModel)
+                            }
+                        }
+                    }
+                }
             }
-            
-            VStack {
-                HStack {
-                    ForEach( Array(viewModel.primaryFunctions.enumerated()), id: \.offset ) { enumeration in
-                        PrimaryCalculatorButton(function: enumeration.element)
-                            .environmentObject(viewModel)
-                    }
-                }
-                let width = (geo.size.width - ( 6 * 6)) / 5
-            
-                LazyVGrid(columns: [ GridItem(.adaptive(minimum: width, maximum: width), spacing: 5) ], spacing: 2 ) {
-                    ForEach( Array(viewModel.functions.enumerated()), id: \.offset ) { enumeration in
-                        CalculatorButton(function: enumeration.element!, shiftFunction: viewModel.shiftFuntions[enumeration.offset] ?? enumeration.element!, alphaFunction: viewModel.alphaFunctions[enumeration.offset] ?? enumeration.element! )
-                            .environmentObject(viewModel)
-                    }
-                }
-            }.background(Rectangle()
-                .foregroundColor(Colors.UIprimaryGrey)
-                .frame(maxHeight: geo.size.height ))
         }
     }
 }

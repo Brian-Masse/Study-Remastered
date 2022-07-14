@@ -13,25 +13,21 @@ struct SetModel {
     
     var cards: [ CardViewModel ] = []
     
-    
+    init( _ cards: [CardViewModel] ) {
+        self.cards = cards
+    }
 }
 
 class SetViewModel: ObservableObject {
     
     @Published var model: SetModel
     
-    init( _ model: SetModel ) {
-        self.model = model
+    var cards: [ CardViewModel ] {
+        get { model.cards }
+        set { model.cards = newValue }
     }
     
-    func createNewCard() -> CardViewModel {
-        
-        let newCardViewModel = CardViewModel(CardModel("term", "definition"), CardTextViewModel("penis") )
-        
-//        model.cards.append(newCardViewModel)
-        print("creating new card")
-        return newCardViewModel
-        
-    }
-    
+    init( _ cards: [ CardViewModel ] ) {
+        self.model = SetModel(cards)
+    }    
 }

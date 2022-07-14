@@ -11,7 +11,7 @@ import Combine
 
 //MARK: RichTextFieldViewModel
 class RichTextFieldViewModel: ObservableObject, Equatable {
-    
+
     static let attributeDidChangeKey: String = "Masse.Brian.attributeDidChange"
     
     @Published var viewController: TextFieldViewController { didSet {
@@ -30,19 +30,19 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
     var observer: AnyCancellable!
     var setActiveViewModel: ((RichTextFieldViewModel) -> Void)?
     
-    init( _ text: String, editable: Bool = true, with activeAttributes: [NSAttributedString.Key: Any]? = nil ) {
+    init( _ text: String, with activeAttributes: [NSAttributedString.Key: Any]? = nil, in width: CGFloat = 350 ) {
         if let safeAttributes = activeAttributes { self.activeAttributes = safeAttributes }
         viewController = .init()
-        viewController = TextFieldViewController(text, parent: self, editable: editable)
+        viewController = TextFieldViewController(text, parent: self, in: width)
         defineObserver()
     }
     
-    init( _ attributedText: NSAttributedString, editable: Bool = true, with activeAttributes: [NSAttributedString.Key: Any]? = nil, setActiveViewModel: ((RichTextFieldViewModel) -> Void)? = nil) {
+    init( _ attributedText: NSAttributedString, with activeAttributes: [NSAttributedString.Key: Any]? = nil, in width: CGFloat, setActiveViewModel: ((RichTextFieldViewModel) -> Void)? = nil) {
         if let safeAttributes = activeAttributes { self.activeAttributes = safeAttributes }
         self.viewController = .init()
         self.setActiveViewModel = setActiveViewModel
     
-        viewController = TextFieldViewController(attributedText.string, parent: self, editable: editable)
+        viewController = TextFieldViewController(attributedText.string, parent: self, in: width)
         viewController.textView.attributedText = attributedText
         defineObserver()
     }
@@ -74,6 +74,14 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
     static func == (lhs: RichTextFieldViewModel, rhs: RichTextFieldViewModel) -> Bool {
         TextFieldViewController.getMemoryAdress(of: lhs) == TextFieldViewController.getMemoryAdress(of: rhs)
     }
+    
+    func updateWidth(_ width: CGFloat) {
+        viewController.width = width
+    }
+    
+    func copy() -> RichTextFieldViewModel {
+        return RichTextFieldViewModel(self.viewController.textView.attributedText, with: self.activeAttributes, in: viewController.width, setActiveViewModel: setActiveViewModel)
+    }
 }
 
 
@@ -104,8 +112,8 @@ struct VCRep: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> TextFieldViewController { viewController }
     
     func updateUIViewController(_ vc: TextFieldViewController, context: Context) {
-        
         if TextFieldViewController.getMemoryAdress(of: vc) != TextFieldViewController.getMemoryAdress(of: self.viewController) {
+            viewController.textView.text = viewController.text
             vc.changeStoredText(with: viewController.textView)
             updateVC(vc)
             vc.SetViewFrames()

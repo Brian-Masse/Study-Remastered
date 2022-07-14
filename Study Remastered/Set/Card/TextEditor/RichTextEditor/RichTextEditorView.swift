@@ -18,7 +18,7 @@ struct RichTextEditorControls: View {
     let aspectRatio = 0.29354839
     
     var body: some View {
-        ZStack {
+        ZStack { if cardTextViewModel.editing {
             Rectangle()
                 .foregroundColor(Colors.UIprimaryGrey)
                 .cornerRadius(15)
@@ -54,7 +54,7 @@ struct RichTextEditorControls: View {
                 activeTextFieldViewModel.activeFont = activeTextFieldViewModel.viewController.getActiveFont()
                 activeTextFieldViewModel.activeFontSize = activeTextFieldViewModel.viewController.getFont()!.pointSize
             }
-        }.frame(width: geo.size.width * 0.9, height: geo.size.width * 0.9 * aspectRatio, alignment: .center)
+        }}.frame(width: geo.size.width * 0.9, height: geo.size.width * 0.9 * aspectRatio, alignment: .center)
     }
     
     struct ToggleAttributeButton: View {
@@ -154,4 +154,32 @@ struct RichTextEditorControls: View {
             }
         }
     }
+}
+
+struct richTextEditorSerializeControls: View {
+    
+    let geo: GeometryProxy
+    
+    @EnvironmentObject var cardTextViewModel: CardTextViewModel
+    @Binding var side: Bool
+    
+    var body: some View {
+        
+        HStack {
+
+            StyledUIText(cardTextViewModel.editing ? "save" : "edit", symbol: cardTextViewModel.editing ? "checkmark.square" : "pencil")
+                .onTapGesture {
+                    if cardTextViewModel.editing { cardTextViewModel.saveCard() }
+                    else if !cardTextViewModel.editing { cardTextViewModel.beginEditing() }
+                }
+            
+            StyledUIText("flip card", symbol: "arrow.2.squarepath")
+                .onTapGesture {
+                    cardTextViewModel.saveCard()
+                    side.toggle()
+                }            
+        }.frame(height: 30)
+        
+    }
+    
 }
