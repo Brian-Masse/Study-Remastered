@@ -6,3 +6,23 @@
 //
 
 import Foundation
+import SwiftUI
+
+struct StudyRemasteredModel {
+}
+
+class StudyRemasteredViewModel: ObservableObject {
+    
+    
+    @Published var model: StudyRemasteredModel
+    
+    @Published var calculatorIsActive = false
+    var activeCalculatorHandler = EquationTextHandler(RichTextFieldViewModel(""))
+    var activeCardText = CardTextViewModel("")
+    
+    init( _ model: StudyRemasteredModel ) {
+        self.model = model
+    }
+}
+
+let appViewModel = StudyRemasteredViewModel(StudyRemasteredModel())

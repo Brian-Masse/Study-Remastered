@@ -132,22 +132,22 @@ struct VerticalSpace: View {
 struct WrappedHStack<Content: View>: View {
     
     let itemsCount: Int
-    let geo: GeometryProxy
     let content: ( Int ) -> Content
     let spacing: CGFloat
+    let width: CGFloat
 
-    init( _ itemsCount: Int, in geo: GeometryProxy, spacing: CGFloat = 5,content: @escaping (Int) -> Content ) {
+    init( _ itemsCount: Int, in width: CGFloat, spacing: CGFloat = 5,content: @escaping (Int) -> Content ) {
         self.itemsCount = itemsCount
-        self.geo = geo
         self.spacing = spacing
         self.content = content
+        self.width = width
     }
     
     var body: some View {
-        display(geo, itemsCount, spacing, content)
+        display(in: width, itemsCount, spacing, content)
     }
     
-    func display(_ geo: GeometryProxy, _ itemsCount: Int, _ spacing: CGFloat, _ content: @escaping (Int) -> Content) -> some View {
+    func display(in maxWidth: CGFloat, _ itemsCount: Int, _ spacing: CGFloat, _ content: @escaping (Int) -> Content) -> some View {
         
         var width: CGFloat = 0
         var height: CGFloat = 0
@@ -159,7 +159,7 @@ struct WrappedHStack<Content: View>: View {
                 
                 content(index)
                     .alignmentGuide(HorizontalAlignment.leading) { d in
-                        if abs(geo.size.width + width) < d.width {
+                        if abs(maxWidth + width) < d.width {
                             width = 0
                             height -= (previousRowHeight + (spacing / 2))
                             previousRowHeight = 0
@@ -179,5 +179,32 @@ struct WrappedHStack<Content: View>: View {
                 }
             }
     }
+}
 
+struct SubViewGeometryReader<Content: View>: View {
+    @Binding var size: CGSize
+    let content: () -> Content
+    var body: some View {
+        ZStack {
+            content()
+                .background(
+                    GeometryReader { proxy in
+                        Color.clear
+                            .preference(key: SizePreferenceKey.self, value: proxy.size)
+                    }
+                )
+        }
+        .onPreferenceChange(SizePreferenceKey.self) { preferences in
+            self.size = preferences
+        }
+    }
+}
+
+struct SizePreferenceKey: PreferenceKey {
+    typealias Value = CGSize
+    static var defaultValue: Value = .zero
+
+    static func reduce(value _: inout Value, nextValue: () -> Value) {
+        _ = nextValue()
+    }
 }

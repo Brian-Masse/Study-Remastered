@@ -13,34 +13,33 @@ struct SetView: View {
     
     @ObservedObject var viewModel: SetViewModel
     
-    @State var showingCardCreator = false
+    @State var showingQuickSetEditor = false
     
     var body: some View {
+        
         VStack {
-            ForEach( Array(viewModel.model.cards.enumerated()), id: \.offset ) { enumeration in
-                
-                CardView( enumeration.element )
+            
+            HStack {
+                Text("edit set")
+                    .onTapGesture {
+                        viewModel.quickSetEditorViewModel.getCopyOfCurrentCards()
+                        showingQuickSetEditor = true
+                    }
             }
             
-            Text( "Create a new Card" )
-                .padding(10)
-                .background {
-                    Rectangle()
-                        .cornerRadius(5)
-                        .foregroundColor(.white)
-                        .shadow(radius: 5)
+            ScrollView(.vertical, showsIndicators: true) {
+                ForEach( Array(viewModel.model.cards.enumerated()), id: \.offset ) { enumeration in
+                    CardView( enumeration.element, displayType: .double )
                 }
-                .onTapGesture { showingCardCreator = true }
-//                .sheet(isPresented: $showingCardCreator) {
-//                    
-////                    CardView(viewModel.createNewCard(), editing: true ) { string in
-//                        
-//                        
-//                    }
-//                }
-        }
-        
-        
+            }
+            
+            Text( "add card" )
+                .onTapGesture {
+                    let count = viewModel.model.cards.count
+                    viewModel.model.cards.append( CardViewModel(CardTextViewModel("front \(count)"),
+                                                                CardTextViewModel("back \(count)")) )
+                    }
+        } .fullScreenCover(isPresented: $showingQuickSetEditor) { QuickSetEditorView().environmentObject(viewModel.quickSetEditorViewModel) }
     }
 }
 

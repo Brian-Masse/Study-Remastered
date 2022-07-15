@@ -43,6 +43,19 @@ class CardViewModel: ObservableObject {
         self.model = CardModel(frontTextViewModel, backTextViewModel)
     }
     
+    //MARK: Editing
+    
+    func beginEditing() {
+        frontTextViewModel.beginEditing()
+        backTextViewModel.beginEditing()
+    }
+    
+    func endEditing() {
+        frontTextViewModel.endEditing()
+        backTextViewModel.endEditing()
+    }
+    
+    
     func copy(in width: CGFloat? = nil) -> CardViewModel { CardViewModel(frontTextViewModel.copy(with: width), backTextViewModel.copy(with: width)) }
 }
 

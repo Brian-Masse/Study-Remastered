@@ -27,12 +27,14 @@ class TextFieldViewController: UIViewController, UITextViewDelegate, ObservableO
     
     init() { super.init(nibName: nil, bundle: nil) }
     
-    init( _ text: String, parent: RichTextFieldViewModel, in width: CGFloat) {
+    init( _ text: String, parent: RichTextFieldViewModel) {
         super.init(nibName: nil, bundle: nil)
-        self.width = width
         self.text = text
         self.parentViewModel = parent
+        
         self.textView.text = text
+        self.textView.isEditable = false
+        self.textView.isSelectable = false
     }
     
     override func viewDidAppear(_ animated: Bool) { }

@@ -10,37 +10,41 @@ import SwiftUI
 
 struct Calculator: View {
     
-    @ObservedObject var viewModel: CalculatorViewModel
-    @State var active: Bool = false
+    @EnvironmentObject var appViewModel: StudyRemasteredViewModel
     
     let shouldDisplayText: Bool
     
     var body: some View {
             
-        if ContentView.calculatorIsActive {
+        let calculatorViewModel = CalculatorViewModel(CalculatorModel( appViewModel.activeCalculatorHandler ))
+        let cardTextViewModel = appViewModel.activeCardText
+        
+        if appViewModel.calculatorIsActive {
             GeometryReader { geo in
                 VStack {
                     Spacer()
+                    
                     if shouldDisplayText {
-                        EquationTextView(text: viewModel.handler.equationText)
+                        EquationTextView(text: calculatorViewModel.handler.equationText)
                             .padding()
                             .frame(height: geo.size.height / 3 )
                     }
                     
-                    VStack {
-                        HStack {
-                            ForEach( Array(viewModel.primaryFunctions.enumerated()), id: \.offset ) { enumeration in
-                                PrimaryCalculatorButton(function: enumeration.element)
-                                    .environmentObject(viewModel)
-                            }
+                    StyledUIText("done", symbol: "checkmark.rectangle").onTapGesture { cardTextViewModel.endEditingEquation() }
+                        .frame(width: geo.size.width - 10, height: 20)
+                
+                    HStack {
+                        ForEach( Array(calculatorViewModel.primaryFunctions.enumerated()), id: \.offset ) { enumeration in
+                            PrimaryCalculatorButton(function: enumeration.element)
+                                .environmentObject(calculatorViewModel)
                         }
-                        let width = (geo.size.width - ( 6 * 6)) / 5
-                    
-                        LazyVGrid(columns: [ GridItem(.adaptive(minimum: width, maximum: width), spacing: 5) ], spacing: 2 ) {
-                            ForEach( Array(viewModel.functions.enumerated()), id: \.offset ) { enumeration in
-                                CalculatorButton(function: enumeration.element!, shiftFunction: viewModel.shiftFuntions[enumeration.offset] ?? enumeration.element!, alphaFunction: viewModel.alphaFunctions[enumeration.offset] ?? enumeration.element! )
-                                    .environmentObject(viewModel)
-                            }
+                    }
+                    let width = (geo.size.width - ( 6 * 6)) / 5
+                
+                    LazyVGrid(columns: [ GridItem(.adaptive(minimum: width, maximum: width), spacing: 5) ], spacing: 2 ) {
+                        ForEach( Array(calculatorViewModel.functions.enumerated()), id: \.offset ) { enumeration in
+                            CalculatorButton(function: enumeration.element!, shiftFunction: calculatorViewModel.shiftFuntions[enumeration.offset] ?? enumeration.element!, alphaFunction: calculatorViewModel.alphaFunctions[enumeration.offset] ?? enumeration.element! )
+                                .environmentObject(calculatorViewModel)
                         }
                     }
                 }

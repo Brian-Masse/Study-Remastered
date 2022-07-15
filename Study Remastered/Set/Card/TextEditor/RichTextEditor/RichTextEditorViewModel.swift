@@ -30,19 +30,19 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
     var observer: AnyCancellable!
     var setActiveViewModel: ((RichTextFieldViewModel) -> Void)?
     
-    init( _ text: String, with activeAttributes: [NSAttributedString.Key: Any]? = nil, in width: CGFloat = 350 ) {
+    init( _ text: String, with activeAttributes: [NSAttributedString.Key: Any]? = nil ) {
         if let safeAttributes = activeAttributes { self.activeAttributes = safeAttributes }
         viewController = .init()
-        viewController = TextFieldViewController(text, parent: self, in: width)
+        viewController = TextFieldViewController(text, parent: self)
         defineObserver()
     }
     
-    init( _ attributedText: NSAttributedString, with activeAttributes: [NSAttributedString.Key: Any]? = nil, in width: CGFloat, setActiveViewModel: ((RichTextFieldViewModel) -> Void)? = nil) {
+    init( _ attributedText: NSAttributedString, with activeAttributes: [NSAttributedString.Key: Any]? = nil, setActiveViewModel: ((RichTextFieldViewModel) -> Void)? = nil) {
         if let safeAttributes = activeAttributes { self.activeAttributes = safeAttributes }
         self.viewController = .init()
         self.setActiveViewModel = setActiveViewModel
     
-        viewController = TextFieldViewController(attributedText.string, parent: self, in: width)
+        viewController = TextFieldViewController(attributedText.string, parent: self)
         viewController.textView.attributedText = attributedText
         defineObserver()
     }
@@ -75,12 +75,8 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
         TextFieldViewController.getMemoryAdress(of: lhs) == TextFieldViewController.getMemoryAdress(of: rhs)
     }
     
-    func updateWidth(_ width: CGFloat) {
-        viewController.width = width
-    }
-    
     func copy() -> RichTextFieldViewModel {
-        return RichTextFieldViewModel(self.viewController.textView.attributedText, with: self.activeAttributes, in: viewController.width, setActiveViewModel: setActiveViewModel)
+        return RichTextFieldViewModel(self.viewController.textView.attributedText, with: self.activeAttributes, setActiveViewModel: setActiveViewModel)
     }
 }
 
@@ -90,15 +86,26 @@ struct RichTextField: View {
     
     @EnvironmentObject var viewModel: RichTextFieldViewModel
     
+    let width: CGFloat
+    
+    init(in width: CGFloat = 350) {
+        self.width = width
+    }
+    
     var body: some View {
         VStack {
             VCRep() { vc in viewModel.viewController = vc }
-            .environmentObject(viewModel.viewController)
+            .environmentObject( returnViewController() )
             .frame(width: viewModel.viewController.size.width, height: viewModel.viewController.size.height)
             .padding(.horizontal, -4)
             .padding(.vertical, -7)
 //            .background(Rectangle().foregroundColor(.red))
         }
+    }
+    
+    func returnViewController() -> TextFieldViewController {
+        viewModel.viewController.width = width
+        return viewModel.viewController
     }
 }
 

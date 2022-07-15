@@ -414,7 +414,7 @@ class EquationText: Hashable, ObservableObject {
         let mutableAttributedString = NSMutableAttributedString(string: mutableText)
         mutableAttributedString.setAttributes( textFieldViewModel.activeAttributes, range: NSRange(location: 0, length: mutableText.count))
         
-        let viewModel = RichTextFieldViewModel(mutableAttributedString, with: textFieldViewModel.activeAttributes, in: 100, setActiveViewModel: textFieldViewModel.setActiveViewModel)
+        let viewModel = RichTextFieldViewModel(mutableAttributedString, with: textFieldViewModel.activeAttributes, setActiveViewModel: textFieldViewModel.setActiveViewModel)
         viewModel.viewController.setEditability(with: false)
         viewModel.viewController.toggleAttributes(textFieldViewModel.activeAttributes)
         

@@ -12,81 +12,86 @@ import Introspect
 
 struct CardView: View {
     
+    enum DisplayType {
+        case single
+        case double
+    }
+    
+    @EnvironmentObject var appViewModel: StudyRemasteredViewModel
     @ObservedObject var viewModel: CardViewModel
     
     @State var side: Bool = true
+    @State var displayType: DisplayType
     
-    init( _ viewModel: CardViewModel ) { self.viewModel = viewModel }
+    init( _ viewModel: CardViewModel, displayType: DisplayType ) {
+        self.viewModel = viewModel
+        self.displayType = displayType
+    }
     
     var body: some View {
         
-        GeometryReader { geo in
-            VStack {
-                HStack {
-                    Spacer()
-                    
-                    if side {
-                        Side(geo: geo, side: $side)
-                            .environmentObject( viewModel )
-                            .environmentObject( viewModel.frontTextViewModel )
-                    }else {
-                        Side(geo: geo, side: $side)
-                            .environmentObject( viewModel )
-                            .environmentObject( viewModel.backTextViewModel )
-                    }
-
-                    Spacer()
-                }
-                Spacer()
+        VStack {
+            switch displayType {
+            case .single:
+                if side { Side(side: $side, showSerializationControls: true).environmentObject( viewModel.frontTextViewModel ) }
+                else { Side(side: $side, showSerializationControls: true).environmentObject( viewModel.backTextViewModel ) }
+                
+            case .double:
+                HStack() {
+                    Side(side: $side, showSerializationControls: false)
+                        .environmentObject(viewModel.frontTextViewModel)
+                    Side(side: $side, showSerializationControls: false)
+                        .environmentObject(viewModel.backTextViewModel)
+                }.padding(.horizontal)
             }
         }
+        .environmentObject(appViewModel)
+        .environmentObject( viewModel )
     }
     
     struct Side: View {
         
+        @EnvironmentObject var appViewModel: StudyRemasteredViewModel
         @EnvironmentObject var cardViewModel: CardViewModel
         @EnvironmentObject var cardTextViewModel: CardTextViewModel
         
-        let geo: GeometryProxy
-        
         @Binding var side: Bool
+        @State var size: CGSize = .zero
         
-        let cornerRadius: CGFloat = 30
+        let showSerializationControls: Bool
+        
+        static let cornerRadius: CGFloat = 30
+        static let aspectRatio: CGFloat = 1.6475033738191633
         
         var body: some View {
-            ZStack(alignment: .center) {
-                TextureFill().cornerRadius(cornerRadius)
-                RoundedRectangle(cornerRadius: cornerRadius)
-                    .stroke(style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
-                    .foregroundColor(Colors.UIprimaryCream)
+            GeometryReader { geo in
+                ZStack(alignment: .center) {
+                    TextureFill().cornerRadius(CardView.Side.cornerRadius)
+                    RoundedRectangle(cornerRadius: CardView.Side.cornerRadius)
+                        .stroke(style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
+                        .foregroundColor(Colors.UIprimaryCream)
 
-                VStack {
-                    RichTextEditorControls(geo: geo)
-                        .environmentObject( cardTextViewModel.activeViewModel )
-                        .offset(y: -cornerRadius)
-                    Spacer()
-                    richTextEditorSerializeControls(geo: geo, side: $side)
-                        .environmentObject( cardTextViewModel )
-                }
+                    VStack {
+                        RichTextEditorControls(geo: geo)
+                            .environmentObject( cardTextViewModel.activeViewModel )
+                            .offset(y: -CardView.Side.cornerRadius)
+                        Spacer()
+                        if showSerializationControls {
+                            richTextEditorSerializeControls(geo: geo, side: $side)
+                                .environmentObject( cardTextViewModel )
+                        }
+                    }
                 
-                GeometryReader { geo2 in
-                    CardTextView(geo: geo2)
+                    CardTextView(size: $size, width: geo.size.width)
+                        .environmentObject(appViewModel)
                         .environmentObject( cardTextViewModel )
                         .frame(maxHeight: geo.size.height * 0.6)
                 }
+                .frame(width: geo.size.width, height: geo.size.width * CardView.Side.aspectRatio)
+                .onAppear { appViewModel.activeCardText = cardTextViewModel  }
             }
-            .frame(width: geo.size.width * 0.95, height: geo.size.height * 0.8)
-            .padding(.top)
-            
-            if cardTextViewModel.editingEquation {
-                VStack {
-                    Spacer()
-                    let handler = cardTextViewModel.equationHandlers[cardTextViewModel.handlerIndex]
-                    StyledUIText("done", symbol: "checkmark.rectangle").onTapGesture { cardTextViewModel.editingEquation = false }
-                        .frame(width: geo.size.width - 10, height: 20)
-//                    Calculator(viewModel: CalculatorViewModel( CalculatorModel( handler ) ), shouldDisplayText: false, geo: geo)
-                }.frame(width: globalFrame.width, height: globalFrame.height)
-            }
+            .aspectRatio(1 / CardView.Side.aspectRatio, contentMode: .fit)
         }
+            
     }
 }

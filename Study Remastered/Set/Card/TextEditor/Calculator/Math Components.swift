@@ -16,7 +16,7 @@ struct EquationString: View {
     @EnvironmentObject var equationText: EquationText
 
     var body: some View {
-        RichTextField()
+        RichTextField(in: 100)
             .environmentObject( equationText.textFieldViewModel )
     }
 }
