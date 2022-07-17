@@ -114,7 +114,6 @@ class CardTextViewModel: ObservableObject {
     
         equationHandlers.insert(handler, at: index)
         
-    
         textFieldViewModels[ index ].observer.cancel()
         textFieldViewModels[ index ] = RichTextFieldViewModel( leadingText, with: textFieldViewModels[ index ].activeAttributes)
         textFieldViewModels.insert( RichTextFieldViewModel(trailingText, with: textFieldViewModels[ index ].activeAttributes), at: index + 1 )
@@ -130,6 +129,7 @@ class CardTextViewModel: ObservableObject {
         }
         
         beginEditingEquation(at: index)
+        beginEditing()
         updateComponentCount()
     }
     
@@ -140,12 +140,15 @@ class CardTextViewModel: ObservableObject {
         let trailingText = NSMutableAttributedString( attributedString: textFieldViewModels[ handlerIndex + 1 ].viewController.textView.attributedText! )
         leadingText.append( trailingText )
         
-        let viewModel = RichTextFieldViewModel(leadingText, with: equationHandlers[handlerIndex].equationText.textFieldViewModel.activeAttributes)
+//        let viewModel = RichTextFieldViewModel(leadingText, with: equationHandlers[handlerIndex].equationText.textFieldViewModel.activeAttributes)
          
-        textFieldViewModels[ handlerIndex ] = viewModel
+        textFieldViewModels[ handlerIndex ].viewController.setAttributedText( leadingText )
+        
+//        textFieldViewModels[ handlerIndex ] = viewModel
         textFieldViewModels.remove(at: handlerIndex + 1)
         equationHandlers.remove(at: handlerIndex)   
         
+        beginEditing()
         updateComponentCount()
     }
     

@@ -16,20 +16,24 @@ let setViewModel = SetViewModel([ card1ViewModel, card2ViewModel ])
 struct StudyRemasteredView: View {
     
     @EnvironmentObject var viewModel: StudyRemasteredViewModel
-    
+
     var body: some View {
         
         ZStack {
             
-//            CardView( card1ViewModel )
+//            CardView(card1ViewModel, displayType: .single  )
 //                .environmentObject(viewModel)
         
-            SetView(viewModel: setViewModel)
+//            SetView(viewModel: setViewModel)
             
-//            QuickSetEditorView( SetViewModel( [card1ViewModel, card2ViewModel] ) )
+            FullSetEditor( currentCardIndex: 0 )
+                .environmentObject( setViewModel )
+        
             
-//            Calculator(shouldDisplayText: false)
-//                .environmentObject( viewModel )
+            
+            
+            Calculator(shouldDisplayText: false)
+                .environmentObject( viewModel )
         }
         
     }

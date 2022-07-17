@@ -28,15 +28,18 @@ struct CardTextView: View {
         if (index % 2) == 0 {
             if !cardTextViewModel.editingEquation {
                 let viewModel = cardTextViewModel.textFieldViewModels[ handlerIndex ]
-                let textField = RichTextField(in: width)
                 
-                return AnyView(textField
-                    .environmentObject(viewModel)
-                    .onTapGesture() { if cardTextViewModel.editing {
-                        cardTextViewModel.activeViewModel = viewModel
-                        cardTextViewModel.viewModelIndex = handlerIndex
-                        cardTextViewModel.endEditingEquation()
-                    }})
+                return AnyView(
+                    VStack {
+                        Text(viewModel.viewController.text)
+                        RichTextField(in: width)
+                        .environmentObject(viewModel)
+                        .onTapGesture() { if cardTextViewModel.editing {
+                            cardTextViewModel.activeViewModel = viewModel
+                            cardTextViewModel.viewModelIndex = handlerIndex
+                            cardTextViewModel.endEditingEquation()
+                        }}
+                    })
             }
         }else{
             if !cardTextViewModel.editingEquation || cardTextViewModel.handlerIndex == handlerIndex {

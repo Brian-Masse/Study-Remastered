@@ -95,11 +95,17 @@ struct QuickSetEditorView: View {
         let width: CGFloat
         
         var body: some View {
-            HStack(alignment: .bottom) {
-                EditablePiece(width: width, model: cardCopy.frontTextViewModel, label: "front")
-                EditablePiece(width: width, model: cardCopy.backTextViewModel, label: "back")
+            VStack {
+                HStack(alignment: .bottom) {
+                    EditablePiece(width: width, model: cardCopy.frontTextViewModel, label: "front")
+                    EditablePiece(width: width, model: cardCopy.backTextViewModel, label: "back")
+                }.padding()
+                
+                Text( "open in detail View ->" )
+//                    .onTapGesture {
+//                        
+//                    }
             }
-            .padding()
         }
         
         struct EditablePiece: View {

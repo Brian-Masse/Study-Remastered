@@ -219,4 +219,10 @@ class TextFieldViewController: UIViewController, UITextViewDelegate, ObservableO
     func getDesiredMemoryAdress() -> String { "\(Unmanaged.passRetained( self.view ).toOpaque())" }
     
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    
+    func copy() -> TextFieldViewController {
+        let vc = TextFieldViewController(textView.text, parent: self.parentViewModel)
+        vc.setAttributedText(textView.attributedText)
+        return vc
+    }
 }

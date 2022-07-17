@@ -30,8 +30,11 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
     var observer: AnyCancellable!
     var setActiveViewModel: ((RichTextFieldViewModel) -> Void)?
     
+    let uuid: UUID
+    
     init( _ text: String, with activeAttributes: [NSAttributedString.Key: Any]? = nil ) {
         if let safeAttributes = activeAttributes { self.activeAttributes = safeAttributes }
+        uuid = UUID()
         viewController = .init()
         viewController = TextFieldViewController(text, parent: self)
         defineObserver()
@@ -42,6 +45,7 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
         self.viewController = .init()
         self.setActiveViewModel = setActiveViewModel
     
+        uuid = UUID()
         viewController = TextFieldViewController(attributedText.string, parent: self)
         viewController.textView.attributedText = attributedText
         defineObserver()
@@ -94,7 +98,7 @@ struct RichTextField: View {
     
     var body: some View {
         VStack {
-            VCRep() { vc in viewModel.viewController = vc }
+            VCRep(uuid: viewModel.uuid ) { vc in viewModel.viewController = vc }
             .environmentObject( returnViewController() )
             .frame(width: viewModel.viewController.size.width, height: viewModel.viewController.size.height)
             .padding(.horizontal, -4)
@@ -114,19 +118,26 @@ struct VCRep: UIViewControllerRepresentable {
     
     @EnvironmentObject var viewController: TextFieldViewController
     
+    let uuid: UUID
+    
     var updateVC: (TextFieldViewController) -> Void
     
     func makeUIViewController(context: Context) -> TextFieldViewController { viewController }
     
     func updateUIViewController(_ vc: TextFieldViewController, context: Context) {
         if TextFieldViewController.getMemoryAdress(of: vc) != TextFieldViewController.getMemoryAdress(of: self.viewController) {
+            
+            print( viewController.text, vc.text )
+            print( TextFieldViewController.getMemoryAdress(of: viewController.parentViewModel), TextFieldViewController.getMemoryAdress(of: vc.parentViewModel) )
+            print( viewController.parentViewModel.uuid, vc.parentViewModel.uuid )
+            
             viewController.textView.text = viewController.text
             vc.changeStoredText(with: viewController.textView)
             updateVC(vc)
             vc.SetViewFrames()
         }
     }
-
+    
     typealias UIViewControllerType = TextFieldViewController
 }
 
