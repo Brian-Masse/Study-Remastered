@@ -27,7 +27,7 @@ class EquationTextHandler: ObservableObject {
     init(_ textFieldViewModel: RichTextFieldViewModel) {
     
         self.textFieldViewModel = textFieldViewModel
-        self.equationText = EquationText(textFieldViewModel, with: textFieldViewModel.viewController.text, type: "", isPrimative: false)
+        self.equationText = EquationText(textFieldViewModel, with: textFieldViewModel.text, type: "", isPrimative: false)
     
         self.observer = equationText.objectWillChange.sink(){self.objectWillChange.send()}
         self.text = prepareText()
@@ -415,8 +415,8 @@ class EquationText: Hashable, ObservableObject {
         mutableAttributedString.setAttributes( textFieldViewModel.activeAttributes, range: NSRange(location: 0, length: mutableText.count))
         
         let viewModel = RichTextFieldViewModel(mutableAttributedString, with: textFieldViewModel.activeAttributes, setActiveViewModel: textFieldViewModel.setActiveViewModel)
-        viewModel.viewController.setEditability(with: false)
-        viewModel.viewController.toggleAttributes(textFieldViewModel.activeAttributes)
+//        viewModel.viewController.setEditability(with: false)
+//        viewModel.viewController.toggleAttributes(textFieldViewModel.activeAttributes)
         
         return viewModel
     }

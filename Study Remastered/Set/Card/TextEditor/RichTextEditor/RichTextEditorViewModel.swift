@@ -14,10 +14,14 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
 
     static let attributeDidChangeKey: String = "Masse.Brian.attributeDidChange"
     
-    @Published var viewController: TextFieldViewController { didSet {
-        defineObserver()
-        viewController.parentViewModel = self
-    } }
+//    @Published var viewController: TextFieldViewController { didSet {
+//        defineObserver()
+//        viewController.parentViewModel = self
+//    } }
+    
+    @Published var attributedText: NSAttributedString
+    
+    var text: String { attributedText.string }
     
     @Published var activeAttributes: [NSAttributedString.Key: Any] = [:] { didSet {
         let name = NSNotification.Name(RichTextFieldViewModel.attributeDidChangeKey)
@@ -35,23 +39,28 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
     init( _ text: String, with activeAttributes: [NSAttributedString.Key: Any]? = nil ) {
         if let safeAttributes = activeAttributes { self.activeAttributes = safeAttributes }
         uuid = UUID()
-        viewController = .init()
-        viewController = TextFieldViewController(text, parent: self)
-        defineObserver()
+        
+        self.attributedText = NSAttributedString(string: text)
+//        viewController = .init()
+//        viewController = TextFieldViewController(text, parent: self)
+//        defineObserver()
     }
     
     init( _ attributedText: NSAttributedString, with activeAttributes: [NSAttributedString.Key: Any]? = nil, setActiveViewModel: ((RichTextFieldViewModel) -> Void)? = nil) {
         if let safeAttributes = activeAttributes { self.activeAttributes = safeAttributes }
-        self.viewController = .init()
+//        self.viewController = .init()
         self.setActiveViewModel = setActiveViewModel
     
         uuid = UUID()
-        viewController = TextFieldViewController(attributedText.string, parent: self)
-        viewController.textView.attributedText = attributedText
-        defineObserver()
+        self.attributedText = attributedText
+        
+        
+//        viewController = TextFieldViewController(attributedText.string, parent: self)
+//        viewController.textView.attributedText = attributedText
+//        defineObserver()
     }
     
-    func defineObserver() { observer = viewController.objectWillChange.sink() { self.objectWillChange.send() } }
+//    func defineObserver() { observer = viewController.objectWillChange.sink() { self.objectWillChange.send() } }
     
     func setAttributes( _ attributes: [ NSAttributedString.Key : Any ] ) {
         activeAttributes = attributes
@@ -66,13 +75,13 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
     }
     
     func toggleFont( _ trait: UIFontDescriptor.SymbolicTraits ) {
-        if let currentFont = self.activeAttributes.first(where: { (key: NSAttributedString.Key, value: Any) in key == .font })?.value as? UIFont {
-            let font = currentFont.hasTrait(trait) ? currentFont.withoutTraits(trait) : currentFont.withTraits(trait)
-            self.activeAttributes[.font] = font
-        }else {
-            let font = viewController.getFont()!.withTraits(trait)
-            self.activeAttributes[.font] = font
-        }
+//        if let currentFont = self.activeAttributes.first(where: { (key: NSAttributedString.Key, value: Any) in key == .font })?.value as? UIFont {
+//            let font = currentFont.hasTrait(trait) ? currentFont.withoutTraits(trait) : currentFont.withTraits(trait)
+//            self.activeAttributes[.font] = font
+//        }else {
+//            let font = viewController.getFont()!.withTraits(trait)
+//            self.activeAttributes[.font] = font
+//        }
     }
     
     static func == (lhs: RichTextFieldViewModel, rhs: RichTextFieldViewModel) -> Bool {
@@ -80,7 +89,7 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
     }
     
     func copy() -> RichTextFieldViewModel {
-        return RichTextFieldViewModel(self.viewController.textView.attributedText, with: self.activeAttributes, setActiveViewModel: setActiveViewModel)
+        return RichTextFieldViewModel(self.attributedText, with: self.activeAttributes, setActiveViewModel: setActiveViewModel)
     }
 }
 
@@ -98,29 +107,30 @@ struct RichTextField: View {
     
     var body: some View {
         VStack {
-            VCRep(uuid: viewModel.uuid ) { vc in viewModel.viewController = vc }
-            .environmentObject( returnViewController() )
-            .frame(width: viewModel.viewController.size.width, height: viewModel.viewController.size.height)
+//            VCRep(uuid: viewModel.uuid ) { vc in viewModel.viewController = vc }
+            VCRep( viewController: TextFieldViewController(viewModel.attributedText.string, parent: viewModel) )
+//            .environmentObject( returnViewController() )
+//            .frame(width: viewModel.viewController.size.width, height: viewModel.viewController.size.height)
             .padding(.horizontal, -4)
             .padding(.vertical, -7)
 //            .background(Rectangle().foregroundColor(.red))
         }
     }
     
-    func returnViewController() -> TextFieldViewController {
-        viewModel.viewController.width = width
-        return viewModel.viewController
-    }
+//    func returnViewController() -> TextFieldViewController {
+//        viewModel.viewController.width = width
+//        return viewModel.viewController
+//    }
 }
 
 //MARK: VCREP
 struct VCRep: UIViewControllerRepresentable {
     
-    @EnvironmentObject var viewController: TextFieldViewController
+//    @EnvironmentObject var viewController: TextFieldViewController
+
+    let viewController: TextFieldViewController
     
-    let uuid: UUID
-    
-    var updateVC: (TextFieldViewController) -> Void
+//    var updateVC: (TextFieldViewController) -> Void
     
     func makeUIViewController(context: Context) -> TextFieldViewController { viewController }
     
@@ -133,7 +143,7 @@ struct VCRep: UIViewControllerRepresentable {
             
             viewController.textView.text = viewController.text
             vc.changeStoredText(with: viewController.textView)
-            updateVC(vc)
+//            updateVC(vc)
             vc.SetViewFrames()
         }
     }

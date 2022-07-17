@@ -31,7 +31,7 @@ struct CardTextView: View {
                 
                 return AnyView(
                     VStack {
-                        Text(viewModel.viewController.text)
+                        Text(viewModel.attributedText.string)
                         RichTextField(in: width)
                         .environmentObject(viewModel)
                         .onTapGesture() { if cardTextViewModel.editing {
