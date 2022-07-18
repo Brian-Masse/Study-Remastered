@@ -16,6 +16,7 @@ let setViewModel = SetViewModel([ card1ViewModel, card2ViewModel ])
 struct StudyRemasteredView: View {
     
     @EnvironmentObject var viewModel: StudyRemasteredViewModel
+    @State var size: CGSize = .zero
 
     var body: some View {
         
@@ -23,11 +24,14 @@ struct StudyRemasteredView: View {
             
 //            CardView(card1ViewModel, displayType: .single  )
 //                .environmentObject(viewModel)
+            
+            CardTextView(size: $size, width: globalFrame.width)
+                .environmentObject( card1ViewModel.frontTextViewModel )
         
 //            SetView(viewModel: setViewModel)
             
-            FullSetEditor( currentCardIndex: 0 )
-                .environmentObject( setViewModel )
+//            FullSetEditor( currentCardIndex: 0 )
+//                .environmentObject( setViewModel )
         
             
             

@@ -35,7 +35,7 @@ class CardTextViewModel: ObservableObject {
     @Published var viewModelIndex = 0
     
     @Published var editingEquation = false
-    @Published var editing = false
+    @Published var editing = true
     
     init( _ model: CardTextModel) {
         self.model = model
@@ -81,56 +81,67 @@ class CardTextViewModel: ObservableObject {
         
     }
     
-    func addMathEquation( at textFieldViewModel: RichTextFieldViewModel) {
-//        if editingEquation { return }
-//
-//        let index = viewModelIndex
-//        let text = textFieldViewModel.text
-//        let attributedText = textFieldViewModels[ index ].attributedText
-//        guard let range = Range( textFieldViewModel.viewController.getCursorRange(), in: text ) else { return }
-//
-//        let leadingText: NSAttributedString = {
-//            if text.startIndex == range.lowerBound { return .init(string: "") }
-//
-//            let nsRange = NSRange(text.startIndex..<range.lowerBound, in: text)
-//            guard let attributedTextString = attributedText?.attributedSubstring(from: nsRange ) else { return .init(string: "") }
-//            return attributedTextString
-//        }()
-//
-//        let trailingText: NSAttributedString = {
-//            if text.count == 0 { return .init(string: "") }
-//            if text.index(before: text.endIndex) == range.upperBound { return .init(string: "") }
-//
-//            let nsRange = NSRange(range.upperBound..<text.endIndex, in: text)
-//            guard let attributedTextString =  attributedText?.attributedSubstring(from: nsRange ) else { return .init(string: "") }
-//            return attributedTextString
-//        }()
-//
-//        let mathMutableAttributedString = NSMutableAttributedString(string: "MT")
-//        mathMutableAttributedString.setAttributes(textFieldViewModels[ index ].activeAttributes, range: NSRange(location: 0, length: 2))
-//        let viewModel = RichTextFieldViewModel(mathMutableAttributedString, with: textFieldViewModels[ index ].activeAttributes)
-//
-//        let handler = EquationTextHandler( viewModel  )
-//
-//        equationHandlers.insert(handler, at: index)
-//
+    func addMathEquation() {
+        if editingEquation { return }
+
+        let index = viewModelIndex
+        let text = activeViewModel.text
+        let attributedText = textFieldViewModels[ index ].attributedText
+        guard let range = Range( activeViewModel.activeSelectedRange, in: text ) else { return }
+
+        let leadingText: NSAttributedString = {
+            if text.startIndex == range.lowerBound { return .init(string: "") }
+
+            let nsRange = NSRange(text.startIndex..<range.lowerBound, in: text)
+//            guard let attributedTextString = attributedText.attributedSubstring(from: nsRange ) else { return .init(string: "") }
+            let attributedTextString = attributedText.attributedSubstring(from: nsRange )
+            return attributedTextString
+        }()
+
+        let trailingText: NSAttributedString = {
+            if text.count == 0 { return .init(string: "") }
+            if text.index(before: text.endIndex) == range.upperBound { return .init(string: "") }
+
+            let nsRange = NSRange(range.upperBound..<text.endIndex, in: text)
+//            guard let attributedTextString =  attributedText.attributedSubstring(from: nsRange ) else { return .init(string: "") }
+            let attributedTextString =  attributedText.attributedSubstring(from: nsRange )
+            return attributedTextString
+        }()
+        
+        print("\n HERE IS THE NEXT INSERTION")
+        print( TextFieldViewController.getMemoryAdress(of: activeViewModel ) )
+        print(text, text[ range ] )
+        print( leadingText, trailingText )
+
+        let mathMutableAttributedString = NSMutableAttributedString(string: "MT")
+        mathMutableAttributedString.setAttributes(textFieldViewModels[ index ].activeAttributes, range: NSRange(location: 0, length: 2))
+        let viewModel = RichTextFieldViewModel(mathMutableAttributedString, with: textFieldViewModels[ index ].activeAttributes)
+        
+        print( "Mat Equation ViewModel: \(TextFieldViewController.getMemoryAdress(of: viewModel))")
+
+        let handler = EquationTextHandler( viewModel  )
+
+        equationHandlers.insert(handler, at: index)
+
 //        textFieldViewModels[ index ].observer.cancel()
 //        textFieldViewModels[ index ] = RichTextFieldViewModel( leadingText, with: textFieldViewModels[ index ].activeAttributes)
-//        textFieldViewModels.insert( RichTextFieldViewModel(trailingText, with: textFieldViewModels[ index ].activeAttributes), at: index + 1 )
+        textFieldViewModels[index].attributedText = leadingText
+        
+        textFieldViewModels.insert( RichTextFieldViewModel(trailingText, with: textFieldViewModels[ index ].activeAttributes), at: index + 1 )
 //
 //        for index in index + 1...textFieldViewModels.count - 1 {
-//            textFieldViewModels[index].observer.cancel()
-//            textFieldViewModels[index] = RichTextFieldViewModel( textFieldViewModels[index].viewController.textView.attributedText, with: textFieldViewModels[index].activeAttributes)
+////            textFieldViewModels[index].observer.cancel()
+//            textFieldViewModels[index] = RichTextFieldViewModel( textFieldViewModels[index].attributedText, with: textFieldViewModels[index].activeAttributes)
 //        }
 //
 //        for index in 0...equationHandlers.count - 1 {
-//            equationHandlers[index] = EquationTextHandler( RichTextFieldViewModel( equationHandlers[index].textFieldViewModel.viewController.textView.attributedText,
+//            equationHandlers[index] = EquationTextHandler( RichTextFieldViewModel( equationHandlers[index].textFieldViewModel.attributedText,
 //                                                                                   with: equationHandlers[index].textFieldViewModel.activeAttributes) )
 //        }
-//
+
 //        beginEditingEquation(at: index)
-//        beginEditing()
-//        updateComponentCount()
+        beginEditing()
+        updateComponentCount()
     }
     
     

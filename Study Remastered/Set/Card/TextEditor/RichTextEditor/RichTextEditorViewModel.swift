@@ -28,6 +28,7 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
         NotificationCenter.default.post(name: name, object: nil)
     } }
     
+    var activeSelectedRange: NSRange = .init()
     @Published var activeFont: String = GlobalTextConstants.fontFamily
     @Published var activeFontSize: CGFloat = GlobalTextConstants.fontSize
     
@@ -40,10 +41,15 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
         if let safeAttributes = activeAttributes { self.activeAttributes = safeAttributes }
         uuid = UUID()
         
+        
         self.attributedText = NSAttributedString(string: text)
+        
+        print( "initializing a viewModel with: \( TextFieldViewController.getMemoryAdress(of: self) ) [\(self.text)]" )
+        
 //        viewController = .init()
 //        viewController = TextFieldViewController(text, parent: self)
 //        defineObserver()
+
     }
     
     init( _ attributedText: NSAttributedString, with activeAttributes: [NSAttributedString.Key: Any]? = nil, setActiveViewModel: ((RichTextFieldViewModel) -> Void)? = nil) {
@@ -54,7 +60,7 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
         uuid = UUID()
         self.attributedText = attributedText
         
-        
+        print( "initializing a viewModel with: \( TextFieldViewController.getMemoryAdress(of: self) ) [\(self.text)]" )
 //        viewController = TextFieldViewController(attributedText.string, parent: self)
 //        viewController.textView.attributedText = attributedText
 //        defineObserver()
@@ -101,6 +107,8 @@ struct RichTextField: View {
     
     let width: CGFloat
     
+    @State var size: CGSize = .zero
+    
     init(in width: CGFloat = 350) {
         self.width = width
     }
@@ -108,25 +116,27 @@ struct RichTextField: View {
     var body: some View {
         VStack {
 //            VCRep(uuid: viewModel.uuid ) { vc in viewModel.viewController = vc }
-            VCRep( viewController: TextFieldViewController(viewModel.attributedText.string, parent: viewModel) )
+            VCRep( size: $size, viewController: returnViewController()    )
 //            .environmentObject( returnViewController() )
-//            .frame(width: viewModel.viewController.size.width, height: viewModel.viewController.size.height)
+            .frame(width: size.width, height: size.height)
             .padding(.horizontal, -4)
             .padding(.vertical, -7)
-//            .background(Rectangle().foregroundColor(.red))
+            .background(.green)
         }
     }
     
-//    func returnViewController() -> TextFieldViewController {
-//        viewModel.viewController.width = width
-//        return viewModel.viewController
-//    }
+    func returnViewController() -> TextFieldViewController {
+        let viewController = TextFieldViewController(parent: viewModel, at: viewModel.activeSelectedRange)
+        viewController.width = width
+        return viewController
+    }
 }
 
 //MARK: VCREP
 struct VCRep: UIViewControllerRepresentable {
     
 //    @EnvironmentObject var viewController: TextFieldViewController
+    @Binding var size: CGSize
 
     let viewController: TextFieldViewController
     
@@ -135,16 +145,24 @@ struct VCRep: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> TextFieldViewController { viewController }
     
     func updateUIViewController(_ vc: TextFieldViewController, context: Context) {
-        if TextFieldViewController.getMemoryAdress(of: vc) != TextFieldViewController.getMemoryAdress(of: self.viewController) {
+        
+        DispatchQueue.main.async { vc.SetViewFrames(); size = vc.size }
+        
+//        if TextFieldViewController.getMemoryAdress(of: vc) != TextFieldViewController.getMemoryAdress(of: self.viewController) {
+        if vc.textView.text != viewController.textView.text {
             
-            print( viewController.text, vc.text )
-            print( TextFieldViewController.getMemoryAdress(of: viewController.parentViewModel), TextFieldViewController.getMemoryAdress(of: vc.parentViewModel) )
-            print( viewController.parentViewModel.uuid, vc.parentViewModel.uuid )
             
-            viewController.textView.text = viewController.text
-            vc.changeStoredText(with: viewController.textView)
-//            updateVC(vc)
-            vc.SetViewFrames()
+//            print( viewController.textView.text, vc.textView.text )
+//            print( TextFieldViewController.getMemoryAdress(of: viewController.parentViewModel), TextFieldViewController.getMemoryAdress(of: vc.parentViewModel) )
+//            print( viewController.parentViewModel.uuid, vc.parentViewModel.uuid )
+//            
+            vc.textView.attributedText = viewController.textView.attributedText
+            vc.parentViewModel = viewController.parentViewModel
+            
+//            viewController.textView.text = viewController.text
+//            vc.changeStoredText(with: viewController.textView)
+////            updateVC(vc)
+//            vc.SetViewFrames()
         }
     }
     

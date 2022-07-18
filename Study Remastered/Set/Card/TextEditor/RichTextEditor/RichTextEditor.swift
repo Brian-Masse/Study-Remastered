@@ -15,26 +15,30 @@ class TextFieldViewController: UIViewController, UITextViewDelegate, ObservableO
     
     let textView = UITextView()
     
-    var selectedRange: NSRange = .init()
     var textViewInsertedElement: Bool = false
      
     var parentViewModel: RichTextFieldViewModel!
     var width: CGFloat = 0
     
     @Published var currentlyEditing: Bool = false
-    @Published var size: CGSize = .zero // when the viewController lays out the textView and shit, it will take this value, which is the correct size
     @Published var text: String = "" { didSet { SetViewFrames() } }
+    
+    var size: CGSize = .zero
+    
     
     init() { super.init(nibName: nil, bundle: nil) }
     
-    init( _ text: String, parent: RichTextFieldViewModel) {
+    init(parent: RichTextFieldViewModel, at selectedRange: NSRange) {
         super.init(nibName: nil, bundle: nil)
-        self.text = text
+        self.text = parent.text
         self.parentViewModel = parent
         
         self.textView.text = text
-        self.textView.isEditable = false
-        self.textView.isSelectable = false
+        self.textView.isEditable = true
+        self.textView.isSelectable = true
+        self.textView.selectedRange = selectedRange
+    
+        print( "initializing a viewController with: \( TextFieldViewController.getMemoryAdress(of: parent)) [\( self.text )]" )
     }
     
     override func viewDidAppear(_ animated: Bool) { }
@@ -50,6 +54,9 @@ class TextFieldViewController: UIViewController, UITextViewDelegate, ObservableO
         
 //        textView.textColor = UIColor( Colors.UIprimaryCream )
 //        textView.font = EditableTextUtilities.setFont(self, with: GlobalTextConstants.UIFontFamily, and: 30).1
+        
+        textView.backgroundColor = UIColor(red: 0, green: 0, blue: 1, alpha: 0.5)
+        view.backgroundColor = .red
         
         view.addSubview(textView)
         SetViewFrames()
@@ -69,7 +76,7 @@ class TextFieldViewController: UIViewController, UITextViewDelegate, ObservableO
     
         newSize = CGSize(width: newSize.width, height:  newSize.height)
         textView.frame.size = newSize
-        size                = newSize
+        size = newSize
     }
     
     func setEditability(with allowsEdits: Bool) {
@@ -102,15 +109,21 @@ class TextFieldViewController: UIViewController, UITextViewDelegate, ObservableO
     }
     
     func textViewDidChangeSelection(_ textView: UITextView) {
+        parentViewModel.activeSelectedRange = textView.selectedRange
+        
+        print(TextFieldViewController.getMemoryAdress(of: parentViewModel ), "[\(self.textView.text)]")
+        
         if !textViewInsertedElement {
-            selectedRange = textView.selectedRange
-            self.objectWillChange.send()
+            
+//            self.objectWillChange.send()
         }
         textViewInsertedElement = false
     }
     
     func textViewDidChange(_ textView: UITextView) {
-        changeStoredText(with: textView)
+//        changeStoredText(with: textView)
+        
+        parentViewModel.attributedText = textView.attributedText
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) { currentlyEditing = true }
@@ -220,9 +233,9 @@ class TextFieldViewController: UIViewController, UITextViewDelegate, ObservableO
     
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     
-    func copy() -> TextFieldViewController {
-        let vc = TextFieldViewController(textView.text, parent: self.parentViewModel)
-        vc.setAttributedText(textView.attributedText)
-        return vc
-    }
+//    func copy() -> TextFieldViewController {
+//        let vc = TextFieldViewController(textView.text, parent: self.parentViewModel, at: )
+//        vc.setAttributedText(textView.attributedText)
+//        return vc
+//    }
 }

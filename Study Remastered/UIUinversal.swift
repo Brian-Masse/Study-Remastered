@@ -136,7 +136,7 @@ struct WrappedHStack<Content: View>: View {
     let spacing: CGFloat
     let width: CGFloat
 
-    init( _ itemsCount: Int, in width: CGFloat, spacing: CGFloat = 5,content: @escaping (Int) -> Content ) {
+    init( _ itemsCount: Int, in width: CGFloat, spacing: CGFloat = 10, content: @escaping (Int) -> Content ) {
         self.itemsCount = itemsCount
         self.spacing = spacing
         self.content = content

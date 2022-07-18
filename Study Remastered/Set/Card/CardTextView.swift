@@ -18,20 +18,29 @@ struct CardTextView: View {
     let width: CGFloat
     
     var body: some View {
-        SubViewGeometryReader(size: $size) {
-            WrappedHStack(cardTextViewModel.componentCount, in: width) { index in createStringPiece(at: index) }
+        VStack {
+            
+            Text("insert Math Equation")
+                .onTapGesture {
+                    cardTextViewModel.addMathEquation()
+                }
+            
+            SubViewGeometryReader(size: $size) {
+                WrappedHStack(cardTextViewModel.componentCount, in: width) { index in createStringPiece(at: index) }
+            }
         }
     }
     
     func createStringPiece(at index: Int) -> some View {
         let handlerIndex = Int(floor(Double(index / 2)))
         if (index % 2) == 0 {
-            if !cardTextViewModel.editingEquation {
+    
+//            if !cardTextViewModel.editingEquation {
                 let viewModel = cardTextViewModel.textFieldViewModels[ handlerIndex ]
                 
                 return AnyView(
                     VStack {
-                        Text(viewModel.attributedText.string)
+//                        Text(viewModel.attributedText.string)
                         RichTextField(in: width)
                         .environmentObject(viewModel)
                         .onTapGesture() { if cardTextViewModel.editing {
@@ -40,9 +49,9 @@ struct CardTextView: View {
                             cardTextViewModel.endEditingEquation()
                         }}
                     })
-            }
+//            }
         }else{
-            if !cardTextViewModel.editingEquation || cardTextViewModel.handlerIndex == handlerIndex {
+//            if !cardTextViewModel.editingEquation || cardTextViewModel.handlerIndex == handlerIndex {
                 let handler = cardTextViewModel.equationHandlers[ handlerIndex ]
 
                 return AnyView(
@@ -50,7 +59,7 @@ struct CardTextView: View {
                         EquationTextView(text: handler.equationText)
                             .fixedSize()
                             .padding(3)
-                            .padding(.top, cardTextViewModel.editingEquation ? 15 : 0)
+//                            .padding(.top, cardTextViewModel.editingEquation ? 15 : 0)
                             .overlay(GeometryReader { geo in
                                 RoundedRectangle(cornerRadius: 10)
                                     .stroke(style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round, miterLimit: 5))
@@ -63,9 +72,9 @@ struct CardTextView: View {
                                     cardTextViewModel.editingEquation = false
                                 }} label: {  Label("Delete Math Equation", systemImage: "delete.backward") }
                             }
-                        if cardTextViewModel.editingEquation { Spacer() }
+//                        if cardTextViewModel.editingEquation { Spacer() }
                     })
-            }
+//            }
         }
         return AnyView(Text(""))
     }
