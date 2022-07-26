@@ -87,7 +87,7 @@ class CardTextViewModel: ObservableObject {
         let index = viewModelIndex
         let text = activeViewModel.text
         let attributedText = textFieldViewModels[ index ].attributedText
-        guard let range = Range( activeViewModel.activeSelectedRange, in: text ) else { return }
+        guard let range = Range( activeViewModel.selectedRange, in: text ) else { return }
 
         let leadingText: NSAttributedString = {
             if text.startIndex == range.lowerBound { return .init(string: "") }
@@ -147,20 +147,21 @@ class CardTextViewModel: ObservableObject {
     
     func deleteMathEquation( at handlerIndex: Int ) {
 //
-//        let leadingText = NSMutableAttributedString( attributedString: textFieldViewModels[ handlerIndex ].viewController.textView.attributedText! )
-//        let trailingText = NSMutableAttributedString( attributedString: textFieldViewModels[ handlerIndex + 1 ].viewController.textView.attributedText! )
-//        leadingText.append( trailingText )
-//
-////        let viewModel = RichTextFieldViewModel(leadingText, with: equationHandlers[handlerIndex].equationText.textFieldViewModel.activeAttributes)
-//
+        let leadingText = NSMutableAttributedString( attributedString: textFieldViewModels[ handlerIndex ].attributedText )
+        let trailingText = NSMutableAttributedString( attributedString: textFieldViewModels[ handlerIndex + 1 ].attributedText )
+        leadingText.append( trailingText )
+
+//        let viewModel = RichTextFieldViewModel(leadingText, with: equationHandlers[handlerIndex].equationText.textFieldViewModel.activeAttributes)
+
 //        textFieldViewModels[ handlerIndex ].viewController.setAttributedText( leadingText )
-//
-////        textFieldViewModels[ handlerIndex ] = viewModel
-//        textFieldViewModels.remove(at: handlerIndex + 1)
-//        equationHandlers.remove(at: handlerIndex)
-//
-//        beginEditing()
-//        updateComponentCount()
+        textFieldViewModels[handlerIndex].attributedText = leadingText
+
+//        textFieldViewModels[ handlerIndex ] = viewModel
+        textFieldViewModels.remove(at: handlerIndex + 1)
+        equationHandlers.remove(at: handlerIndex)
+
+        beginEditing()
+        updateComponentCount()
     }
     
     //MARK: editing

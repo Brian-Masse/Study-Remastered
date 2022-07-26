@@ -28,57 +28,109 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
         NotificationCenter.default.post(name: name, object: nil)
     } }
     
-    var activeSelectedRange: NSRange = .init()
+    var selectedRange: NSRange = .init()
     @Published var activeFont: String = GlobalTextConstants.fontFamily
     @Published var activeFontSize: CGFloat = GlobalTextConstants.fontSize
     
-    var observer: AnyCancellable!
     var setActiveViewModel: ((RichTextFieldViewModel) -> Void)?
-    
-    let uuid: UUID
     
     init( _ text: String, with activeAttributes: [NSAttributedString.Key: Any]? = nil ) {
         if let safeAttributes = activeAttributes { self.activeAttributes = safeAttributes }
-        uuid = UUID()
-        
-        
         self.attributedText = NSAttributedString(string: text)
-        
-        print( "initializing a viewModel with: \( TextFieldViewController.getMemoryAdress(of: self) ) [\(self.text)]" )
-        
-//        viewController = .init()
-//        viewController = TextFieldViewController(text, parent: self)
-//        defineObserver()
-
     }
     
     init( _ attributedText: NSAttributedString, with activeAttributes: [NSAttributedString.Key: Any]? = nil, setActiveViewModel: ((RichTextFieldViewModel) -> Void)? = nil) {
         if let safeAttributes = activeAttributes { self.activeAttributes = safeAttributes }
-//        self.viewController = .init()
         self.setActiveViewModel = setActiveViewModel
-    
-        uuid = UUID()
         self.attributedText = attributedText
+    }
+    
+    
+    //MARK: Attribute Functions
+    
+    func setAttributedText(with attributedString: NSAttributedString) {
+        // apply the current attributes to the text
+        if attributedString.string.count == text.count + 1 {
+            let mutableAttributes = NSMutableAttributedString(attributedString: attributedString)
+
+            let rangeSize = attributedString.string.count - text.count
+            let range = NSRange(location: selectedRange.lowerBound - rangeSize, length: rangeSize)
+
+            mutableAttributes.setAttributes(activeAttributes, range: range)
+            attributedText = mutableAttributes
+        }else {
+            attributedText = attributedString
+        }
+    }
+    
+    func updateAttributes() {
+//        activeAttributes = getAttributes()
+    }
+    
+    func setAttributes( _ attributes: [ NSAttributedString.Key : Any ] ) { activeAttributes = attributes }
+    
+    func getAttributes() -> [ NSAttributedString.Key: Any ]  {
         
-        print( "initializing a viewModel with: \( TextFieldViewController.getMemoryAdress(of: self) ) [\(self.text)]" )
-//        viewController = TextFieldViewController(attributedText.string, parent: self)
-//        viewController.textView.attributedText = attributedText
-//        defineObserver()
+        func collectFonts(in text: NSAttributedString, start: Int) -> [UIFont] {
+            var range = NSRange()
+            var fonts: [UIFont] = []
+            if start == text.length { return fonts }
+            
+            let font = text.attribute(.font, at: start, effectiveRange: &range)
+            if font == nil { return fonts }
+            else {
+                fonts.append( font as! UIFont )
+                fonts.append(contentsOf: collectFonts(in: text, start: start + range.length))
+            }
+            return fonts
+        }
+        
+        var returningAttributes: [NSAttributedString.Key: Any] = [:]
+    
+        let range: NSRange? = {
+            if selectedRange.length == 0 {
+                let range = Range(selectedRange, in: text)!
+                if range.lowerBound == text.startIndex { return nil }
+                return NSRange( text.index(before: range.lowerBound)..<range.lowerBound, in: text )
+            }
+            return selectedRange
+        }()
+        
+        guard let safeRange = range else { return [:] }
+        let selectedText = attributedText.attributedSubstring(from: safeRange)
+    
+        var fonts: [UIFont] = []
+        for attribute in selectedText.attributes(at: 0, effectiveRange: nil) {
+            if attribute.key == .font {  fonts = collectFonts(in: selectedText, start: 0)  }
+            else if attributeInRange(attribute, in: selectedText) > 0 { returningAttributes[ attribute.key ] = attribute.value }
+        }
+        
+        returningAttributes[.font] = EditableTextUtilities.consolodateFonts(fonts)
+        return returningAttributes
     }
     
-//    func defineObserver() { observer = viewController.objectWillChange.sink() { self.objectWillChange.send() } }
-    
-    func setAttributes( _ attributes: [ NSAttributedString.Key : Any ] ) {
-        activeAttributes = attributes
-    }
-    
-    func toggleAttributes( _ attributes: [ NSAttributedString.Key : Any ] ) {
+    func toggleActiveAttributes( _ attributes: [ NSAttributedString.Key : Any ] ) {
         for attribute in attributes {
             if activeAttributes[ attribute.key ] == nil { activeAttributes[ attribute.key ] = attribute.value; return }
             if activeAttributes[ attribute.key ] as! AnyHashable != attribute.value as! AnyHashable { activeAttributes[ attribute.key ] = attribute.value; return }
             else { activeAttributes[ attribute.key ] = nil; return }
         }
     }
+    
+    func toggleAttributedTextAttributes( _ attributes: [ NSAttributedString.Key : Any ]) {
+        if selectedRange.length == 0 { return  }
+        
+        let mutableAttributedString = NSMutableAttributedString(attributedString: attributedText)
+        let mutableAttributedSubString = mutableAttributedString.attributedSubstring(from: selectedRange)
+        
+        for attribute in attributes {
+            if attributeInRange(attribute, in: mutableAttributedSubString) <= 1 { mutableAttributedString.addAttributes(attributes, range: selectedRange) }
+            else { mutableAttributedString.removeAttribute(attribute.key, range: selectedRange) }
+        }
+        attributedText = mutableAttributedString
+    }
+    
+//    func toggleAttributedTextFont( _  )
     
     func toggleFont( _ trait: UIFontDescriptor.SymbolicTraits ) {
 //        if let currentFont = self.activeAttributes.first(where: { (key: NSAttributedString.Key, value: Any) in key == .font })?.value as? UIFont {
@@ -88,6 +140,21 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
 //            let font = viewController.getFont()!.withTraits(trait)
 //            self.activeAttributes[.font] = font
 //        }
+    }
+    
+    
+    //MARK: utility functions
+    
+    // 0 the attribute is not entirley present in the range, 1 the attribute is entirley not present, 2 the attribute is entirley present
+    private func attributeInRange( _ attribute: (NSAttributedString.Key, Any), in text: NSAttributedString ) -> Int {
+        var nsRangePointer = NSRange()
+        
+        let value = text.attribute(attribute.0, at: 0, effectiveRange: &nsRangePointer)
+        if !(text.attributedSubstring(from: nsRangePointer).string == text.string) { return 0 }
+        
+        if value == nil { return 1 }
+        if value as! AnyHashable != attribute.1 as! AnyHashable { return 1 }
+        return 2
     }
     
     static func == (lhs: RichTextFieldViewModel, rhs: RichTextFieldViewModel) -> Bool {
@@ -100,7 +167,7 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
 }
 
 
-
+//MARK: RichTextField
 struct RichTextField: View {
     
     @EnvironmentObject var viewModel: RichTextFieldViewModel
@@ -126,7 +193,7 @@ struct RichTextField: View {
     }
     
     func returnViewController() -> TextFieldViewController {
-        let viewController = TextFieldViewController(parent: viewModel, at: viewModel.activeSelectedRange)
+        let viewController = TextFieldViewController(parent: viewModel, at: viewModel.selectedRange)
         viewController.width = width
         return viewController
     }
@@ -149,14 +216,15 @@ struct VCRep: UIViewControllerRepresentable {
         DispatchQueue.main.async { vc.SetViewFrames(); size = vc.size }
         
 //        if TextFieldViewController.getMemoryAdress(of: vc) != TextFieldViewController.getMemoryAdress(of: self.viewController) {
-        if vc.textView.text != viewController.textView.text {
+        if vc.textView.attributedText != viewController.textView.attributedText {
             
             
 //            print( viewController.textView.text, vc.textView.text )
 //            print( TextFieldViewController.getMemoryAdress(of: viewController.parentViewModel), TextFieldViewController.getMemoryAdress(of: vc.parentViewModel) )
 //            print( viewController.parentViewModel.uuid, vc.parentViewModel.uuid )
-//            
+//
             vc.textView.attributedText = viewController.textView.attributedText
+            vc.textView.selectedRange = viewController.textView.selectedRange
             vc.parentViewModel = viewController.parentViewModel
             
 //            viewController.textView.text = viewController.text

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "29E5ADFE-70B4-47A7-84D7-2E588E498250"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "1AC9387B-5578-4DAC-953A-0BC84319E340"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Study Remastered/Set/Card/TextEditor/RichTextEditor/RichTextEditorViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "31"
+            endingLineNumber = "31"
+            landmarkName = "RichTextFieldViewModel"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  uuid = "1AC9387B-5578-4DAC-953A-0BC84319E340 - cd9a68d00105addc"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Study_Remastered.RichTextFieldViewModel.selectedRange.didset : __C._NSRange"
+                  moduleName = "Study Remastered"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/brianmasse/Developer/Xcode%20/Study%20Remastered/Study%20Remastered/Set/Card/TextEditor/RichTextEditor/RichTextEditorViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "31"
+                  endingLineNumber = "31"
+                  offsetFromSymbolStart = "20">
+               </Location>
+               <Location
+                  uuid = "1AC9387B-5578-4DAC-953A-0BC84319E340 - 828fcae9fc331eaa"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Study_Remastered.RichTextFieldViewModel.selectedRange.getter : __C._NSRange"
+                  moduleName = "Study Remastered"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/brianmasse/Developer/Xcode%20/Study%20Remastered/Study%20Remastered/Set/Card/TextEditor/RichTextEditor/RichTextEditorViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "31"
+                  endingLineNumber = "31"
+                  offsetFromSymbolStart = "98">
+               </Location>
+               <Location
+                  uuid = "1AC9387B-5578-4DAC-953A-0BC84319E340 - 14dd1bf03caaeeb6"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Study_Remastered.RichTextFieldViewModel.selectedRange.setter : __C._NSRange"
+                  moduleName = "Study Remastered"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/brianmasse/Developer/Xcode%20/Study%20Remastered/Study%20Remastered/Set/Card/TextEditor/RichTextEditor/RichTextEditorViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "31"
+                  endingLineNumber = "31"
+                  offsetFromSymbolStart = "118">
+               </Location>
+               <Location
+                  uuid = "1AC9387B-5578-4DAC-953A-0BC84319E340 - 256917b37d625aa9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Study_Remastered.RichTextFieldViewModel.selectedRange.modify : __C._NSRange"
+                  moduleName = "Study Remastered"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/brianmasse/Developer/Xcode%20/Study%20Remastered/Study%20Remastered/Set/Card/TextEditor/RichTextEditor/RichTextEditorViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "31"
+                  endingLineNumber = "31"
+                  offsetFromSymbolStart = "0">
+               </Location>
+               <Location
+                  uuid = "1AC9387B-5578-4DAC-953A-0BC84319E340 - 492fc931c6d40093"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Study_Remastered.RichTextFieldViewModel.selectedRange.modify : __C._NSRange with unmangled suffix &quot;.resume.0&quot;"
+                  moduleName = "Study Remastered"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/brianmasse/Developer/Xcode%20/Study%20Remastered/Study%20Remastered/Set/Card/TextEditor/RichTextEditor/RichTextEditorViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "31"
+                  endingLineNumber = "31"
+                  offsetFromSymbolStart = "17">
+               </Location>
+               <Location
+                  uuid = "1AC9387B-5578-4DAC-953A-0BC84319E340 - dbfaccd6bb8d8672"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Study_Remastered.RichTextFieldViewModel.init(_: Swift.String, with: Swift.Optional&lt;Swift.Dictionary&lt;__C.NSAttributedStringKey, Any&gt;&gt;) -&gt; Study_Remastered.RichTextFieldViewModel"
+                  moduleName = "Study Remastered"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/brianmasse/Developer/Xcode%20/Study%20Remastered/Study%20Remastered/Set/Card/TextEditor/RichTextEditor/RichTextEditorViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "31"
+                  endingLineNumber = "31"
+                  offsetFromSymbolStart = "431">
+               </Location>
+               <Location
+                  uuid = "1AC9387B-5578-4DAC-953A-0BC84319E340 - 46433cb4cbbacd4b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Study_Remastered.RichTextFieldViewModel.init(_: __C.NSAttributedString, with: Swift.Optional&lt;Swift.Dictionary&lt;__C.NSAttributedStringKey, Any&gt;&gt;, setActiveViewModel: Swift.Optional&lt;(Study_Remastered.RichTextFieldViewModel) -&gt; ()&gt;) -&gt; Study_Remastered.RichTextFieldViewModel"
+                  moduleName = "Study Remastered"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/brianmasse/Developer/Xcode%20/Study%20Remastered/Study%20Remastered/Set/Card/TextEditor/RichTextEditor/RichTextEditorViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "31"
+                  endingLineNumber = "31"
+                  offsetFromSymbolStart = "469">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F5A9637C-3F5B-44C2-83FE-023A03F06E0A"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Study Remastered/Set/Card/TextEditor/RichTextEditor/RichTextEditorViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "226"
+            endingLineNumber = "226"
+            landmarkName = "updateUIViewController(_:context:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>

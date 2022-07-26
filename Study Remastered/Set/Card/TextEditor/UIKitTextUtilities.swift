@@ -58,19 +58,19 @@ class EditableTextUtilities {
         return (mutableAttributedString, font!)
     }
     
-    static func addTraitTo( _ viewController: TextFieldViewController, with trait: UIFontDescriptor.SymbolicTraits ) -> NSAttributedString  {
+    static func addTraitTo( _ text: NSAttributedString, at selectedRange: NSRange, with trait: UIFontDescriptor.SymbolicTraits ) -> NSAttributedString  {
         
-        let mutableAttributedString = NSMutableAttributedString(attributedString: viewController.textView.attributedText)
-        let subString = NSMutableAttributedString( attributedString: mutableAttributedString.attributedSubstring(from: viewController.textView.selectedRange) )
+        let mutableAttributedString = NSMutableAttributedString(attributedString: text)
+        let subString = NSMutableAttributedString( attributedString: mutableAttributedString.attributedSubstring(from: selectedRange) )
         
         var fonts: [ (UIFont, NSRange) ] = []
         var hasTrait = true
         
-        let startIndex = viewController.textView.selectedRange.lowerBound
+        let startIndex = selectedRange.lowerBound
         var range = NSRange()
         
         while range.upperBound != subString.length {
-            guard var font: UIFont = subString.attribute(.font, at: range.upperBound, effectiveRange: &range) as? UIFont else { break }
+            var font: UIFont = subString.attribute(.font, at: range.upperBound, effectiveRange: &range) as? UIFont ?? UIFont(name: GlobalTextConstants.fontFamily, size: GlobalTextConstants.fontSize)!
             
             if !font.hasTrait(trait) { hasTrait = false }
             if !hasTrait { font = font.withTraits(trait) }
@@ -83,7 +83,7 @@ class EditableTextUtilities {
             let finalFont = hasTrait ? tuple.0.withoutTraits(trait) : tuple.0
             mutableAttributedString.addAttributes([.font: finalFont ], range: tuple.1)
         }
-    
+
         return mutableAttributedString
     }
     

@@ -19,12 +19,6 @@ struct CardTextView: View {
     
     var body: some View {
         VStack {
-            
-            Text("insert Math Equation")
-                .onTapGesture {
-                    cardTextViewModel.addMathEquation()
-                }
-            
             SubViewGeometryReader(size: $size) {
                 WrappedHStack(cardTextViewModel.componentCount, in: width) { index in createStringPiece(at: index) }
             }

@@ -1,6 +1,0 @@
-framework module Pods_Study_Remastered {
-  umbrella header "Pods-Study Remastered-umbrella.h"
-
-  export *
-  module * { export * }
-}

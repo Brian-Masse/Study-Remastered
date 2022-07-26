@@ -21,7 +21,6 @@ class TextFieldViewController: UIViewController, UITextViewDelegate, ObservableO
     var width: CGFloat = 0
     
     @Published var currentlyEditing: Bool = false
-    @Published var text: String = "" { didSet { SetViewFrames() } }
     
     var size: CGSize = .zero
     
@@ -30,15 +29,14 @@ class TextFieldViewController: UIViewController, UITextViewDelegate, ObservableO
     
     init(parent: RichTextFieldViewModel, at selectedRange: NSRange) {
         super.init(nibName: nil, bundle: nil)
-        self.text = parent.text
         self.parentViewModel = parent
+        self.textView.attributedText = parent.attributedText
+        self.textView.selectedRange = selectedRange
         
-        self.textView.text = text
         self.textView.isEditable = true
         self.textView.isSelectable = true
-        self.textView.selectedRange = selectedRange
-    
-        print( "initializing a viewController with: \( TextFieldViewController.getMemoryAdress(of: parent)) [\( self.text )]" )
+        
+//        print( "initializing a viewController with: \( TextFieldViewController.getMemoryAdress(of: parent)) [\( self.text )]" )
     }
     
     override func viewDidAppear(_ animated: Bool) { }
@@ -47,7 +45,7 @@ class TextFieldViewController: UIViewController, UITextViewDelegate, ObservableO
     override func viewDidLoad() {
         
         textView.delegate = self
-        textView.backgroundColor = .clear
+//        textView.backgroundColor = .clear
         
         textView.isScrollEnabled = false
         textView.translatesAutoresizingMaskIntoConstraints = false
@@ -55,11 +53,11 @@ class TextFieldViewController: UIViewController, UITextViewDelegate, ObservableO
 //        textView.textColor = UIColor( Colors.UIprimaryCream )
 //        textView.font = EditableTextUtilities.setFont(self, with: GlobalTextConstants.UIFontFamily, and: 30).1
         
-        textView.backgroundColor = UIColor(red: 0, green: 0, blue: 1, alpha: 0.5)
-        view.backgroundColor = .red
+//        textView.backgroundColor = UIColor(red: 0, green: 0, blue: 1, alpha: 0.5)
+//        view.backgroundColor = .red
         
         view.addSubview(textView)
-        SetViewFrames()
+//        SetViewFrames()
     }
     
     func SetViewFrames() {
@@ -89,41 +87,32 @@ class TextFieldViewController: UIViewController, UITextViewDelegate, ObservableO
     func changeStoredText(with textView: UITextView) {
         
         //apply the current attributes to the typed text
-        if textView.text.count == self.text.count + 1 {
-            textViewInsertedElement = true
-    
-            let selection = self.textView.selectedRange
-            let mutableAttributes = NSMutableAttributedString(attributedString: textView.attributedText)
-            
-            let rangeSize = textView.text.count - self.text.count
-            let range = NSRange(location: selection.lowerBound - rangeSize, length: rangeSize)
-            
-            mutableAttributes.setAttributes([:], range: range)
-            mutableAttributes.addAttributes(parentViewModel.activeAttributes, range: range)
-            self.textView.attributedText = mutableAttributes
-            self.textView.selectedRange = selection
-            
-        }else { self.textView.attributedText = textView.attributedText }
-        
-        self.text = textView.text
+//        if textView.text.count == self.text.count + 1 {
+//            textViewInsertedElement = true
+//
+//            let selection = self.textView.selectedRange
+//            let mutableAttributes = NSMutableAttributedString(attributedString: textView.attributedText)
+//
+//            let rangeSize = textView.text.count - self.text.count
+//            let range = NSRange(location: selection.lowerBound - rangeSize, length: rangeSize)
+//
+//            mutableAttributes.setAttributes([:], range: range)
+//            mutableAttributes.addAttributes(parentViewModel.activeAttributes, range: range)
+//            self.textView.attributedText = mutableAttributes
+//            self.textView.selectedRange = selection
+//
+//        }else { self.textView.attributedText = textView.attributedText }
+//
+//        self.text = textView.text
     }
     
     func textViewDidChangeSelection(_ textView: UITextView) {
-        parentViewModel.activeSelectedRange = textView.selectedRange
-        
-        print(TextFieldViewController.getMemoryAdress(of: parentViewModel ), "[\(self.textView.text)]")
-        
-        if !textViewInsertedElement {
-            
-//            self.objectWillChange.send()
-        }
-        textViewInsertedElement = false
+        parentViewModel.selectedRange = textView.selectedRange
+        if textView.text.count == parentViewModel.text.count { parentViewModel.updateAttributes() }
     }
     
     func textViewDidChange(_ textView: UITextView) {
-//        changeStoredText(with: textView)
-        
-        parentViewModel.attributedText = textView.attributedText
+        parentViewModel.setAttributedText(with: textView.attributedText)
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) { currentlyEditing = true }
@@ -153,10 +142,10 @@ class TextFieldViewController: UIViewController, UITextViewDelegate, ObservableO
     }
     
     func setAttributedText( _ text: NSAttributedString ) {
-        let selectedRange = textView.selectedRange
-        textView.attributedText = text
-        textView.selectedRange = selectedRange
-        SetViewFrames()
+//        let selectedRange = textView.selectedRange
+//        textView.attributedText = text
+//        textView.selectedRange = selectedRange
+//        SetViewFrames()
     }
     
     func toggleAttributes( _ attributes: [ NSAttributedString.Key: Any ] ) {
@@ -202,11 +191,11 @@ class TextFieldViewController: UIViewController, UITextViewDelegate, ObservableO
         
         let attributedText: NSAttributedString? = {
             let range: NSRange? = {
-                if textView.selectedRange.length == 0 {
-                    let range = Range(textView.selectedRange, in: text)!
-                    if range.lowerBound == text.startIndex { return nil }
-                    return NSRange( text.index(before: range.lowerBound)..<range.lowerBound, in: text )
-                }
+//                if textView.selectedRange.length == 0 {
+//                    let range = Range(textView.selectedRange, in: text)!
+//                    if range.lowerBound == text.startIndex { return nil }
+//                    return NSRange( text.index(before: range.lowerBound)..<range.lowerBound, in: text )
+//                }
                 return textView.selectedRange
             }()
             

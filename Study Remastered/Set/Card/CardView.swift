@@ -7,7 +7,7 @@
 
 import Foundation
 import SwiftUI
-import Introspect
+//import Introspect
 
 
 struct CardView: View {
@@ -71,16 +71,16 @@ struct CardView: View {
                         .stroke(style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
                         .foregroundColor(Colors.UIprimaryCream)
 
-//                    VStack {
-//                        RichTextEditorControls(geo: geo)
-//                            .environmentObject( cardTextViewModel.activeViewModel )
-//                            .offset(y: -CardView.Side.cornerRadius)
-//                        Spacer()
-//                        if showSerializationControls {
-//                            richTextEditorSerializeControls(geo: geo, side: $side)
-//                                .environmentObject( cardTextViewModel )
-//                        }
-//                    }
+                    VStack {
+                        RichTextEditorControls(geo: geo)
+                            .environmentObject( cardTextViewModel.activeViewModel )
+                            .offset(y: -CardView.Side.cornerRadius)
+                        Spacer()
+                        if showSerializationControls {
+                            richTextEditorSerializeControls(geo: geo, side: $side)
+                                .environmentObject( cardTextViewModel )
+                        }
+                    }
                 
                     CardTextView(size: $size, width: geo.size.width)
                         .environmentObject(appViewModel)
