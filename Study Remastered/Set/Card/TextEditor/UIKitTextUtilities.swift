@@ -10,6 +10,7 @@ import UIKit
 
 class EditableTextUtilities {
     
+    // takes the passed fonts, finds their common traits, and returns a new single font with all of those traits
     static func consolodateFonts( _ fonts: [UIFont] ) -> UIFont {
         
         var commonTraits: [ UIFontDescriptor.SymbolicTraits ] = [ .traitBold, .traitItalic ]
@@ -24,24 +25,25 @@ class EditableTextUtilities {
             if font.pointSize != fontSize && fontSize != GlobalTextConstants.fontSize { fontSize = font.pointSize }
             if font.familyName != fontFamily && fontFamily != GlobalTextConstants.fontFamily { fontFamily = font.familyName }
         }
+        if fonts.isEmpty { commonTraits.removeAll() }
         
         var font = UIFont(name: fontFamily, size: fontSize)
         for trait in commonTraits { font = font?.withTraits(trait) }
         return font!
     }
     
-    static func setFont( _ viewController: TextFieldViewController, with fontString: String? = nil, and fontSize: CGFloat? = nil ) -> (NSAttributedString, UIFont)  {
+    static func setFont( _ viewModel: RichTextFieldViewModel, with fontString: String? = nil, and fontSize: CGFloat? = nil ) -> (NSAttributedString, UIFont)  {
         
-        let mutableAttributedString = NSMutableAttributedString(attributedString: viewController.textView.attributedText)
-        let subString = NSMutableAttributedString( attributedString: mutableAttributedString.attributedSubstring(from: viewController.textView.selectedRange) )
+        let mutableAttributedString = NSMutableAttributedString(attributedString: viewModel.attributedText)
+        let subString = NSMutableAttributedString( attributedString: mutableAttributedString.attributedSubstring(from: viewModel.selectedRange) )
         
-        let startIndex = viewController.textView.selectedRange.lowerBound
+        let startIndex = viewModel.selectedRange.lowerBound
         var range = NSRange()
         
         var returningFont: UIFont? = nil
         
         while range.upperBound != subString.length {
-            guard let font: UIFont = subString.attribute(.font, at: range.upperBound, effectiveRange: &range) as? UIFont else { break }
+            let font: UIFont = subString.attribute(.font, at: range.upperBound, effectiveRange: &range) as? UIFont ?? UIFont(name: GlobalTextConstants.fontFamily, size: GlobalTextConstants.fontSize)!
         
             returningFont = UIFont(name:  fontString == nil ? font.familyName : fontString!, size: fontSize == nil ? font.pointSize : fontSize!)!
             returningFont = returningFont!.withTraits( font.fontDescriptor.symbolicTraits )
@@ -52,8 +54,8 @@ class EditableTextUtilities {
 
         var font = returningFont
         if returningFont == nil {
-            font = UIFont(name:  fontString == nil ? viewController.getFont()!.familyName : fontString!, size: fontSize == nil ? viewController.getFont()!.pointSize : fontSize!)!
-            font = font?.withTraits( viewController.getFont()!.fontDescriptor.symbolicTraits )
+            font = UIFont(name:  fontString == nil ? viewModel.activeFont.familyName : fontString!, size: fontSize == nil ? viewModel.activeFont.pointSize : fontSize!)!
+            font = font?.withTraits( viewModel.activeFont.fontDescriptor.symbolicTraits )
         }
         return (mutableAttributedString, font!)
     }

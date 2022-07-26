@@ -137,8 +137,8 @@
             filePath = "Study Remastered/Set/Card/TextEditor/RichTextEditor/RichTextEditorViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "226"
-            endingLineNumber = "226"
+            startingLineNumber = "237"
+            endingLineNumber = "237"
             landmarkName = "updateUIViewController(_:context:)"
             landmarkType = "7">
          </BreakpointContent>

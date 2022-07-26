@@ -29,8 +29,13 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
     } }
     
     var selectedRange: NSRange = .init()
-    @Published var activeFont: String = GlobalTextConstants.fontFamily
-    @Published var activeFontSize: CGFloat = GlobalTextConstants.fontSize
+    var activeFont: UIFont {
+        guard let font = activeAttributes[.font] as? UIFont else { return UIFont(name: GlobalTextConstants.fontFamily, size: GlobalTextConstants.fontSize)! }
+        return font
+    }
+    
+//    @Published var activeFont:  String = GlobalTextConstants.fontFamily
+//    @Published var activeFontSize: CGFloat = GlobalTextConstants.fontSize
     
     var setActiveViewModel: ((RichTextFieldViewModel) -> Void)?
     
@@ -48,6 +53,7 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
     
     //MARK: Attribute Functions
     
+    //when the textView gets inputed in
     func setAttributedText(with attributedString: NSAttributedString) {
         // apply the current attributes to the text
         if attributedString.string.count == text.count + 1 {
@@ -63,13 +69,19 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
         }
     }
     
+    //when the cursor changes selection
     func updateAttributes() {
-//        activeAttributes = getAttributes()
+        activeAttributes = getAttributes()
+        activeAttributes[.font] = getFont()
     }
     
-    func setAttributes( _ attributes: [ NSAttributedString.Key : Any ] ) { activeAttributes = attributes }
+    private func getFont() -> UIFont? {
+        if text.count == 0 { return UIFont(name: GlobalTextConstants.fontFamily, size: GlobalTextConstants.fontSize ) }
+        guard let font = attributedText.attribute(.font, at: max(selectedRange.upperBound - 1, 0), effectiveRange: nil) as? UIFont else {return nil}
+        return font
+    }
     
-    func getAttributes() -> [ NSAttributedString.Key: Any ]  {
+    private func getAttributes() -> [ NSAttributedString.Key: Any ]  {
         
         func collectFonts(in text: NSAttributedString, start: Int) -> [UIFont] {
             var range = NSRange()
@@ -110,6 +122,8 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
     }
     
     func toggleActiveAttributes( _ attributes: [ NSAttributedString.Key : Any ] ) {
+        toggleAttributedTextAttributes(attributes)
+        
         for attribute in attributes {
             if activeAttributes[ attribute.key ] == nil { activeAttributes[ attribute.key ] = attribute.value; return }
             if activeAttributes[ attribute.key ] as! AnyHashable != attribute.value as! AnyHashable { activeAttributes[ attribute.key ] = attribute.value; return }
@@ -117,7 +131,15 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
         }
     }
     
-    func toggleAttributedTextAttributes( _ attributes: [ NSAttributedString.Key : Any ]) {
+    func toggleFont( _ trait: UIFontDescriptor.SymbolicTraits ) {
+        if let currentFont = self.activeAttributes.first(where: { (key: NSAttributedString.Key, value: Any) in key == .font })?.value as? UIFont {
+            let font = currentFont.hasTrait(trait) ? currentFont.withoutTraits(trait) : currentFont.withTraits(trait)
+            self.activeAttributes[.font] = font
+        }
+    }
+    
+    //actually updates the attributes in the text
+    private func toggleAttributedTextAttributes( _ attributes: [ NSAttributedString.Key : Any ]) {
         if selectedRange.length == 0 { return  }
         
         let mutableAttributedString = NSMutableAttributedString(attributedString: attributedText)
@@ -129,18 +151,7 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
         }
         attributedText = mutableAttributedString
     }
-    
-//    func toggleAttributedTextFont( _  )
-    
-    func toggleFont( _ trait: UIFontDescriptor.SymbolicTraits ) {
-//        if let currentFont = self.activeAttributes.first(where: { (key: NSAttributedString.Key, value: Any) in key == .font })?.value as? UIFont {
-//            let font = currentFont.hasTrait(trait) ? currentFont.withoutTraits(trait) : currentFont.withTraits(trait)
-//            self.activeAttributes[.font] = font
-//        }else {
-//            let font = viewController.getFont()!.withTraits(trait)
-//            self.activeAttributes[.font] = font
-//        }
-    }
+
     
     
     //MARK: utility functions

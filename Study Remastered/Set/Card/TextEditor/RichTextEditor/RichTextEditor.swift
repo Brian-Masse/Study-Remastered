@@ -149,6 +149,8 @@ class TextFieldViewController: UIViewController, UITextViewDelegate, ObservableO
     }
     
     func toggleAttributes( _ attributes: [ NSAttributedString.Key: Any ] ) {
+        
+        
         let range = textView.selectedRange
         if range.length == 0 { return  }
         

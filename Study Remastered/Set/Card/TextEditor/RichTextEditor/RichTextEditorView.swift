@@ -37,11 +37,11 @@ struct RichTextEditorControls: View {
                     ToggleAttributeButton(name: "x", key: .strikethroughStyle, value: 2)
                         .environmentObject( activeTextFieldViewModel )
                     
-//                    FontSelector()
-//                        .environmentObject(activeTextFieldViewModel)
+                    FontSelector()
+                        .environmentObject(activeTextFieldViewModel)
 //                    
-//                    FontSizeSelector()
-//                        .environmentObject(activeTextFieldViewModel)
+                    FontSizeSelector()
+                        .environmentObject(activeTextFieldViewModel)
                 }
                 .padding(.bottom, 5)
                 
@@ -75,7 +75,7 @@ struct RichTextEditorControls: View {
                 activeTextFieldViewModel.toggleFont(trait)
             }else {
 //                activeTextFieldViewModel.viewController.toggleAttributes([ key: value ])
-                activeTextFieldViewModel.toggleAttributedTextAttributes( [ key: value ] )
+//                activeTextFieldViewModel.toggleAttributedTextAttributes( [ key: value ] )
                 activeTextFieldViewModel.toggleActiveAttributes([ key: value ])
             }
         }
@@ -100,64 +100,59 @@ struct RichTextEditorControls: View {
         }
     }
     
-//    struct FontSizeSelector: View {
-//
-//        @EnvironmentObject var viewModel: RichTextFieldViewModel
-//
-//        func setFontSize(with size: CGFloat) {
-//            let result = EditableTextUtilities.setFont(viewModel.viewController, and: size)
-//            viewModel.viewController.setAttributedText( result.0 )
-//            viewModel.activeFontSize = size
+    struct FontSizeSelector: View {
+
+        @EnvironmentObject var viewModel: RichTextFieldViewModel
+
+        func setFontSize(with size: CGFloat) {
+            let result = EditableTextUtilities.setFont(viewModel, and: size)
+            viewModel.attributedText = result.0
 //            viewModel.activeAttributes[.font] = result.1
-//        }
-//
-//        var body: some View {
-//
-//            HStack {
-//                StyledUIText( "\(Int(viewModel.activeFontSize))" )
-//                    .frame(width: 34, height: 30)
-//
-//                VStack(spacing: 0) {
-//                    StyledUIText(symbol: "chevron.up")
-//                        .frame(width: 30, height: 15).onTapGesture { setFontSize(with: min(viewModel.activeFontSize + 1, 99) ) }
-//                    Spacer()
-//                    StyledUIText(symbol: "chevron.down")
-//                        .frame(width: 30, height: 15).onTapGesture { setFontSize(with: max( viewModel.activeFontSize - 1, 2 )) }
-//                }.frame(height: 30)
-//            }
-//
-//        }
-//
-//    }
+        }
+
+        var body: some View {
+
+            HStack {
+                StyledUIText( "\(Int(viewModel.activeFont.pointSize))" )
+                    .frame(width: 34, height: 30)
+
+                VStack(spacing: 0) {
+                    StyledUIText(symbol: "chevron.up")
+                        .frame(width: 30, height: 15).onTapGesture { setFontSize(with: min(viewModel.activeFont.pointSize + 1, 99) ) }
+                    Spacer()
+                    StyledUIText(symbol: "chevron.down")
+                        .frame(width: 30, height: 15).onTapGesture { setFontSize(with: max(viewModel.activeFont.pointSize - 1, 2 )) }
+                }.frame(height: 30)
+            }
+        }
+    }
     
-//    struct FontSelector: View {
-//
-//        @EnvironmentObject var viewModel: RichTextFieldViewModel
-//
-//        let fonts = [ "helvetica", "Goku", "Arial" ]
-//
-//        var body: some View {
-//            Menu {
-//                ForEach( fonts, id: \.self ) { font in
-//                    Button {
-//                        let result = EditableTextUtilities.setFont(viewModel.viewController, with: font)
-//                        viewModel.viewController.setAttributedText( result.0 )
-//                        viewModel.activeFont = font
-//                        viewModel.activeAttributes[.font] = result.1
-//                    } label : {
-//                        HStack {
-//                            Text(font)
-//                            if viewModel.activeFont == font { Image(systemName: "checkmark") }
-//                        }
-//                    }
-//                }
-//            } label: {
-//                StyledUIText( viewModel.activeFont, symbol: "chevron.up.chevron.down", aspectRatio: 10 )
-//                    .frame(width: 100, height: 30)
-//
-//            }
-//        }
-//    }
+    struct FontSelector: View {
+
+        @EnvironmentObject var viewModel: RichTextFieldViewModel
+
+        let fonts = [ "helvetica", "Goku", "Arial" ]
+
+        var body: some View {
+            Menu {
+                ForEach( fonts, id: \.self ) { font in
+                    Button {
+                        let result = EditableTextUtilities.setFont(viewModel, with: font)
+                        viewModel.attributedText = result.0
+                    } label : {
+                        HStack {
+                            Text(font)
+                            if viewModel.activeFont.familyName == font { Image(systemName: "checkmark") }
+                        }
+                    }
+                }
+            } label: {
+                StyledUIText( viewModel.activeFont.familyName, symbol: "chevron.up.chevron.down", aspectRatio: 10 )
+                    .frame(width: 100, height: 30)
+
+            }
+        }
+    }
 }
 
 struct richTextEditorSerializeControls: View {
