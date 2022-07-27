@@ -68,10 +68,11 @@ struct RichTextEditorControls: View {
         
         func setAttribute( key: NSAttributedString.Key, value: Any ) {
             if let trait = value as? UIFontDescriptor.SymbolicTraits {
-                activeTextFieldViewModel.attributedText = EditableTextUtilities.addTraitTo(activeTextFieldViewModel.attributedText,
-                                                                                           at: activeTextFieldViewModel.selectedRange,
-                                                                                           with: trait)
-            
+                let result = EditableTextUtilities.addTraitTo(activeTextFieldViewModel.attributedText,
+                                                               at: activeTextFieldViewModel.selectedRange,
+                                                               with: trait)
+
+                activeTextFieldViewModel.attributedText = result
                 activeTextFieldViewModel.toggleFont(trait)
             }else {
 //                activeTextFieldViewModel.viewController.toggleAttributes([ key: value ])

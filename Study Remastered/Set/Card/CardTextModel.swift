@@ -35,7 +35,7 @@ class CardTextViewModel: ObservableObject {
     @Published var viewModelIndex = 0
     
     @Published var editingEquation = false
-    @Published var editing = true
+    @Published var editing = false
     
     init( _ model: CardTextModel) {
         self.model = model
@@ -45,11 +45,13 @@ class CardTextViewModel: ObservableObject {
     init( _ text: String) {
         self.model = CardTextModel(text)
         self.activeViewModel = model.textFieldViewModels.first!
+        self.endEditing()
     }
     
     init( textFieldViewModels: [ RichTextFieldViewModel ], equationHandlers: [ EquationTextHandler ]) {
         self.model = CardTextModel(textFieldViewModels: textFieldViewModels, equationHandlers: equationHandlers)
         self.activeViewModel = textFieldViewModels.first!
+        self.endEditing()
     }
     
     var equationHandlers: [EquationTextHandler] {
@@ -139,7 +141,7 @@ class CardTextViewModel: ObservableObject {
 //                                                                                   with: equationHandlers[index].textFieldViewModel.activeAttributes) )
 //        }
 
-//        beginEditingEquation(at: index)
+        beginEditingEquation(at: index)
         beginEditing()
         updateComponentCount()
     }
@@ -186,12 +188,15 @@ class CardTextViewModel: ObservableObject {
     //MARK: serialization
     func saveCard() {
         toggleViewEditability(with: false)
-        
     }
     
     private func toggleViewEditability(with newValue: Bool ) {
-//        editing = newValue
-//        for viewModel in textFieldViewModels { viewModel.viewController.setEditability(with: newValue) }
+        
+        if !newValue { UIApplication.shared.sendAction(
+            #selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil
+          )  }
+        editing = newValue
+        for viewModel in textFieldViewModels { viewModel.editing = newValue }
     }
     
     //MARK: UTILITY

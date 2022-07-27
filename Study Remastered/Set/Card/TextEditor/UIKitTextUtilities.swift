@@ -73,7 +73,7 @@ class EditableTextUtilities {
         
         while range.upperBound != subString.length {
             var font: UIFont = subString.attribute(.font, at: range.upperBound, effectiveRange: &range) as? UIFont ?? UIFont(name: GlobalTextConstants.fontFamily, size: GlobalTextConstants.fontSize)!
-            
+    
             if !font.hasTrait(trait) { hasTrait = false }
             if !hasTrait { font = font.withTraits(trait) }
             

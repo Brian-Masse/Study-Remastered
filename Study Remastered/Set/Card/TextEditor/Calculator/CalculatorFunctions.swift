@@ -408,18 +408,19 @@ class EquationText: Hashable, ObservableObject {
         }
     }
     
-    func createNewViewModel(with text: String) -> RichTextFieldViewModel {
-        var mutableText = text
-        mutableText.removeAll(where: { $0 == "_" })
-        let mutableAttributedString = NSMutableAttributedString(string: mutableText)
-        mutableAttributedString.setAttributes( textFieldViewModel.activeAttributes, range: NSRange(location: 0, length: mutableText.count))
-        
-        let viewModel = RichTextFieldViewModel(mutableAttributedString, with: textFieldViewModel.activeAttributes, setActiveViewModel: textFieldViewModel.setActiveViewModel)
-//        viewModel.viewController.setEditability(with: false)
-//        viewModel.viewController.toggleAttributes(textFieldViewModel.activeAttributes)
-        
-        return viewModel
-    }
+//    func createNewViewModel(with text: String) -> RichTextFieldViewModel {
+//        var mutableText = text
+//        mutableText.removeAll(where: { $0 == "_" })
+//        let mutableAttributedString = NSMutableAttributedString(string: mutableText)
+//        mutableAttributedString.setAttributes( textFieldViewModel.activeAttributes, range: NSRange(location: 0, length: mutableText.count))
+//
+//        let viewModel = RichTextFieldViewModel(mutableAttributedString, with: textFieldViewModel.activeAttributes, setActiveViewModel: textFieldViewModel.setActiveViewModel)
+//
+////        viewModel.viewController.setEditability(with: false)
+////        viewModel.viewController.toggleAttributes(textFieldViewModel.activeAttributes)
+//
+//        return viewModel
+//    }
     
     func splitIntoPrimatives(in text: String) {
 
@@ -436,7 +437,7 @@ class EquationText: Hashable, ObservableObject {
                     if !space.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                         
 //                        let newPrimative = EquationText(text: space, type: "" )
-                        let newPrimative = EquationText(createNewViewModel(with: space), with: space, type: "")
+                        let newPrimative = EquationText( textFieldViewModel, with: space, type: "")
                         self.primatives.append(newPrimative)
                     }
                 }
@@ -451,7 +452,7 @@ class EquationText: Hashable, ObservableObject {
                     let type = String(stringSubSection[ EquationText.findClosure(type: "<", in: stringSubSection) ])
                     
 //                    let newPrimative = EquationText(text: content, type: type, hasComponent: true)
-                    let newPrimative = EquationText(createNewViewModel(with: content), with: content, type: type, hasComponent: true)
+                    let newPrimative = EquationText(textFieldViewModel, with: content, type: type, hasComponent: true)
                     self.primatives.append( newPrimative )
                     
                     let remainingText = String( text[ text.index(start, offsetBy: content.count + type.count + 5    )... ]  )
@@ -473,7 +474,7 @@ class EquationText: Hashable, ObservableObject {
                 if enumeration.element == "\\"  {
                     let content = String(stringSubSection[ closure ] )
 //                    let newComponent = EquationText(text: content, type: "comp")
-                    let newComponent = EquationText(createNewViewModel(with: content), with: content, type: "comp")
+                    let newComponent = EquationText(textFieldViewModel, with: content, type: "comp")
                     components.append(newComponent)
                 }else {
                     let remainingText = String( stringSubSection[ text.index(closure.upperBound, offsetBy: 2)... ])

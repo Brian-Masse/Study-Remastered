@@ -29,7 +29,7 @@ struct CardTextView: View {
         let handlerIndex = Int(floor(Double(index / 2)))
         if (index % 2) == 0 {
     
-//            if !cardTextViewModel.editingEquation {
+            if !cardTextViewModel.editingEquation {
                 let viewModel = cardTextViewModel.textFieldViewModels[ handlerIndex ]
                 
                 return AnyView(
@@ -43,9 +43,9 @@ struct CardTextView: View {
                             cardTextViewModel.endEditingEquation()
                         }}
                     })
-//            }
+            }
         }else{
-//            if !cardTextViewModel.editingEquation || cardTextViewModel.handlerIndex == handlerIndex {
+            if !cardTextViewModel.editingEquation || cardTextViewModel.handlerIndex == handlerIndex {
                 let handler = cardTextViewModel.equationHandlers[ handlerIndex ]
 
                 return AnyView(
@@ -66,9 +66,9 @@ struct CardTextView: View {
                                     cardTextViewModel.editingEquation = false
                                 }} label: {  Label("Delete Math Equation", systemImage: "delete.backward") }
                             }
-//                        if cardTextViewModel.editingEquation { Spacer() }
+                        if cardTextViewModel.editingEquation { Spacer() }
                     })
-//            }
+            }
         }
         return AnyView(Text(""))
     }

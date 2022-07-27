@@ -33,8 +33,13 @@ class TextFieldViewController: UIViewController, UITextViewDelegate, ObservableO
         self.textView.attributedText = parent.attributedText
         self.textView.selectedRange = selectedRange
         
-        self.textView.isEditable = true
-        self.textView.isSelectable = true
+        print("reinit: \(parentViewModel.editing), TextView at: \( TextFieldViewController.getMemoryAdress(of: self.textView) )")
+        
+//        self.textView.isEditable = parentViewModel.editing
+//        self.textView.isSelectable = parentViewModel.editing
+//
+//        self.textView.isEditable = true
+//        self.textView.isSelectable = true
         
 //        print( "initializing a viewController with: \( TextFieldViewController.getMemoryAdress(of: parent)) [\( self.text )]" )
     }
@@ -49,6 +54,7 @@ class TextFieldViewController: UIViewController, UITextViewDelegate, ObservableO
         
         textView.isScrollEnabled = false
         textView.translatesAutoresizingMaskIntoConstraints = false
+    
         
 //        textView.textColor = UIColor( Colors.UIprimaryCream )
 //        textView.font = EditableTextUtilities.setFont(self, with: GlobalTextConstants.UIFontFamily, and: 30).1
@@ -78,8 +84,11 @@ class TextFieldViewController: UIViewController, UITextViewDelegate, ObservableO
     }
     
     func setEditability(with allowsEdits: Bool) {
-        textView.isSelectable = allowsEdits
-        textView.isEditable = allowsEdits
+        
+//        if !allowsEdits { }
+        textView.isUserInteractionEnabled = allowsEdits
+//        textView.isSelectable = allowsEdits
+//        textView.isEditable = allowsEdits
     }
     
     

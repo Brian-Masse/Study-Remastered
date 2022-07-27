@@ -18,7 +18,7 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
 //        defineObserver()
 //        viewController.parentViewModel = self
 //    } }
-    
+    @Published var editing: Bool = false
     @Published var attributedText: NSAttributedString
     
     var text: String { attributedText.string }
@@ -48,6 +48,7 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
         if let safeAttributes = activeAttributes { self.activeAttributes = safeAttributes }
         self.setActiveViewModel = setActiveViewModel
         self.attributedText = attributedText
+        self.selectedRange = NSRange(location: 0, length: text.count)
     }
     
     
@@ -226,6 +227,17 @@ struct VCRep: UIViewControllerRepresentable {
         
         DispatchQueue.main.async { vc.SetViewFrames(); size = vc.size }
         
+//        print( vc.parentViewModel.editing, viewController.parentViewModel.editing )
+        
+//        vc.textView.isSelectable = vc.parentViewModel.editing
+//        vc.textView.isEditable = vc.parentViewModel.editing
+        
+        vc.setEditability(with: vc.parentViewModel.editing)
+        
+//        if vc.parentViewModel.editing != viewController.parentViewModel.editing {
+//            vc.setEditability(with: viewController.parentViewModel.editing)
+//            print("rung") }
+        
 //        if TextFieldViewController.getMemoryAdress(of: vc) != TextFieldViewController.getMemoryAdress(of: self.viewController) {
         if vc.textView.attributedText != viewController.textView.attributedText {
             
@@ -237,6 +249,9 @@ struct VCRep: UIViewControllerRepresentable {
             vc.textView.attributedText = viewController.textView.attributedText
             vc.textView.selectedRange = viewController.textView.selectedRange
             vc.parentViewModel = viewController.parentViewModel
+            
+            vc.textView.isSelectable = viewController.parentViewModel.editing
+            vc.textView.isEditable = viewController.parentViewModel.editing
             
 //            viewController.textView.text = viewController.text
 //            vc.changeStoredText(with: viewController.textView)
