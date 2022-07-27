@@ -13,13 +13,13 @@ import Combine
 class RichTextFieldViewModel: ObservableObject, Equatable {
 
     static let attributeDidChangeKey: String = "Masse.Brian.attributeDidChange"
-    
-//    @Published var viewController: TextFieldViewController { didSet {
-//        defineObserver()
-//        viewController.parentViewModel = self
-//    } }
-    @Published var editing: Bool = false
+
     @Published var attributedText: NSAttributedString
+    
+    var selectedRange: NSRange = .init()
+    
+    @Published var editing: Bool = false
+    
     
     var text: String { attributedText.string }
     
@@ -28,7 +28,6 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
         NotificationCenter.default.post(name: name, object: nil)
     } }
     
-    var selectedRange: NSRange = .init()
     var activeFont: UIFont {
         guard let font = activeAttributes[.font] as? UIFont else { return UIFont(name: GlobalTextConstants.fontFamily, size: GlobalTextConstants.fontSize)! }
         return font
@@ -68,12 +67,13 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
         }else {
             attributedText = attributedString
         }
+        updateAttributes()
     }
     
     //when the cursor changes selection
     func updateAttributes() {
         activeAttributes = getAttributes()
-        activeAttributes[.font] = getFont()
+//        activeAttributes[.font] = getFont()
     }
     
     private func getFont() -> UIFont? {
@@ -111,25 +111,34 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
         
         guard let safeRange = range else { return [:] }
         let selectedText = attributedText.attributedSubstring(from: safeRange)
+        
+        print("\n \(selectedText) \n")
     
         var fonts: [UIFont] = []
         for attribute in selectedText.attributes(at: 0, effectiveRange: nil) {
+            
+            let result = attributeInRange(attribute, in: selectedText)
+            print(attribute, result)
             if attribute.key == .font {  fonts = collectFonts(in: selectedText, start: 0)  }
-            else if attributeInRange(attribute, in: selectedText) > 0 { returningAttributes[ attribute.key ] = attribute.value }
+            else if result > 0 { returningAttributes[ attribute.key ] = attribute.value }
         }
         
         returningAttributes[.font] = EditableTextUtilities.consolodateFonts(fonts)
+        
+        print("function finished: \(returningAttributes)")
+        
         return returningAttributes
     }
     
     func toggleActiveAttributes( _ attributes: [ NSAttributedString.Key : Any ] ) {
-        toggleAttributedTextAttributes(attributes)
-        
         for attribute in attributes {
-            if activeAttributes[ attribute.key ] == nil { activeAttributes[ attribute.key ] = attribute.value; return }
-            if activeAttributes[ attribute.key ] as! AnyHashable != attribute.value as! AnyHashable { activeAttributes[ attribute.key ] = attribute.value; return }
-            else { activeAttributes[ attribute.key ] = nil; return }
+            if activeAttributes[ attribute.key ] == nil { activeAttributes[ attribute.key ] = attribute.value; break }
+            if activeAttributes[ attribute.key ] as! AnyHashable != attribute.value as! AnyHashable { activeAttributes[ attribute.key ] = attribute.value; break }
+            else { activeAttributes[ attribute.key ] = nil; break }
         }
+        toggleAttributedTextAttributes(attributes)
+        updateAttributes()
+        print("\n")
     }
     
     func toggleFont( _ trait: UIFontDescriptor.SymbolicTraits ) {
@@ -150,6 +159,8 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
             if attributeInRange(attribute, in: mutableAttributedSubString) <= 1 { mutableAttributedString.addAttributes(attributes, range: selectedRange) }
             else { mutableAttributedString.removeAttribute(attribute.key, range: selectedRange) }
         }
+        
+        print("FROM VIEWMODEL: \(mutableAttributedString), \(attributes)")
         attributedText = mutableAttributedString
     }
 
@@ -161,7 +172,9 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
     private func attributeInRange( _ attribute: (NSAttributedString.Key, Any), in text: NSAttributedString ) -> Int {
         var nsRangePointer = NSRange()
         
-        let value = text.attribute(attribute.0, at: 0, effectiveRange: &nsRangePointer)
+        let fullRange = NSRange(location: 0, length: text.length)
+        let value = text.attribute(attribute.0, at: 0, longestEffectiveRange: &nsRangePointer, in: fullRange)
+        
         if !(text.attributedSubstring(from: nsRangePointer).string == text.string) { return 0 }
         
         if value == nil { return 1 }

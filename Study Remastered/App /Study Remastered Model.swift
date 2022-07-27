@@ -17,7 +17,7 @@ class StudyRemasteredViewModel: ObservableObject {
     @Published var model: StudyRemasteredModel
     
     @Published var calculatorIsActive = false
-    var activeCalculatorHandler = EquationTextHandler(RichTextFieldViewModel(""))
+    lazy var activeCalculatorHandler = EquationTextHandler()
     var activeCardText = CardTextViewModel("")
     
     init( _ model: StudyRemasteredModel ) {

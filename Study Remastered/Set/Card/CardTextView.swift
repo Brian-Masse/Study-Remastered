@@ -53,7 +53,7 @@ struct CardTextView: View {
                         EquationTextView(text: handler.equationText)
                             .fixedSize()
                             .padding(3)
-//                            .padding(.top, cardTextViewModel.editingEquation ? 15 : 0)
+                            .padding(.top, cardTextViewModel.editingEquation ? 15 : 0)
                             .overlay(GeometryReader { geo in
                                 RoundedRectangle(cornerRadius: 10)
                                     .stroke(style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round, miterLimit: 5))

@@ -15,8 +15,8 @@ class EditableTextUtilities {
         
         var commonTraits: [ UIFontDescriptor.SymbolicTraits ] = [ .traitBold, .traitItalic ]
         
-        var fontFamily = ""
-        var fontSize: CGFloat = 0
+        var fontFamily = GlobalTextConstants.fontFamily
+        var fontSize: CGFloat = GlobalTextConstants.fontSize
         
         for font in fonts {
             for trait in commonTraits {

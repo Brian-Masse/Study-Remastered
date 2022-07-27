@@ -45,13 +45,15 @@ class CardTextViewModel: ObservableObject {
     init( _ text: String) {
         self.model = CardTextModel(text)
         self.activeViewModel = model.textFieldViewModels.first!
-        self.endEditing()
+//        self.endEditing()
+        self.beginEditing()
     }
     
     init( textFieldViewModels: [ RichTextFieldViewModel ], equationHandlers: [ EquationTextHandler ]) {
         self.model = CardTextModel(textFieldViewModels: textFieldViewModels, equationHandlers: equationHandlers)
         self.activeViewModel = textFieldViewModels.first!
-        self.endEditing()
+//        self.endEditing()
+        self.beginEditing()
     }
     
     var equationHandlers: [EquationTextHandler] {
@@ -80,7 +82,6 @@ class CardTextViewModel: ObservableObject {
             }
         }
         return returningString
-        
     }
     
     func addMathEquation() {
@@ -95,7 +96,6 @@ class CardTextViewModel: ObservableObject {
             if text.startIndex == range.lowerBound { return .init(string: "") }
 
             let nsRange = NSRange(text.startIndex..<range.lowerBound, in: text)
-//            guard let attributedTextString = attributedText.attributedSubstring(from: nsRange ) else { return .init(string: "") }
             let attributedTextString = attributedText.attributedSubstring(from: nsRange )
             return attributedTextString
         }()
@@ -105,42 +105,20 @@ class CardTextViewModel: ObservableObject {
             if text.index(before: text.endIndex) == range.upperBound { return .init(string: "") }
 
             let nsRange = NSRange(range.upperBound..<text.endIndex, in: text)
-//            guard let attributedTextString =  attributedText.attributedSubstring(from: nsRange ) else { return .init(string: "") }
             let attributedTextString =  attributedText.attributedSubstring(from: nsRange )
             return attributedTextString
         }()
         
-        print("\n HERE IS THE NEXT INSERTION")
-        print( TextFieldViewController.getMemoryAdress(of: activeViewModel ) )
-        print(text, text[ range ] )
-        print( leadingText, trailingText )
-
         let mathMutableAttributedString = NSMutableAttributedString(string: "MT")
         mathMutableAttributedString.setAttributes(textFieldViewModels[ index ].activeAttributes, range: NSRange(location: 0, length: 2))
-        let viewModel = RichTextFieldViewModel(mathMutableAttributedString, with: textFieldViewModels[ index ].activeAttributes)
         
-        print( "Mat Equation ViewModel: \(TextFieldViewController.getMemoryAdress(of: viewModel))")
-
+        let viewModel = RichTextFieldViewModel(mathMutableAttributedString, with: textFieldViewModels[ index ].activeAttributes)
         let handler = EquationTextHandler( viewModel  )
-
         equationHandlers.insert(handler, at: index)
 
-//        textFieldViewModels[ index ].observer.cancel()
-//        textFieldViewModels[ index ] = RichTextFieldViewModel( leadingText, with: textFieldViewModels[ index ].activeAttributes)
         textFieldViewModels[index].attributedText = leadingText
-        
         textFieldViewModels.insert( RichTextFieldViewModel(trailingText, with: textFieldViewModels[ index ].activeAttributes), at: index + 1 )
-//
-//        for index in index + 1...textFieldViewModels.count - 1 {
-////            textFieldViewModels[index].observer.cancel()
-//            textFieldViewModels[index] = RichTextFieldViewModel( textFieldViewModels[index].attributedText, with: textFieldViewModels[index].activeAttributes)
-//        }
-//
-//        for index in 0...equationHandlers.count - 1 {
-//            equationHandlers[index] = EquationTextHandler( RichTextFieldViewModel( equationHandlers[index].textFieldViewModel.attributedText,
-//                                                                                   with: equationHandlers[index].textFieldViewModel.activeAttributes) )
-//        }
-
+        
         beginEditingEquation(at: index)
         beginEditing()
         updateComponentCount()
@@ -148,17 +126,12 @@ class CardTextViewModel: ObservableObject {
     
     
     func deleteMathEquation( at handlerIndex: Int ) {
-//
         let leadingText = NSMutableAttributedString( attributedString: textFieldViewModels[ handlerIndex ].attributedText )
         let trailingText = NSMutableAttributedString( attributedString: textFieldViewModels[ handlerIndex + 1 ].attributedText )
         leadingText.append( trailingText )
-
-//        let viewModel = RichTextFieldViewModel(leadingText, with: equationHandlers[handlerIndex].equationText.textFieldViewModel.activeAttributes)
-
-//        textFieldViewModels[ handlerIndex ].viewController.setAttributedText( leadingText )
+        
         textFieldViewModels[handlerIndex].attributedText = leadingText
-
-//        textFieldViewModels[ handlerIndex ] = viewModel
+        
         textFieldViewModels.remove(at: handlerIndex + 1)
         equationHandlers.remove(at: handlerIndex)
 

@@ -84,7 +84,9 @@ struct RichTextEditorControls: View {
         func checkValueMatch() -> Bool {
             if let trait = value as? UIFontDescriptor.SymbolicTraits {
                 return activeTextFieldViewModel.activeAttributes.contains(where: { element in
+                    
                     guard let font = element.value as? UIFont else {return false}
+
                     
                     return element.key == key && font.hasTrait(trait)
                 })
@@ -107,7 +109,8 @@ struct RichTextEditorControls: View {
 
         func setFontSize(with size: CGFloat) {
             let result = EditableTextUtilities.setFont(viewModel, and: size)
-            viewModel.attributedText = result.0
+            viewModel.setAttributedText(with: result.0)
+//            viewModel.attributedText = result.0
 //            viewModel.activeAttributes[.font] = result.1
         }
 
@@ -139,7 +142,8 @@ struct RichTextEditorControls: View {
                 ForEach( fonts, id: \.self ) { font in
                     Button {
                         let result = EditableTextUtilities.setFont(viewModel, with: font)
-                        viewModel.attributedText = result.0
+                        viewModel.setAttributedText(with: result.0)
+//                        viewModel.attributedText = result.0
                     } label : {
                         HStack {
                             Text(font)
