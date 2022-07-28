@@ -7,7 +7,7 @@
 
 import Foundation
 import SwiftUI
-import Introspect
+//import Introspect
 
 
 struct CardView: View {

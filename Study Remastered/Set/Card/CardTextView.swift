@@ -18,20 +18,23 @@ struct CardTextView: View {
     let width: CGFloat
     
     var body: some View {
-        SubViewGeometryReader(size: $size) {
-            WrappedHStack(cardTextViewModel.componentCount, in: width) { index in createStringPiece(at: index) }
+        VStack {
+            SubViewGeometryReader(size: $size) {
+                WrappedHStack(cardTextViewModel.componentCount, in: width) { index in createStringPiece(at: index) }
+            }
         }
     }
     
     func createStringPiece(at index: Int) -> some View {
         let handlerIndex = Int(floor(Double(index / 2)))
         if (index % 2) == 0 {
+    
             if !cardTextViewModel.editingEquation {
                 let viewModel = cardTextViewModel.textFieldViewModels[ handlerIndex ]
                 
                 return AnyView(
                     VStack {
-                        Text(viewModel.viewController.text)
+//                        Text(viewModel.attributedText.string)
                         RichTextField(in: width)
                         .environmentObject(viewModel)
                         .onTapGesture() { if cardTextViewModel.editing {

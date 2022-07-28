@@ -33,13 +33,9 @@
 		C9DBC2B22880C7E50076E5FA /* Study Remastered Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DBC2B12880C7E50076E5FA /* Study Remastered Model.swift */; };
 		C9DBC2B52880CA0C0076E5FA /* Study Remastered View.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DBC2B42880CA0C0076E5FA /* Study Remastered View.swift */; };
 		C9DBC2B72881D7DB0076E5FA /* FullSetEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DBC2B62881D7DA0076E5FA /* FullSetEditor.swift */; };
-		E1B3849BD112820E3E9161E7 /* Pods_Study_Remastered.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 726A778CB0712E74C23EAF75 /* Pods_Study_Remastered.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		085F861890602B61821CCFC6 /* Pods-Study Remastered.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Study Remastered.debug.xcconfig"; path = "Target Support Files/Pods-Study Remastered/Pods-Study Remastered.debug.xcconfig"; sourceTree = "<group>"; };
-		5EE685C560550D343A30B317 /* Pods-Study Remastered.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Study Remastered.release.xcconfig"; path = "Target Support Files/Pods-Study Remastered/Pods-Study Remastered.release.xcconfig"; sourceTree = "<group>"; };
-		726A778CB0712E74C23EAF75 /* Pods_Study_Remastered.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Study_Remastered.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C919CFA028569F62008135C8 /* Study Remastered.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Study Remastered.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C919CFA328569F62008135C8 /* Study_RemasteredApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Study_RemasteredApp.swift; sourceTree = "<group>"; };
 		C919CFA528569F62008135C8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -75,37 +71,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E1B3849BD112820E3E9161E7 /* Pods_Study_Remastered.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		62D13CA094B98042B23851F8 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				726A778CB0712E74C23EAF75 /* Pods_Study_Remastered.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		8D500F018747B8DE85C40CAF /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				085F861890602B61821CCFC6 /* Pods-Study Remastered.debug.xcconfig */,
-				5EE685C560550D343A30B317 /* Pods-Study Remastered.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		C919CF9728569F62008135C8 = {
 			isa = PBXGroup;
 			children = (
 				C919CFA228569F62008135C8 /* Study Remastered */,
 				C919CFA128569F62008135C8 /* Products */,
-				8D500F018747B8DE85C40CAF /* Pods */,
-				62D13CA094B98042B23851F8 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -230,11 +206,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C919CFAE28569F63008135C8 /* Build configuration list for PBXNativeTarget "Study Remastered" */;
 			buildPhases = (
-				BEDAEBC1D54B291BF7A1F9F5 /* [CP] Check Pods Manifest.lock */,
 				C919CF9C28569F62008135C8 /* Sources */,
 				C919CF9D28569F62008135C8 /* Frameworks */,
 				C919CF9E28569F62008135C8 /* Resources */,
-				A6700182E8B6494337C6B1C6 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -290,48 +264,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		A6700182E8B6494337C6B1C6 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Study Remastered/Pods-Study Remastered-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Study Remastered/Pods-Study Remastered-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Study Remastered/Pods-Study Remastered-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		BEDAEBC1D54B291BF7A1F9F5 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Study Remastered-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		C919CF9C28569F62008135C8 /* Sources */ = {
@@ -483,7 +415,6 @@
 		};
 		C919CFAF28569F63008135C8 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 085F861890602B61821CCFC6 /* Pods-Study Remastered.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -515,7 +446,6 @@
 		};
 		C919CFB028569F63008135C8 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5EE685C560550D343A30B317 /* Pods-Study Remastered.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

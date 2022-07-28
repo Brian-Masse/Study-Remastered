@@ -88,6 +88,7 @@ struct CalculatorButton: View {
                     .minimumScaleFactor(0.5)
             }.onTapGesture {
                 viewModel.callButtonFunction( returnMode() )
+                viewModel.handler.equationText.setup()
             }
         }
     }
@@ -111,6 +112,7 @@ struct PrimaryCalculatorButton: View {
             }
             .onTapGesture {
                 viewModel.callButtonFunction( function )
+                viewModel.handler.equationText.setup()
             }
     }
 }
