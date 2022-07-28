@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		C901A92128922B0C001EF90F /* SetEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C901A92028922B0C001EF90F /* SetEditor.swift */; };
+		C901A9232892BD53001EF90F /* FlashCardsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C901A9222892BD53001EF90F /* FlashCardsModel.swift */; };
+		C901A9262892BD99001EF90F /* FlashCardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C901A9252892BD99001EF90F /* FlashCardsView.swift */; };
+		C901A9282892E949001EF90F /* Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = C901A9272892E949001EF90F /* Animations.swift */; };
 		C919CFA428569F62008135C8 /* Study_RemasteredApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C919CFA328569F62008135C8 /* Study_RemasteredApp.swift */; };
 		C919CFA628569F62008135C8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C919CFA528569F62008135C8 /* ContentView.swift */; };
 		C919CFA828569F63008135C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C919CFA728569F63008135C8 /* Assets.xcassets */; };
@@ -38,6 +41,9 @@
 
 /* Begin PBXFileReference section */
 		C901A92028922B0C001EF90F /* SetEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetEditor.swift; sourceTree = "<group>"; };
+		C901A9222892BD53001EF90F /* FlashCardsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashCardsModel.swift; sourceTree = "<group>"; };
+		C901A9252892BD99001EF90F /* FlashCardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashCardsView.swift; sourceTree = "<group>"; };
+		C901A9272892E949001EF90F /* Animations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animations.swift; sourceTree = "<group>"; };
 		C919CFA028569F62008135C8 /* Study Remastered.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Study Remastered.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C919CFA328569F62008135C8 /* Study_RemasteredApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Study_RemasteredApp.swift; sourceTree = "<group>"; };
 		C919CFA528569F62008135C8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -79,10 +85,28 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C901A9242892BD64001EF90F /* Study Modes */ = {
+			isa = PBXGroup;
+			children = (
+				C901A9222892BD53001EF90F /* FlashCardsModel.swift */,
+				C901A9252892BD99001EF90F /* FlashCardsView.swift */,
+			);
+			path = "Study Modes";
+			sourceTree = "<group>";
+		};
+		C901A9292892E95B001EF90F /* Universals */ = {
+			isa = PBXGroup;
+			children = (
+				C92F309F2875FAD700A7AA87 /* UIUinversal.swift */,
+				C901A9272892E949001EF90F /* Animations.swift */,
+				C92F30A728760CC000A7AA87 /* Color.swift */,
+			);
+			path = Universals;
+			sourceTree = "<group>";
+		};
 		C919CF9728569F62008135C8 = {
 			isa = PBXGroup;
 			children = (
-				C901A92028922B0C001EF90F /* SetEditor.swift */,
 				C919CFA228569F62008135C8 /* Study Remastered */,
 				C919CFA128569F62008135C8 /* Products */,
 			);
@@ -102,8 +126,7 @@
 				C92F30A628760AE800A7AA87 /* Study-Remastered-Info.plist */,
 				C92F30A328760A1F00A7AA87 /* Fonts */,
 				C9DBC2B32880C7EC0076E5FA /* App  */,
-				C92F309F2875FAD700A7AA87 /* UIUinversal.swift */,
-				C92F30A728760CC000A7AA87 /* Color.swift */,
+				C901A9292892E95B001EF90F /* Universals */,
 				C919CFA528569F62008135C8 /* ContentView.swift */,
 				C919CFC52856A85A008135C8 /* Set */,
 				C919CFA728569F63008135C8 /* Assets.xcassets */,
@@ -148,6 +171,7 @@
 			isa = PBXGroup;
 			children = (
 				C919CFC12856A7C4008135C8 /* SetModel.swift */,
+				C901A9242892BD64001EF90F /* Study Modes */,
 				C9DBC2B82881D7E50076E5FA /* Set Editor */,
 				C919CFC32856A847008135C8 /* SetView.swift */,
 				C919CFBC2856A041008135C8 /* Card */,
@@ -196,6 +220,7 @@
 		C9DBC2B82881D7E50076E5FA /* Set Editor */ = {
 			isa = PBXGroup;
 			children = (
+				C901A92028922B0C001EF90F /* SetEditor.swift */,
 				C9DBC2B62881D7DA0076E5FA /* FullSetEditor.swift */,
 				C9DBC2AF2880C2D50076E5FA /* QuickSetEditor.swift */,
 			);
@@ -286,7 +311,10 @@
 				C919CFA428569F62008135C8 /* Study_RemasteredApp.swift in Sources */,
 				C92F30A02875FAD700A7AA87 /* UIUinversal.swift in Sources */,
 				C92D21BA286E960000FA586C /* RichTextEditorView.swift in Sources */,
+				C901A9232892BD53001EF90F /* FlashCardsModel.swift in Sources */,
+				C901A9282892E949001EF90F /* Animations.swift in Sources */,
 				C901A92128922B0C001EF90F /* SetEditor.swift in Sources */,
+				C901A9262892BD99001EF90F /* FlashCardsView.swift in Sources */,
 				C9DBC2B22880C7E50076E5FA /* Study Remastered Model.swift in Sources */,
 				C92F30A828760CC000A7AA87 /* Color.swift in Sources */,
 				C919CFB828569FAA008135C8 /* CalculatorModel.swift in Sources */,

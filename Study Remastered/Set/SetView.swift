@@ -13,20 +13,27 @@ struct SetView: View {
     
     @ObservedObject var viewModel: SetViewModel
     
-    @State var showingQuickSetEditor = false
+    @State var showingEditor = false
+    @State var showingFlashCards = false
     
     var body: some View {
         
         VStack {
             
-            HStack {
-                NamedButton("edit", and: "pencil.circle", oriented: .vertical)
+            HStack(spacing: 10) {
+                NamedButton("edit", and: "square.and.pencil", oriented: .vertical)
                     .onTapGesture {
                         viewModel.editorViewModel.getCopyOfCurrentCards()
-                        showingQuickSetEditor = true
+                        showingEditor = true
                     }
                 
-                NamedButton("flashcards", and: "doc.on.doc", oriented: .vertical)
+                NamedButton("Flashcards", and: "doc.on.doc", oriented: .vertical).onTapGesture { showingFlashCards = true }
+                
+                NamedButton("Study", and: "graduationcap", oriented: .vertical)
+                
+                NamedButton("Write", and: "pencil", oriented: .vertical)
+                
+                NamedButton("listen", and: "beats.headphones", oriented: .vertical)
             }
             
             ScrollView(.vertical, showsIndicators: true) {
@@ -35,10 +42,15 @@ struct SetView: View {
                 }
             }
         
-        } .fullScreenCover(isPresented: $showingQuickSetEditor) {
+        } .fullScreenCover(isPresented: $showingEditor) {
             SetEditorView()
                 .environmentObject(viewModel.editorViewModel)
                 .environmentObject(viewModel)
+        }
+        .fullScreenCover(isPresented: $showingFlashCards) {
+            FlashCardView()
+                .environmentObject(viewModel)
+//                .environmentObject(viewModel)
         }
     }
 }

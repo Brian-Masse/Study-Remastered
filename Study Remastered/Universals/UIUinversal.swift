@@ -26,27 +26,33 @@ struct NamedButton: View {
     let alignment: Direction
     let text: String
     let systemImage: String
+    let reversed: Bool
     
-    init( _ text: String, and systemImage: String, oriented alignment: Direction ) {
+    init( _ text: String, and systemImage: String, oriented alignment: Direction, reversed: Bool = false ) {
         self.text = text
         self.systemImage = systemImage
         self.alignment = alignment
+        self.reversed = reversed
     }
     
     var body: some View {
-        if alignment == .vertical {
-            VStack {
-                Image(systemName: systemImage)
-                Text(text)
-            }
-        }else {
-            HStack {
-                Text(text)
-                Image(systemName: systemImage)
+        ZStack {
+            if alignment == .vertical {
+                VStack {
+                    if reversed { Text(text) }
+                    Image(systemName: systemImage)
+                    if !reversed { Text(text) }
+                }
+            }else {
+                HStack {
+                    if reversed { Image(systemName: systemImage) }
+                    Text(text)
+                    if !reversed { Image(systemName: systemImage) }
+                }
             }
         }
-        
-        
+        .padding(5)
+        .background(RoundedRectangle(cornerRadius: 5).stroke())
     }
 }
 

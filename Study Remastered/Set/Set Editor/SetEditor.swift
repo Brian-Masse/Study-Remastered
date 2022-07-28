@@ -74,15 +74,17 @@ struct SetEditorView: View {
         ZStack {
             VStack {
             
-                HStack {
-                    Button("Dismiss Modal") { presentationMode.wrappedValue.dismiss() }
-                    Button( "save" ) {
+                HStack(spacing: 10) {
+                    NamedButton("save", and: "checkmark.seal", oriented: .vertical).onTapGesture   {
                         setEditorViewModel.saveEdits()
                         presentationMode.wrappedValue.dismiss()
                     }
+                    
+                    NamedButton( "dicard edits", and: "trash", oriented: .vertical ).onTapGesture { presentationMode.wrappedValue.dismiss() }
+                    
+                    NamedButton(!quickEditor ? "Quick Set Editor" : "Full Set Editor", and: "arrow.2.squarepath", oriented: .vertical)
+                        .onTapGesture { quickEditor.toggle() }
                 }
-                Text( !quickEditor ? "Quick Set Editor" : "Full Set Editor" )
-                    .onTapGesture { quickEditor.toggle() }
                 
                 if quickEditor {
                     QuickSetEditorView().environmentObject( setEditorViewModel )
@@ -98,5 +100,62 @@ struct SetEditorView: View {
         }
         
     }
+}
+
+struct CardScroller<someView: View, contentView: View>: View {
+   
+    let cards: [ CardViewModel ]
+    let continuousScrolling: Bool
+    let endFunction: () -> Void
+    @ViewBuilder var endButton: someView
+    @ViewBuilder var content: (Int) -> contentView
     
+    @State var currentCardIndex = 0
+    @State var gestureDirection = false
+    
+    private let horizontalTolerance: CGFloat = 40
+    private let verticalTolerance: CGFloat = 5
+    
+    private func getAnimationMovement(forward: Bool) -> CGFloat {
+        return (globalFrame.height ) * ( gestureDirection ? 1 : -1 ) * ( forward ? 1 : -1 )
+    }
+    
+    private func changeActiveCard(with direction: Bool) {
+        gestureDirection = direction
+        withAnimation() {
+            if direction {
+                if currentCardIndex == cards.count - 1 { endFunction() }
+                if continuousScrolling { currentCardIndex += 1 }
+                if currentCardIndex < cards.count - 1 { currentCardIndex = currentCardIndex + 1 }
+            } else { currentCardIndex = max( currentCardIndex - 1, 0 ) }
+        }
+    }
+
+    var body: some View {
+        let swipe = DragGesture()
+            .onEnded { gesture in
+                if abs(gesture.location.x - gesture.startLocation.x) < horizontalTolerance {
+                    if abs(gesture.location.y - gesture.startLocation.y) > verticalTolerance {
+                        if (gesture.location.y - gesture.startLocation.y) < 0   { changeActiveCard(with: true) }
+                        else                                                    { changeActiveCard(with: false) }
+                    }
+                }
+            }
+        
+        ZStack {
+            content(currentCardIndex)
+                .id(UUID())
+                .transition( .asymmetric(insertion: .verticalSlide(offSet: getAnimationMovement(forward: true)),
+                                         removal: .verticalSlide(offSet:  getAnimationMovement(forward: false)) ))
+            
+            VStack {
+                Spacer()
+                if currentCardIndex + 1 < cards.count {
+                    content(currentCardIndex + 1)
+                        .transition( .asymmetric(insertion: .scale, removal: .opacity) )
+                        .offset(y: globalFrame.height * (7/10))
+                }else { endButton }
+            }
+        }.gesture(swipe)
+    }
 }

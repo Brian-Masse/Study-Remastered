@@ -146,7 +146,7 @@ struct richTextEditorSerializeControls: View {
     let geo: GeometryProxy
     
     @EnvironmentObject var cardTextViewModel: CardTextViewModel
-    @Binding var side: Bool
+    let changeSide: () -> Void
     
     var body: some View {
         
@@ -159,9 +159,7 @@ struct richTextEditorSerializeControls: View {
 //                }
             
             StyledUIText("flip card", symbol: "arrow.2.squarepath")
-                .onTapGesture {
-                    side.toggle()
-                }
+                .onTapGesture { changeSide() }
         }.frame(height: 30)
         
     }

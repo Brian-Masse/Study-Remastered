@@ -16,6 +16,8 @@ struct CardModel {
         case incorrect
     }
     
+    let uuid: UUID = UUID()
+    
     var frontTextViewModel: CardTextViewModel
     var backTextViewModel: CardTextViewModel
     
