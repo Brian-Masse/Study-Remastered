@@ -15,28 +15,18 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
     static let attributeDidChangeKey: String = "Masse.Brian.attributeDidChange"
 
     @Published var attributedText: NSAttributedString
-    
+    @Published var activeAttributes: [NSAttributedString.Key: Any] = [:]
     var selectedRange: NSRange = .init()
+    var text: String { attributedText.string }
     
     @Published var editing: Bool = false
     
-    
-    var text: String { attributedText.string }
-    
     let belongsToHandler: Bool
     
-    @Published var activeAttributes: [NSAttributedString.Key: Any] = [:] { didSet {
-    } }
-    
     var activeFont: UIFont {
-        guard let font = activeAttributes[.font] as? UIFont else { return UIFont(name: GlobalTextConstants.fontFamily, size: GlobalTextConstants.fontSize)! }
+        guard let font = getFont() else { return UIFont(name: GlobalTextConstants.fontFamily, size: GlobalTextConstants.fontSize)! }
         return font
     }
-    
-//    @Published var activeFont:  String = GlobalTextConstants.fontFamily
-//    @Published var activeFontSize: CGFloat = GlobalTextConstants.fontSize
-    
-    var setActiveViewModel: ((RichTextFieldViewModel) -> Void)?
     
     init( _ text: String, with activeAttributes: [NSAttributedString.Key: Any]? = nil ) {
         if let safeAttributes = activeAttributes { self.activeAttributes = safeAttributes }
@@ -44,13 +34,11 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
         self.belongsToHandler = false
     }
     
-    init( _ attributedText: NSAttributedString, with activeAttributes: [NSAttributedString.Key: Any]? = nil, setActiveViewModel: ((RichTextFieldViewModel) -> Void)? = nil, belongsToHandler: Bool = false) {
+    init( _ attributedText: NSAttributedString, with activeAttributes: [NSAttributedString.Key: Any]? = nil, belongsToHandler: Bool = false) {
         if let safeAttributes = activeAttributes { self.activeAttributes = safeAttributes }
-        self.setActiveViewModel = setActiveViewModel
         self.attributedText = attributedText
         self.belongsToHandler = belongsToHandler
         self.selectedRange = NSRange(location: 0, length: text.count)
-        
     }
     
     
@@ -67,12 +55,10 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
 
             mutableAttributes.setAttributes(activeAttributes, range: range)
             attributedText = mutableAttributes
-        }else {
-            attributedText = attributedString
-        }
+        }else { attributedText = attributedString }
         updateAttributes()
     }
-    
+    //for math equations only
     func postAttributeChange() {
         if !belongsToHandler { return }
         let name = NSNotification.Name(RichTextFieldViewModel.attributeDidChangeKey)
@@ -80,10 +66,7 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
     }
     
     //when the cursor changes selection
-    func updateAttributes() {
-        activeAttributes = getAttributes()
-//        activeAttributes[.font] = getFont()
-    }
+    func updateAttributes() { activeAttributes = getAttributes() }
     
     private func getFont() -> UIFont? {
         if text.count == 0 { return UIFont(name: GlobalTextConstants.fontFamily, size: GlobalTextConstants.fontSize ) }
@@ -120,22 +103,16 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
         
         guard let safeRange = range else { return [:] }
         let selectedText = attributedText.attributedSubstring(from: safeRange)
-        
-        print("\n \(selectedText) \n")
     
         var fonts: [UIFont] = []
         for attribute in selectedText.attributes(at: 0, effectiveRange: nil) {
             
             let result = attributeInRange(attribute, in: selectedText)
-            print(attribute, result)
             if attribute.key == .font {  fonts = collectFonts(in: selectedText, start: 0)  }
             else if result > 0 { returningAttributes[ attribute.key ] = attribute.value }
         }
         
         returningAttributes[.font] = EditableTextUtilities.consolodateFonts(fonts)
-        
-        print("function finished: \(returningAttributes)")
-        
         return returningAttributes
     }
     
@@ -147,9 +124,9 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
         }
         toggleAttributedTextAttributes(attributes)
         updateAttributes()
-        print("\n")
     }
     
+    // there is no function that updates the actual font in attributedText, the callers of this function directly set the attributedText
     func toggleFont( _ trait: UIFontDescriptor.SymbolicTraits ) {
         if let currentFont = self.activeAttributes.first(where: { (key: NSAttributedString.Key, value: Any) in key == .font })?.value as? UIFont {
             let font = currentFont.hasTrait(trait) ? currentFont.withoutTraits(trait) : currentFont.withTraits(trait)
@@ -168,12 +145,8 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
             if attributeInRange(attribute, in: mutableAttributedSubString) <= 1 { mutableAttributedString.addAttributes(attributes, range: selectedRange) }
             else { mutableAttributedString.removeAttribute(attribute.key, range: selectedRange) }
         }
-        
-        print("FROM VIEWMODEL: \(mutableAttributedString), \(attributes)")
         attributedText = mutableAttributedString
     }
-
-    
     
     //MARK: utility functions
     
@@ -196,10 +169,9 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
     }
     
     func copy() -> RichTextFieldViewModel {
-        return RichTextFieldViewModel(self.attributedText, with: self.activeAttributes, setActiveViewModel: setActiveViewModel)
+        return RichTextFieldViewModel(self.attributedText, with: self.activeAttributes)
     }
 }
-
 
 //MARK: RichTextField
 struct RichTextField: View {
@@ -207,22 +179,16 @@ struct RichTextField: View {
     @EnvironmentObject var viewModel: RichTextFieldViewModel
     
     let width: CGFloat
-    
     @State var size: CGSize = .zero
     
-    init(in width: CGFloat = 350) {
-        self.width = width
-    }
+    init(in width: CGFloat = 350) { self.width = width }
     
     var body: some View {
         VStack {
-//            VCRep(uuid: viewModel.uuid ) { vc in viewModel.viewController = vc }
             VCRep( size: $size, viewController: returnViewController()    )
-//            .environmentObject( returnViewController() )
             .frame(width: size.width, height: size.height)
             .padding(.horizontal, -4)
             .padding(.vertical, -7)
-            .background(.green)
         }
     }
     
@@ -236,49 +202,22 @@ struct RichTextField: View {
 //MARK: VCREP
 struct VCRep: UIViewControllerRepresentable {
     
-//    @EnvironmentObject var viewController: TextFieldViewController
     @Binding var size: CGSize
 
     let viewController: TextFieldViewController
-    
-//    var updateVC: (TextFieldViewController) -> Void
     
     func makeUIViewController(context: Context) -> TextFieldViewController { viewController }
     
     func updateUIViewController(_ vc: TextFieldViewController, context: Context) {
         
         DispatchQueue.main.async { vc.SetViewFrames(); size = vc.size }
-        
-//        print( vc.parentViewModel.editing, viewController.parentViewModel.editing )
-        
-//        vc.textView.isSelectable = vc.parentViewModel.editing
-//        vc.textView.isEditable = vc.parentViewModel.editing
-        
+    
         vc.setEditability(with: vc.parentViewModel.editing)
-        
-//        if vc.parentViewModel.editing != viewController.parentViewModel.editing {
-//            vc.setEditability(with: viewController.parentViewModel.editing)
-//            print("rung") }
-        
-//        if TextFieldViewController.getMemoryAdress(of: vc) != TextFieldViewController.getMemoryAdress(of: self.viewController) {
         if vc.textView.attributedText != viewController.textView.attributedText {
             
-            
-//            print( viewController.textView.text, vc.textView.text )
-//            print( TextFieldViewController.getMemoryAdress(of: viewController.parentViewModel), TextFieldViewController.getMemoryAdress(of: vc.parentViewModel) )
-//            print( viewController.parentViewModel.uuid, vc.parentViewModel.uuid )
-//
             vc.textView.attributedText = viewController.textView.attributedText
             vc.textView.selectedRange = viewController.textView.selectedRange
             vc.parentViewModel = viewController.parentViewModel
-            
-            vc.textView.isSelectable = viewController.parentViewModel.editing
-            vc.textView.isEditable = viewController.parentViewModel.editing
-            
-//            viewController.textView.text = viewController.text
-//            vc.changeStoredText(with: viewController.textView)
-////            updateVC(vc)
-//            vc.SetViewFrames()
         }
     }
     

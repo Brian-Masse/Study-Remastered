@@ -16,11 +16,6 @@ struct EquationString: View {
     @EnvironmentObject var equationText: EquationText
 
     var body: some View {
-//        Text("querey")
-//            .onTapGesture {
-//                print( equationText.textFieldViewModel.attributedText )
-//            }
-//        
         RichTextField(in: 100)
             .environmentObject( equationText.textFieldViewModel )
     }

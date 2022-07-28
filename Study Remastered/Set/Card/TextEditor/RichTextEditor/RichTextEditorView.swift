@@ -25,9 +25,6 @@ struct RichTextEditorControls: View {
                 .shadow(color: Colors.shadow, radius: 10, x: 0, y: 4)
             VStack {
                 HStack {
-    //                ToggleAttributeButton(name: "highlight", key: .foregroundColor, value: UIColor.green)
-    //                    .environmentObject( activeTextFieldViewModel )
-                    
                     ToggleAttributeButton(name: "b", key: .font, value: UIFontDescriptor.SymbolicTraits.traitBold)
                         .environmentObject( activeTextFieldViewModel )
                     ToggleAttributeButton(name: "i", key: .font, value: UIFontDescriptor.SymbolicTraits.traitItalic)
@@ -49,12 +46,12 @@ struct RichTextEditorControls: View {
                     .frame(width: geo.size.width * 0.85, height: 30)
                     .onTapGesture { cardTextViewModel.addMathEquation() }
             }
-//            .onChange(of: activeTextFieldViewModel.selectedRange) { _ in
-//                activeTextFieldViewModel.setAttributes( activeTextFieldViewModel.getAttributes() )
-//                activeTextFieldViewModel.activeFont = activeTextFieldViewModel.viewController.getActiveFont()
-//                activeTextFieldViewModel.activeFontSize = activeTextFieldViewModel.viewController.getFont()!.pointSize
-//            }
         }}.frame(width: geo.size.width * 0.9, height: geo.size.width * 0.9 * aspectRatio, alignment: .center)
+    }
+    
+    static func setFont(in viewModel: RichTextFieldViewModel, with font: String? = nil, and size: CGFloat? = nil ) {
+        viewModel.setAttributedText(with: EditableTextUtilities.setFont(viewModel, with: font, and: size).0)
+        viewModel.postAttributeChange()
     }
     
     struct ToggleAttributeButton: View {
@@ -68,17 +65,11 @@ struct RichTextEditorControls: View {
         
         func setAttribute( key: NSAttributedString.Key, value: Any ) {
             if let trait = value as? UIFontDescriptor.SymbolicTraits {
-                let result = EditableTextUtilities.addTraitTo(activeTextFieldViewModel.attributedText,
-                                                               at: activeTextFieldViewModel.selectedRange,
-                                                               with: trait)
-
-                activeTextFieldViewModel.attributedText = result
+                activeTextFieldViewModel.attributedText = EditableTextUtilities.addTraitTo(activeTextFieldViewModel.attributedText,
+                                                                                           at: activeTextFieldViewModel.selectedRange,
+                                                                                           with: trait)
                 activeTextFieldViewModel.toggleFont(trait)
-            }else {
-//                activeTextFieldViewModel.viewController.toggleAttributes([ key: value ])
-//                activeTextFieldViewModel.toggleAttributedTextAttributes( [ key: value ] )
-                activeTextFieldViewModel.toggleActiveAttributes([ key: value ])
-            }
+            }else { activeTextFieldViewModel.toggleActiveAttributes([ key: value ]) }
             activeTextFieldViewModel.postAttributeChange()
         }
         
@@ -108,14 +99,6 @@ struct RichTextEditorControls: View {
 
         @EnvironmentObject var viewModel: RichTextFieldViewModel
 
-        func setFontSize(with size: CGFloat) {
-            let result = EditableTextUtilities.setFont(viewModel, and: size)
-            viewModel.setAttributedText(with: result.0)
-            viewModel.postAttributeChange()
-//            viewModel.attributedText = result.0
-//            viewModel.activeAttributes[.font] = result.1
-        }
-
         var body: some View {
 
             HStack {
@@ -124,10 +107,12 @@ struct RichTextEditorControls: View {
 
                 VStack(spacing: 0) {
                     StyledUIText(symbol: "chevron.up")
-                        .frame(width: 30, height: 15).onTapGesture { setFontSize(with: min(viewModel.activeFont.pointSize + 1, 99) ) }
+                        .frame(width: 30, height: 15)
+                        .onTapGesture { RichTextEditorControls.setFont(in: viewModel, and: min(viewModel.activeFont.pointSize + 1, 99) ) }
                     Spacer()
                     StyledUIText(symbol: "chevron.down")
-                        .frame(width: 30, height: 15).onTapGesture { setFontSize(with: max(viewModel.activeFont.pointSize - 1, 2 )) }
+                        .frame(width: 30, height: 15)
+                        .onTapGesture { RichTextEditorControls.setFont(in: viewModel, and: max(viewModel.activeFont.pointSize - 1, 2 )) }
                 }.frame(height: 30)
             }
         }
@@ -136,18 +121,12 @@ struct RichTextEditorControls: View {
     struct FontSelector: View {
 
         @EnvironmentObject var viewModel: RichTextFieldViewModel
-
         let fonts = [ "helvetica", "Goku", "Arial" ]
 
         var body: some View {
             Menu {
                 ForEach( fonts, id: \.self ) { font in
-                    Button {
-                        let result = EditableTextUtilities.setFont(viewModel, with: font)
-                        viewModel.setAttributedText(with: result.0)
-                        viewModel.postAttributeChange()
-//                        viewModel.attributedText = result.0
-                    } label : {
+                    Button { RichTextEditorControls.setFont(in: viewModel, with: font) } label : {
                         HStack {
                             Text(font)
                             if viewModel.activeFont.familyName == font { Image(systemName: "checkmark") }
@@ -157,7 +136,6 @@ struct RichTextEditorControls: View {
             } label: {
                 StyledUIText( viewModel.activeFont.familyName, symbol: "chevron.up.chevron.down", aspectRatio: 10 )
                     .frame(width: 100, height: 30)
-
             }
         }
     }

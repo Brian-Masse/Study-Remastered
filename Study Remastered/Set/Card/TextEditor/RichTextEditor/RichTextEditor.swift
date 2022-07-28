@@ -25,9 +25,9 @@ class TextFieldViewController: UIViewController, UITextViewDelegate, ObservableO
         super.init(nibName: nil, bundle: nil)
         self.parentViewModel = parent
         
-        self.textView.attributedText = parent.attributedText
-        self.textView.selectedRange = selectedRange
-    
+        textView.attributedText = parent.attributedText
+        textView.selectedRange = selectedRange
+        textView.textColor = UIColor(Colors.UIprimaryCream)
     }
     
     override func viewDidAppear(_ animated: Bool) { }
@@ -38,6 +38,7 @@ class TextFieldViewController: UIViewController, UITextViewDelegate, ObservableO
         textView.isScrollEnabled = false
         textView.translatesAutoresizingMaskIntoConstraints = false
     
+        textView.backgroundColor = .clear
         view.addSubview(textView)
     }
     
