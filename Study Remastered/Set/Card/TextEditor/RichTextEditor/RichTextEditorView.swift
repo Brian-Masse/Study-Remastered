@@ -152,15 +152,14 @@ struct richTextEditorSerializeControls: View {
         
         HStack {
 
-            StyledUIText(cardTextViewModel.editing ? "save" : "edit", symbol: cardTextViewModel.editing ? "checkmark.square" : "pencil")
-                .onTapGesture {
-                    if cardTextViewModel.editing { cardTextViewModel.saveCard() }
-                    else if !cardTextViewModel.editing { cardTextViewModel.beginEditing() }
-                }
+//            StyledUIText(cardTextViewModel.editing ? "save" : "edit", symbol: cardTextViewModel.editing ? "checkmark.square" : "pencil")
+//                .onTapGesture {
+//                    if cardTextViewModel.editing { cardTextViewModel.saveCard() }
+//                    else if !cardTextViewModel.editing { cardTextViewModel.beginEditing() }
+//                }
             
             StyledUIText("flip card", symbol: "arrow.2.squarepath")
                 .onTapGesture {
-                    cardTextViewModel.saveCard()
                     side.toggle()
                 }
         }.frame(height: 30)

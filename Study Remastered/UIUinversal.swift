@@ -16,6 +16,40 @@ struct GlobalTextConstants {
     static let UIFontFamily = "Goku"
 }
 
+struct NamedButton: View {
+    
+    enum Direction {
+        case horizontal
+        case vertical
+    }
+    
+    let alignment: Direction
+    let text: String
+    let systemImage: String
+    
+    init( _ text: String, and systemImage: String, oriented alignment: Direction ) {
+        self.text = text
+        self.systemImage = systemImage
+        self.alignment = alignment
+    }
+    
+    var body: some View {
+        if alignment == .vertical {
+            VStack {
+                Image(systemName: systemImage)
+                Text(text)
+            }
+        }else {
+            HStack {
+                Text(text)
+                Image(systemName: systemImage)
+            }
+        }
+        
+        
+    }
+}
+
 struct UIText: View {
 
     let text: String

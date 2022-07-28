@@ -20,11 +20,13 @@ struct SetView: View {
         VStack {
             
             HStack {
-                Text("edit set")
+                NamedButton("edit", and: "pencil.circle", oriented: .vertical)
                     .onTapGesture {
-                        viewModel.quickSetEditorViewModel.getCopyOfCurrentCards()
+                        viewModel.editorViewModel.getCopyOfCurrentCards()
                         showingQuickSetEditor = true
                     }
+                
+                NamedButton("flashcards", and: "doc.on.doc", oriented: .vertical)
             }
             
             ScrollView(.vertical, showsIndicators: true) {
@@ -32,14 +34,12 @@ struct SetView: View {
                     CardView( enumeration.element, displayType: .double )
                 }
             }
-            
-            Text( "add card" )
-                .onTapGesture {
-                    let count = viewModel.model.cards.count
-                    viewModel.model.cards.append( CardViewModel(CardTextViewModel("front \(count)"),
-                                                                CardTextViewModel("back \(count)")) )
-                    }
-        } .fullScreenCover(isPresented: $showingQuickSetEditor) { QuickSetEditorView().environmentObject(viewModel.quickSetEditorViewModel) }
+        
+        } .fullScreenCover(isPresented: $showingQuickSetEditor) {
+            SetEditorView()
+                .environmentObject(viewModel.editorViewModel)
+                .environmentObject(viewModel)
+        }
     }
 }
 

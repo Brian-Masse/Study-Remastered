@@ -10,7 +10,7 @@ import SwiftUI
 
 struct Calculator: View {
     
-    @EnvironmentObject var appViewModel: StudyRemasteredViewModel
+    @EnvironmentObject var studyViewModel: StudyRemasteredViewModel
     
     let shouldDisplayText: Bool
     
@@ -19,7 +19,7 @@ struct Calculator: View {
         let calculatorViewModel = CalculatorViewModel(CalculatorModel( appViewModel.activeCalculatorHandler ))
         let cardTextViewModel = appViewModel.activeCardText
         
-        if appViewModel.calculatorIsActive {
+        if studyViewModel.calculatorIsActive {
             GeometryReader { geo in
                 VStack {
                     Spacer()

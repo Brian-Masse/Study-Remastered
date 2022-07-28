@@ -22,22 +22,18 @@ struct StudyRemasteredView: View {
         
         ZStack {
             
-            CardView(card1ViewModel, displayType: .single  )
-                .environmentObject(viewModel)
+//            CardView(card1ViewModel, displayType: .single  )
+//                .environmentObject(viewModel)
             
 //            CardTextView(size: $size, width: globalFrame.width)
 //                .environmentObject( card1ViewModel.frontTextViewModel )
         
-//            SetView(viewModel: setViewModel)
-            
-//            FullSetEditor( currentCardIndex: 0 )
+            SetView(viewModel: setViewModel)
+
+//            
+//            FullSetEditor()
 //                .environmentObject( setViewModel )
-        
-            
-            
-            
-            Calculator(shouldDisplayText: false)
-                .environmentObject( viewModel )
+                    
         }
         
     }

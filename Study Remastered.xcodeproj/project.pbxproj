@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C901A92128922B0C001EF90F /* SetEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C901A92028922B0C001EF90F /* SetEditor.swift */; };
 		C919CFA428569F62008135C8 /* Study_RemasteredApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C919CFA328569F62008135C8 /* Study_RemasteredApp.swift */; };
 		C919CFA628569F62008135C8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C919CFA528569F62008135C8 /* ContentView.swift */; };
 		C919CFA828569F63008135C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C919CFA728569F63008135C8 /* Assets.xcassets */; };
@@ -36,6 +37,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C901A92028922B0C001EF90F /* SetEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetEditor.swift; sourceTree = "<group>"; };
 		C919CFA028569F62008135C8 /* Study Remastered.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Study Remastered.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C919CFA328569F62008135C8 /* Study_RemasteredApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Study_RemasteredApp.swift; sourceTree = "<group>"; };
 		C919CFA528569F62008135C8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -80,6 +82,7 @@
 		C919CF9728569F62008135C8 = {
 			isa = PBXGroup;
 			children = (
+				C901A92028922B0C001EF90F /* SetEditor.swift */,
 				C919CFA228569F62008135C8 /* Study Remastered */,
 				C919CFA128569F62008135C8 /* Products */,
 			);
@@ -283,6 +286,7 @@
 				C919CFA428569F62008135C8 /* Study_RemasteredApp.swift in Sources */,
 				C92F30A02875FAD700A7AA87 /* UIUinversal.swift in Sources */,
 				C92D21BA286E960000FA586C /* RichTextEditorView.swift in Sources */,
+				C901A92128922B0C001EF90F /* SetEditor.swift in Sources */,
 				C9DBC2B22880C7E50076E5FA /* Study Remastered Model.swift in Sources */,
 				C92F30A828760CC000A7AA87 /* Color.swift in Sources */,
 				C919CFB828569FAA008135C8 /* CalculatorModel.swift in Sources */,

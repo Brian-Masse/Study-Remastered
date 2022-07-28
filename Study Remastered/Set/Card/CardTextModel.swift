@@ -45,15 +45,15 @@ class CardTextViewModel: ObservableObject {
     init( _ text: String) {
         self.model = CardTextModel(text)
         self.activeViewModel = model.textFieldViewModels.first!
-//        self.endEditing()
-        self.beginEditing()
+        self.endEditing()
+//        self.beginEditing()
     }
     
     init( textFieldViewModels: [ RichTextFieldViewModel ], equationHandlers: [ EquationTextHandler ]) {
         self.model = CardTextModel(textFieldViewModels: textFieldViewModels, equationHandlers: equationHandlers)
         self.activeViewModel = textFieldViewModels.first!
-//        self.endEditing()
-        self.beginEditing()
+        self.endEditing()
+//        self.beginEditing()
     }
     
     var equationHandlers: [EquationTextHandler] {

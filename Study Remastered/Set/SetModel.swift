@@ -22,7 +22,7 @@ class SetViewModel: ObservableObject {
     
     @Published var model: SetModel
     
-    var quickSetEditorViewModel: QuickSetEditorViewModel = QuickSetEditorViewModel()
+    lazy var editorViewModel: SetEditorViewModel = SetEditorViewModel( self, in: globalFrame.width * 0.45)
     
     var cards: [ CardViewModel ] {
         get { model.cards }
@@ -31,8 +31,7 @@ class SetViewModel: ObservableObject {
     
     init( _ cards: [ CardViewModel ] ) {
         let model = SetModel(cards)
-        self.model = model 
-        self.quickSetEditorViewModel = QuickSetEditorViewModel( self, in: globalFrame.width * 0.45)
+        self.model = model
     }
     
     func addCard(with card: CardViewModel) {
