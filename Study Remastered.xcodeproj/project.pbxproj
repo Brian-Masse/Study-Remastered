@@ -11,6 +11,10 @@
 		C901A9232892BD53001EF90F /* FlashCardsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C901A9222892BD53001EF90F /* FlashCardsModel.swift */; };
 		C901A9262892BD99001EF90F /* FlashCardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C901A9252892BD99001EF90F /* FlashCardsView.swift */; };
 		C901A9282892E949001EF90F /* Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = C901A9272892E949001EF90F /* Animations.swift */; };
+		C901A92C2893342F001EF90F /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C901A92B2893342F001EF90F /* Authenticator.swift */; };
+		C901A92E2893344D001EF90F /* AuthenticatorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C901A92D2893344D001EF90F /* AuthenticatorManager.swift */; };
+		C901A9302893346B001EF90F /* AuthenticatorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C901A92F2893346B001EF90F /* AuthenticatorModel.swift */; };
+		C901A93228933480001EF90F /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = C901A93128933480001EF90F /* Utilities.swift */; };
 		C919CFA428569F62008135C8 /* Study_RemasteredApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C919CFA328569F62008135C8 /* Study_RemasteredApp.swift */; };
 		C919CFA628569F62008135C8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C919CFA528569F62008135C8 /* ContentView.swift */; };
 		C919CFA828569F63008135C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C919CFA728569F63008135C8 /* Assets.xcassets */; };
@@ -31,19 +35,28 @@
 		C92F30A22876079600A7AA87 /* CardTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92F30A12876079600A7AA87 /* CardTextView.swift */; };
 		C92F30A528760A4700A7AA87 /* Goku.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C92F30A428760A4700A7AA87 /* Goku.ttf */; };
 		C92F30A828760CC000A7AA87 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92F30A728760CC000A7AA87 /* Color.swift */; };
+		C9339B6B28933C300066D6F4 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9339B6A28933C2F0066D6F4 /* UserData.swift */; };
+		C9339B6D28933D600066D6F4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C9339B6C28933D5F0066D6F4 /* GoogleService-Info.plist */; };
 		C9CE53E7285ACB9E0028A2FF /* RichTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9CE53E6285ACB9E0028A2FF /* RichTextEditor.swift */; };
 		C9CE53E9285ACE8E0028A2FF /* UIKitTextUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9CE53E8285ACE8E0028A2FF /* UIKitTextUtilities.swift */; };
 		C9DBC2B02880C2D50076E5FA /* QuickSetEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DBC2AF2880C2D50076E5FA /* QuickSetEditor.swift */; };
 		C9DBC2B22880C7E50076E5FA /* Study Remastered Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DBC2B12880C7E50076E5FA /* Study Remastered Model.swift */; };
 		C9DBC2B52880CA0C0076E5FA /* Study Remastered View.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DBC2B42880CA0C0076E5FA /* Study Remastered View.swift */; };
 		C9DBC2B72881D7DB0076E5FA /* FullSetEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DBC2B62881D7DA0076E5FA /* FullSetEditor.swift */; };
+		F143EDFC093D42B871018AA5 /* Pods_Study_Remastered.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB887DFF3250614B7C5AA2D8 /* Pods_Study_Remastered.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		00AEBA7499C17B2F773D1C21 /* Pods-Study Remastered.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Study Remastered.release.xcconfig"; path = "Target Support Files/Pods-Study Remastered/Pods-Study Remastered.release.xcconfig"; sourceTree = "<group>"; };
+		93666559A88A8575185CBB5D /* Pods-Study Remastered.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Study Remastered.debug.xcconfig"; path = "Target Support Files/Pods-Study Remastered/Pods-Study Remastered.debug.xcconfig"; sourceTree = "<group>"; };
 		C901A92028922B0C001EF90F /* SetEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetEditor.swift; sourceTree = "<group>"; };
 		C901A9222892BD53001EF90F /* FlashCardsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashCardsModel.swift; sourceTree = "<group>"; };
 		C901A9252892BD99001EF90F /* FlashCardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashCardsView.swift; sourceTree = "<group>"; };
 		C901A9272892E949001EF90F /* Animations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animations.swift; sourceTree = "<group>"; };
+		C901A92B2893342F001EF90F /* Authenticator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Authenticator.swift; sourceTree = "<group>"; };
+		C901A92D2893344D001EF90F /* AuthenticatorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatorManager.swift; sourceTree = "<group>"; };
+		C901A92F2893346B001EF90F /* AuthenticatorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatorModel.swift; sourceTree = "<group>"; };
+		C901A93128933480001EF90F /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		C919CFA028569F62008135C8 /* Study Remastered.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Study Remastered.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C919CFA328569F62008135C8 /* Study_RemasteredApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Study_RemasteredApp.swift; sourceTree = "<group>"; };
 		C919CFA528569F62008135C8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -66,12 +79,15 @@
 		C92F30A428760A4700A7AA87 /* Goku.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Goku.ttf; sourceTree = "<group>"; };
 		C92F30A628760AE800A7AA87 /* Study-Remastered-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Study-Remastered-Info.plist"; sourceTree = SOURCE_ROOT; };
 		C92F30A728760CC000A7AA87 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		C9339B6A28933C2F0066D6F4 /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
+		C9339B6C28933D5F0066D6F4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C9CE53E6285ACB9E0028A2FF /* RichTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RichTextEditor.swift; sourceTree = "<group>"; };
 		C9CE53E8285ACE8E0028A2FF /* UIKitTextUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKitTextUtilities.swift; sourceTree = "<group>"; };
 		C9DBC2AF2880C2D50076E5FA /* QuickSetEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickSetEditor.swift; sourceTree = "<group>"; };
 		C9DBC2B12880C7E50076E5FA /* Study Remastered Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Study Remastered Model.swift"; sourceTree = "<group>"; };
 		C9DBC2B42880CA0C0076E5FA /* Study Remastered View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Study Remastered View.swift"; sourceTree = "<group>"; };
 		C9DBC2B62881D7DA0076E5FA /* FullSetEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullSetEditor.swift; sourceTree = "<group>"; };
+		CB887DFF3250614B7C5AA2D8 /* Pods_Study_Remastered.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Study_Remastered.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,12 +95,30 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F143EDFC093D42B871018AA5 /* Pods_Study_Remastered.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		39C11B4A4A0C4A117E6C6CB9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CB887DFF3250614B7C5AA2D8 /* Pods_Study_Remastered.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C61F8B58894CC1297E2D12A5 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				93666559A88A8575185CBB5D /* Pods-Study Remastered.debug.xcconfig */,
+				00AEBA7499C17B2F773D1C21 /* Pods-Study Remastered.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		C901A9242892BD64001EF90F /* Study Modes */ = {
 			isa = PBXGroup;
 			children = (
@@ -98,10 +132,22 @@
 			isa = PBXGroup;
 			children = (
 				C92F309F2875FAD700A7AA87 /* UIUinversal.swift */,
+				C901A93128933480001EF90F /* Utilities.swift */,
 				C901A9272892E949001EF90F /* Animations.swift */,
 				C92F30A728760CC000A7AA87 /* Color.swift */,
 			);
 			path = Universals;
+			sourceTree = "<group>";
+		};
+		C901A92A28933416001EF90F /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
+				C901A92B2893342F001EF90F /* Authenticator.swift */,
+				C901A92D2893344D001EF90F /* AuthenticatorManager.swift */,
+				C901A92F2893346B001EF90F /* AuthenticatorModel.swift */,
+				C9339B6A28933C2F0066D6F4 /* UserData.swift */,
+			);
+			path = Authentication;
 			sourceTree = "<group>";
 		};
 		C919CF9728569F62008135C8 = {
@@ -109,6 +155,8 @@
 			children = (
 				C919CFA228569F62008135C8 /* Study Remastered */,
 				C919CFA128569F62008135C8 /* Products */,
+				C61F8B58894CC1297E2D12A5 /* Pods */,
+				39C11B4A4A0C4A117E6C6CB9 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -123,8 +171,10 @@
 		C919CFA228569F62008135C8 /* Study Remastered */ = {
 			isa = PBXGroup;
 			children = (
+				C9339B6C28933D5F0066D6F4 /* GoogleService-Info.plist */,
 				C92F30A628760AE800A7AA87 /* Study-Remastered-Info.plist */,
 				C92F30A328760A1F00A7AA87 /* Fonts */,
+				C9339B6928933C180066D6F4 /* User */,
 				C9DBC2B32880C7EC0076E5FA /* App  */,
 				C901A9292892E95B001EF90F /* Universals */,
 				C919CFA528569F62008135C8 /* ContentView.swift */,
@@ -207,6 +257,14 @@
 			path = Fonts;
 			sourceTree = "<group>";
 		};
+		C9339B6928933C180066D6F4 /* User */ = {
+			isa = PBXGroup;
+			children = (
+				C901A92A28933416001EF90F /* Authentication */,
+			);
+			path = User;
+			sourceTree = "<group>";
+		};
 		C9DBC2B32880C7EC0076E5FA /* App  */ = {
 			isa = PBXGroup;
 			children = (
@@ -234,9 +292,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C919CFAE28569F63008135C8 /* Build configuration list for PBXNativeTarget "Study Remastered" */;
 			buildPhases = (
+				6F8CCF6B9BFEF512CBAA704C /* [CP] Check Pods Manifest.lock */,
 				C919CF9C28569F62008135C8 /* Sources */,
 				C919CF9D28569F62008135C8 /* Frameworks */,
 				C919CF9E28569F62008135C8 /* Resources */,
+				55F6FB5277FA9984FBBBF0E6 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -286,6 +346,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C92F30A528760A4700A7AA87 /* Goku.ttf in Resources */,
+				C9339B6D28933D600066D6F4 /* GoogleService-Info.plist in Resources */,
 				C919CFAB28569F63008135C8 /* Preview Assets.xcassets in Resources */,
 				C919CFA828569F63008135C8 /* Assets.xcassets in Resources */,
 			);
@@ -293,18 +354,65 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		55F6FB5277FA9984FBBBF0E6 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Study Remastered/Pods-Study Remastered-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Study Remastered/Pods-Study Remastered-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Study Remastered/Pods-Study Remastered-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6F8CCF6B9BFEF512CBAA704C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Study Remastered-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		C919CF9C28569F62008135C8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				C919CFA628569F62008135C8 /* ContentView.swift in Sources */,
+				C901A92C2893342F001EF90F /* Authenticator.swift in Sources */,
+				C9339B6B28933C300066D6F4 /* UserData.swift in Sources */,
 				C919CFC02856A1CD008135C8 /* CardView.swift in Sources */,
 				C92D21BC286F6F1D00FA586C /* CardTextModel.swift in Sources */,
+				C901A93228933480001EF90F /* Utilities.swift in Sources */,
 				C9DBC2B02880C2D50076E5FA /* QuickSetEditor.swift in Sources */,
 				C92F30A22876079600A7AA87 /* CardTextView.swift in Sources */,
 				C9CE53E9285ACE8E0028A2FF /* UIKitTextUtilities.swift in Sources */,
 				C919CFB728569FAA008135C8 /* CalculatorView.swift in Sources */,
+				C901A92E2893344D001EF90F /* AuthenticatorManager.swift in Sources */,
+				C901A9302893346B001EF90F /* AuthenticatorModel.swift in Sources */,
 				C919CFBB28569FAA008135C8 /* CalculatorFunctions.swift in Sources */,
 				C9DBC2B52880CA0C0076E5FA /* Study Remastered View.swift in Sources */,
 				C92EEFF528752F4D00D6A81E /* RichTextEditorViewModel.swift in Sources */,
@@ -447,6 +555,7 @@
 		};
 		C919CFAF28569F63008135C8 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 93666559A88A8575185CBB5D /* Pods-Study Remastered.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -468,7 +577,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "Brian-Masse.Study-Remastered";
+				PRODUCT_BUNDLE_IDENTIFIER = "Brian-Masse.Study---Remastered";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -478,6 +587,7 @@
 		};
 		C919CFB028569F63008135C8 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 00AEBA7499C17B2F773D1C21 /* Pods-Study Remastered.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -499,7 +609,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "Brian-Masse.Study-Remastered";
+				PRODUCT_BUNDLE_IDENTIFIER = "Brian-Masse.Study---Remastered";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

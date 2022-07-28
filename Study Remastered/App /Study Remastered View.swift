@@ -17,6 +17,7 @@ struct StudyRemasteredView: View {
     
     @EnvironmentObject var viewModel: StudyRemasteredViewModel
     @State var size: CGSize = .zero
+    @EnvironmentObject var authHandler: AuthenticatorViewModel
 
     var body: some View {
         
@@ -28,7 +29,14 @@ struct StudyRemasteredView: View {
 //            CardTextView(size: $size, width: globalFrame.width)
 //                .environmentObject( card1ViewModel.frontTextViewModel )
         
-            SetView(viewModel: setViewModel)
+            if authHandler.authenticatorModel.isSignedin {
+                SetView(viewModel: setViewModel)
+            }else {
+                Authenticator()
+            }
+        
+            
+            
 
 //            
 //            FullSetEditor()
