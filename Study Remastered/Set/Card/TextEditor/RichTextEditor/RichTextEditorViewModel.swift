@@ -23,9 +23,9 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
     
     var text: String { attributedText.string }
     
+    let belongsToHandler: Bool
+    
     @Published var activeAttributes: [NSAttributedString.Key: Any] = [:] { didSet {
-        let name = NSNotification.Name(RichTextFieldViewModel.attributeDidChangeKey)
-        NotificationCenter.default.post(name: name, object: nil)
     } }
     
     var activeFont: UIFont {
@@ -41,13 +41,16 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
     init( _ text: String, with activeAttributes: [NSAttributedString.Key: Any]? = nil ) {
         if let safeAttributes = activeAttributes { self.activeAttributes = safeAttributes }
         self.attributedText = NSAttributedString(string: text)
+        self.belongsToHandler = false
     }
     
-    init( _ attributedText: NSAttributedString, with activeAttributes: [NSAttributedString.Key: Any]? = nil, setActiveViewModel: ((RichTextFieldViewModel) -> Void)? = nil) {
+    init( _ attributedText: NSAttributedString, with activeAttributes: [NSAttributedString.Key: Any]? = nil, setActiveViewModel: ((RichTextFieldViewModel) -> Void)? = nil, belongsToHandler: Bool = false) {
         if let safeAttributes = activeAttributes { self.activeAttributes = safeAttributes }
         self.setActiveViewModel = setActiveViewModel
         self.attributedText = attributedText
+        self.belongsToHandler = belongsToHandler
         self.selectedRange = NSRange(location: 0, length: text.count)
+        
     }
     
     
@@ -68,6 +71,12 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
             attributedText = attributedString
         }
         updateAttributes()
+    }
+    
+    func postAttributeChange() {
+        if !belongsToHandler { return }
+        let name = NSNotification.Name(RichTextFieldViewModel.attributeDidChangeKey)
+        NotificationCenter.default.post(name: name, object: nil)
     }
     
     //when the cursor changes selection

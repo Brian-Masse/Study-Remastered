@@ -112,7 +112,7 @@ class CardTextViewModel: ObservableObject {
         let mathMutableAttributedString = NSMutableAttributedString(string: "MT")
         mathMutableAttributedString.setAttributes(textFieldViewModels[ index ].activeAttributes, range: NSRange(location: 0, length: 2))
         
-        let viewModel = RichTextFieldViewModel(mathMutableAttributedString, with: textFieldViewModels[ index ].activeAttributes)
+        let viewModel = RichTextFieldViewModel(mathMutableAttributedString, with: textFieldViewModels[ index ].activeAttributes, belongsToHandler: true)
         let handler = EquationTextHandler( viewModel  )
         equationHandlers.insert(handler, at: index)
 

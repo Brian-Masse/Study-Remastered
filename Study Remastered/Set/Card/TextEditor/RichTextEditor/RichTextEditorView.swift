@@ -79,6 +79,7 @@ struct RichTextEditorControls: View {
 //                activeTextFieldViewModel.toggleAttributedTextAttributes( [ key: value ] )
                 activeTextFieldViewModel.toggleActiveAttributes([ key: value ])
             }
+            activeTextFieldViewModel.postAttributeChange()
         }
         
         func checkValueMatch() -> Bool {
@@ -110,6 +111,7 @@ struct RichTextEditorControls: View {
         func setFontSize(with size: CGFloat) {
             let result = EditableTextUtilities.setFont(viewModel, and: size)
             viewModel.setAttributedText(with: result.0)
+            viewModel.postAttributeChange()
 //            viewModel.attributedText = result.0
 //            viewModel.activeAttributes[.font] = result.1
         }
@@ -143,6 +145,7 @@ struct RichTextEditorControls: View {
                     Button {
                         let result = EditableTextUtilities.setFont(viewModel, with: font)
                         viewModel.setAttributedText(with: result.0)
+                        viewModel.postAttributeChange()
 //                        viewModel.attributedText = result.0
                     } label : {
                         HStack {
