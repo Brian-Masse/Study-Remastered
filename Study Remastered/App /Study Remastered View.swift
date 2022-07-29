@@ -23,25 +23,13 @@ struct StudyRemasteredView: View {
         
         ZStack {
             
-//            CardView(card1ViewModel, displayType: .single  )
-//                .environmentObject(viewModel)
-            
-//            CardTextView(size: $size, width: globalFrame.width)
-//                .environmentObject( card1ViewModel.frontTextViewModel )
-        
             if authHandler.authenticatorModel.isSignedin {
-                SetView(viewModel: setViewModel)
+                HomeView()
+                    .environmentObject(HomeViewModel(authHandler.authenticatorModel.activeUser))
+//                SetView(viewModel: setViewModel)
             }else {
                 Authenticator()
-            }
-        
-            
-            
-
-//            
-//            FullSetEditor()
-//                .environmentObject( setViewModel )
-                    
+            }  
         }
         
     }

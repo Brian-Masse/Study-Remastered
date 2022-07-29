@@ -13,17 +13,13 @@ struct FullSetEditor: View {
     @EnvironmentObject var setEditorViewModel: SetEditorViewModel
     
     var body: some View {
-        
-        
-//        CardScroller(cards: setEditorViewModel.currentCards, endFunction: setEditorViewModel.addNewCard )
-//            {  }
-        
+    
         CardScroller(cards: setEditorViewModel.currentCards, continuousScrolling: true, endFunction: setEditorViewModel.addNewCard) {
             NamedButton("Add New Card", and: "plus.app", oriented: .horizontal)
         } content: { index in
             CardView(setEditorViewModel.currentCards[index], displayType: .single)
                 .environmentObject(appViewModel)
-                .padding()
+                .padding(25)
         }
 
             

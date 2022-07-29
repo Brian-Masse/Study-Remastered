@@ -12,10 +12,13 @@ import SwiftUI
 class SetEditorViewModel: ObservableObject {
     
     static let defaultCreationString = "enter text here"
+    static let defaultDescription = "Enter Description Here"
     
     let setViewModel: SetViewModel?
     let width: CGFloat
     @Published var currentCards: [ CardViewModel ] = []
+    @Published var name: String = ""
+    @Published var description: String = ""
 
     init() {
         width = 0
@@ -28,7 +31,13 @@ class SetEditorViewModel: ObservableObject {
         self.getCopyOfCurrentCards()
     }
     
-    func getCopyOfCurrentCards() {
+    func getCopy() {
+        getCopyOfCurrentCards()
+        name = setViewModel!.model.name
+        description = setViewModel!.model.description == "" ? SetEditorViewModel.defaultDescription : setViewModel!.model.description
+    }
+    
+    private func getCopyOfCurrentCards() {
         currentCards = setViewModel!.cards.map({ card in
             let copy = card.copy(in: width)
             copy.beginEditing()
@@ -37,7 +46,7 @@ class SetEditorViewModel: ObservableObject {
     }
 
     func saveEdits() {
-        //update all the new values
+        //update all the new values of cards
         for index in currentCards.indices {
             currentCards[index].endEditing()
             
@@ -51,6 +60,9 @@ class SetEditorViewModel: ObservableObject {
                 }
             }
         }
+        //update name and description
+        setViewModel!.name = name
+        setViewModel!.description = description
     }
     
     func addNewCard() {
@@ -58,6 +70,9 @@ class SetEditorViewModel: ObservableObject {
         newCard.beginEditing()
         currentCards.append(newCard)
     }
+    
+    func changeName(with name: String) { if name.count <= SetModel.nameCharachterLimit { self.name = name } }
+    func changeDescription(with description: String) { if description.count <= SetModel.descriptionCharachterLimit { self.description = description } }
 }
 
 struct SetEditorView: View {
@@ -69,11 +84,14 @@ struct SetEditorView: View {
     
     @State var quickEditor: Bool = false
     
+    @State var boundName: String = ""
+    @State var boundDescription: String = ""
+    
     var body: some View {
         
         ZStack {
             VStack {
-            
+                Text( setEditorViewModel.name )
                 HStack(spacing: 10) {
                     NamedButton("save", and: "checkmark.seal", oriented: .vertical).onTapGesture   {
                         setEditorViewModel.saveEdits()
@@ -86,6 +104,14 @@ struct SetEditorView: View {
                         .onTapGesture { quickEditor.toggle() }
                 }
                 
+                TextField(setEditorViewModel.name, text: $boundName)
+                    .onChange(of: boundName, perform: { newValue in setEditorViewModel.changeName(with: newValue) })
+                
+                //this needs to be update with the new axis perameter when on Xcode 14
+                TextField("Insert Description", text: $boundDescription)
+                    .frame(maxWidth: globalFrame.width * 0.9)
+                    .onChange(of: boundDescription, perform: { newValue in setEditorViewModel.changeDescription(with: newValue) })
+                
                 if quickEditor {
                     QuickSetEditorView().environmentObject( setEditorViewModel )
                 }else {
@@ -97,6 +123,8 @@ struct SetEditorView: View {
             
             Calculator(shouldDisplayText: false)
                 .environmentObject( appViewModel )
+        }.onAppear() {
+            boundName = setEditorViewModel.name
         }
         
     }

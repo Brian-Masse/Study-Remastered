@@ -11,7 +11,7 @@ import FirebaseAuth
 
 class UserData: Object {
     
-    
+    //MARK: Authentication Properties
     @objc dynamic var accessToken: String = ""
     
     @objc dynamic var firstName: String = ""
@@ -24,6 +24,10 @@ class UserData: Object {
     var fireBaseUser: FirebaseAuth.User? {
         get { Auth.auth().currentUser }
     }
+    
+    //MARK: App Properties
+    
+    var sets: [ SetViewModel ] = [ setViewModel ]
     
     override static func primaryKey() -> String? {
         return "accessToken"
@@ -63,4 +67,8 @@ class UserData: Object {
             util.removeDataFromRealm(key: accessToken)
         }
     }
+    
+    //MARK: Convienience Functions:
+    
+    func getFormattedName() -> String { "\(firstName) \(String(lastName.first!))." }
 }

@@ -16,14 +16,22 @@ struct SetView: View {
     @State var showingEditor = false
     @State var showingFlashCards = false
     
+    @Environment(\.presentationMode) var presentationMode
+    
     var body: some View {
         
         VStack {
             
+            HStack {
+                NamedButton("Back", and: "chevron.backward", oriented: .horizontal, reversed: true).onTapGesture { presentationMode.wrappedValue.dismiss() }
+                Spacer()
+                NamedButton(viewModel.name, and: "rectangle.on.rectangle", oriented: .horizontal)
+            }.padding()
+            
             HStack(spacing: 10) {
                 NamedButton("edit", and: "square.and.pencil", oriented: .vertical)
                     .onTapGesture {
-                        viewModel.editorViewModel.getCopyOfCurrentCards()
+                        viewModel.editorViewModel.getCopy()
                         showingEditor = true
                     }
                 
@@ -36,13 +44,16 @@ struct SetView: View {
                 NamedButton("listen", and: "beats.headphones", oriented: .vertical)
             }
             
+            Text( viewModel.description )
+            
             ScrollView(.vertical, showsIndicators: true) {
                 ForEach( Array(viewModel.model.cards.enumerated()), id: \.offset ) { enumeration in
                     CardView( enumeration.element, displayType: .double )
                 }
             }
         
-        } .fullScreenCover(isPresented: $showingEditor) {
+        }
+        .fullScreenCover(isPresented: $showingEditor) {
             SetEditorView()
                 .environmentObject(viewModel.editorViewModel)
                 .environmentObject(viewModel)
@@ -52,6 +63,29 @@ struct SetView: View {
                 .environmentObject(viewModel)
 //                .environmentObject(viewModel)
         }
+    }
+}
+
+struct SetPreviewView: View {
+    
+    @EnvironmentObject var setViewModel: SetViewModel
+    
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading) {
+                Text( setViewModel.model.name )
+                if setViewModel.description != "" {
+                    Text( setViewModel.model.description )
+                        .padding(.bottom)
+                }
+            }
+            Spacer()
+            
+            Image(systemName: "chevron.right")
+        }
+        .padding()
+        .overlay(RoundedRectangle(cornerRadius: 10).stroke())
+        .background(Color(red: 1, green: 1, blue: 1, opacity: 0.01))
     }
 }
 
