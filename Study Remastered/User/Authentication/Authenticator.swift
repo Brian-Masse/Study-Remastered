@@ -18,7 +18,7 @@ struct Authenticator: View {
     @State var lastName = ""
     @State var userName = ""
     
-    @StateObject var handler = authenticatorHandler
+    @StateObject var handler = AuthenticatorViewModel.shared
     
     var body: some View {
         VStack {
@@ -41,37 +41,13 @@ struct Authenticator: View {
                 }
             }
             
-    //        ForEach( Array(handler.authenticatorModel.users.keys), id: \.self ) { key in
-    //            VStack {
-    //                Text( handler.authenticatorModel.users[key]!.firstName )
-    //            }
-    //        }
-            
             HStack {
-                if handler.authenticatorModel.isSignedin {
-                    Text( "SIGNED IN: \(handler.authenticatorModel.activeUser.firstName)" )
-                }else {
-                    Text( "SIGNED OUT" )
-                }
-                
                 Button(action: { handler.signup(email, password, firstName, lastName, userName) }) {
                     Text( "SIGNUP" )
                 }
                 
                 Button(action: { handler.login(email, password) }) {
                     Text( "LOGIN" )
-                }
-                
-                Button(action: { handler.signout() }) {
-                    Text( "SIGN OUT" )
-                }
-                
-                Button(action: {  handler.authenticatorModel.activeUser.delete()   }) {
-                    Text( "DELETE CURRENT USER" )
-                }
-                
-                Button(action: { print( handler.authenticatorModel.activeUser.firstName ) } ) {
-                    Text( "check the current User " )
                 }
             }
         }

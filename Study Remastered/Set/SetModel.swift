@@ -7,7 +7,7 @@
 
 import Foundation
 import SwiftUI
-
+import RealmSwift
 
 struct SetModel {
     
@@ -22,9 +22,10 @@ struct SetModel {
     
     var name: String = "New Set"
     var description: String = ""
+    
 }
 
-class SetViewModel: ObservableObject {
+class SetViewModel: ObservableObject, Codable {
     
     @Published private (set) var model: SetModel
     
@@ -53,6 +54,7 @@ class SetViewModel: ObservableObject {
     init( _ cards: [ CardViewModel ], name: String, description: String ) {
         let model = SetModel(cards)
         self.model = model
+//        super.init()
         self.model.name = name
         self.model.description = description
     }
@@ -63,5 +65,28 @@ class SetViewModel: ObservableObject {
     
     func addCard(with card: CardViewModel) {
         cards.append(card)
+    }
+    
+    //MARK: Serialization
+    
+    enum CodingKeys: String, CodingKey {
+        case cards
+        case name
+        case description
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        Utilities.shared.encodeData(name, using: encoder, with: CodingKeys.name)
+        Utilities.shared.encodeData(description, using: encoder, with: CodingKeys.description)
+        Utilities.shared.encodeData(cards, using: encoder, with: CodingKeys.cards)
+    }
+    
+    required init(from decoder: Decoder) throws {
+        let values = try! decoder.container(keyedBy: CodingKeys.self)
+        
+        model =  SetModel([])
+        name =          Utilities.shared.decodeData(in: values, with: CodingKeys.name, defaultValue: "")!
+        description =   Utilities.shared.decodeData(in: values, with: CodingKeys.description, defaultValue: "")!
+        cards =         Utilities.shared.decodeData(in: values, with: CodingKeys.cards, defaultValue: [])!
     }
 }

@@ -26,7 +26,7 @@ struct CardTextModel {
 }
 
 
-class CardTextViewModel: ObservableObject {
+class CardTextViewModel: ObservableObject, Codable {
     
     @Published var model: CardTextModel
     @Published var activeViewModel: RichTextFieldViewModel!
@@ -178,6 +178,29 @@ class CardTextViewModel: ObservableObject {
     func copy(with newWidth: CGFloat? = nil) -> CardTextViewModel {
         return CardTextViewModel(textFieldViewModels: textFieldViewModels.map( { textFieldViewModel in textFieldViewModel.copy()}),
                                  equationHandlers: equationHandlers.map( { equationHandler in equationHandler.copy() } ) )
+    }
+    
+    //MARK: Serialization
+    
+    enum CodingKeys: String, CodingKey {
+        case equationHandlers
+        case textFieldViewModels
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        Utilities.shared.encodeData(equationHandlers, using: encoder, with: CodingKeys.equationHandlers)
+        Utilities.shared.encodeData(textFieldViewModels, using: encoder, with: CodingKeys.textFieldViewModels)
+    }
+    
+    required init(from decoder: Decoder) throws {
+        let values = try! decoder.container(keyedBy: CodingKeys.self)
+        
+        let equationHandlers: [EquationTextHandler]          = Utilities.shared.decodeData(in: values, with: CodingKeys.equationHandlers)!
+        let textFieldViewModels: [RichTextFieldViewModel]   = Utilities.shared.decodeData(in: values, with: CodingKeys.textFieldViewModels)!
+        
+        model =  CardTextModel(textFieldViewModels: textFieldViewModels, equationHandlers: equationHandlers)
+        activeViewModel = textFieldViewModels.first!
+        updateComponentCount()
     }
     
 }

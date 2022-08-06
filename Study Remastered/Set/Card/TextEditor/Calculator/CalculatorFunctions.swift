@@ -2,7 +2,7 @@ import SwiftUI
 import Swift
 import Combine
 
-class EquationTextHandler: ObservableObject {
+class EquationTextHandler: ObservableObject, Codable {
     
     static let cursorJumps = [ "[", "]", "\\", "#", ":", "<", ">"]
     enum Direction {
@@ -327,6 +327,31 @@ class EquationTextHandler: ObservableObject {
         addString( EquationText.closurers[type]! )
         cursorPos = type == ")" ? text.index(after: oldCursor) : oldCursor
         text = prepareText()
+    }
+    
+    //MARK: Serialization
+    
+    enum CodingKeys: String, CodingKey {
+        case textFieldViewModel
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        Utilities.shared.encodeData(textFieldViewModel, using: encoder, with: CodingKeys.textFieldViewModel)
+    }
+    
+    required init(from decoder: Decoder) throws {
+        let values = try! decoder.container(keyedBy: CodingKeys.self)
+        
+        textFieldViewModel = Utilities.shared.decodeData(in: values, with: CodingKeys.textFieldViewModel)!
+
+        self.equationText = EquationText()
+        self.equationText = EquationText(textFieldViewModel.copy(), with: textFieldViewModel.text, parentHandler: self, type: "", isPrimative: false)
+    
+        self.observer = equationText.objectWillChange.sink(){self.objectWillChange.send()}
+        self.text = prepareText()
+        moveCursor(direction: .left)
+        
+        self.setupObserver()
     }
 }
 

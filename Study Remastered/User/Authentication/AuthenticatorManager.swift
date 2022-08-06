@@ -10,49 +10,60 @@ import SwiftUI
 import FirebaseCore
 import FirebaseAuth
 
-
-let authenticatorHandler = AuthenticatorViewModel()
-
 class AuthenticatorViewModel: ObservableObject {
     
-    @Published private(set) var authenticatorModel = AuthenticatorModel()
+//    @Published private(set) var authenticatorModel = AuthenticatorModel()
     
     var email = ""
     var password = ""
-    
     var firstName = ""
     var lastName = ""
     var userName = ""
     
     var handler: AuthStateDidChangeListenerHandle?
     
-    init() {
-        
+    var accessToken: String {
+        get {
+            guard let user = Auth.auth().currentUser else { return "" }
+            return user.uid
+        }
+    }
+    
+    @Published var isSignedin: Bool = false
+    @Published var activeUser: UserData = UserData()
+    @Published var userLoaded: Bool = false // comes shortly after sign in, to ensure it has a valid User attatched to it
+    
+    static let shared = AuthenticatorViewModel()
+    
+    func setupFireBaseHandler() {
         FirebaseApp.configure()
         
+//        signout()
         handler = Auth.auth().addStateDidChangeListener() { auth, user in
-            if let usr = user {
-                self.changeActiveUser(token: usr.uid)
-                self.authenticatorModel.isSignedin = true
+            
+            if let _ = user {
+                self.changeActiveUser()
+                self.isSignedin = true
             } else {
-                self.authenticatorModel.isSignedin = false
+                self.isSignedin = false
+                self.userLoaded = false
             }
         }
     }
     
-    func validateEmail( _ email: String ) -> Bool {
+    private func validateEmail( _ email: String ) -> Bool {
         let emailTest = NSPredicate(format: "SELF MATCHES %@", "[A-Z0-9a-z.-_]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,3}")
         return emailTest.evaluate(with: email)
     }
     
-    func validateFields() -> String? {
+    private func validateFields() -> String? {
         if self.email == "" || self.email == "" { return "Please Fill in All Fields" }
         if !validateEmail( self.email ) {  return "Please Enter a valid email" }
     
         return nil
     }
     
-    func cleanFields( _ email: String, _ password: String ) -> String?  {
+    private func cleanFields( _ email: String, _ password: String ) -> String?  {
         self.email = email.trimmingCharacters(in: .whitespacesAndNewlines)
         self.password = password.trimmingCharacters(in: .whitespacesAndNewlines)
         
@@ -71,7 +82,6 @@ class AuthenticatorViewModel: ObservableObject {
             if err != nil {
                 print( "ERROR SIGNING IN: \( err!.localizedDescription )" )
                 return
-                
             }
         }
 
@@ -86,16 +96,20 @@ class AuthenticatorViewModel: ObservableObject {
         let result = cleanFields(email, password)
         if result != nil { print( result! ); return }
         
+        var token: String = ""
+        
         Auth.auth().createUser(withEmail: self.email, password: self.password) { result, err in
             
             if err != nil { print(" ERROR CREATING USER: \(err!.localizedDescription)"); return }
                                   
             if let content = result {
 //                THIS SHOULD BE THE TOKEN, but that requires some formatting / reading what a token even us
-                let token = content.user.uid
+                token = content.user.uid
                 
                 let user = UserData()
-                user.create(accessToken: token , self.firstName, self.lastName, self.userName)
+                user.create(accessToken: token , self.firstName, self.lastName, self.email)
+                
+                self.changeActiveUser()
             }
         }
     }
@@ -103,20 +117,23 @@ class AuthenticatorViewModel: ObservableObject {
     func signout() {
         do {
             try Auth.auth().signOut()
-        } catch {
-            print(error.localizedDescription)
-        }
+        } catch { print(error.localizedDescription) }
     }
     
     func delete() {
-        signout()
-        self.authenticatorModel.activeUser.delete()
+        isSignedin = false
+        userLoaded = false
+        activeUser = UserData()
+        
+        activeUser.delete()
     }
     
-    func changeActiveUser(token: String) {
-//        authenticatorModel.setToken( token )
-        if let user = util.locateDataInRealm(key: authenticatorModel.accessToken) {
-            authenticatorModel.activeUser = user
+    func changeActiveUser() {
+        if let user = RealmManager.shared.locateDataInRealm(key: accessToken) {
+            user.load()
+            activeUser = user
+            userLoaded = true
         }
+//        else { signout() }
     }
 }

@@ -9,43 +9,29 @@ import Foundation
 import SwiftUI
 
 
-class HomeViewModel: ObservableObject {
-    
-    let activeUser: UserData
-    
-    init( _ activeUser: UserData ) {
-        self.activeUser = activeUser
-    }
-    
-    func addNewSet(number: Int) {
-        let newCardViewModel = CardViewModel(CardTextViewModel("Click Here to Edit Text :)"), CardTextViewModel("Click Here to Edit the Back Text :0"))
-        let newName = "New Set \(number)"
-        let newSet = SetViewModel([ newCardViewModel ], name: newName, description: "")
-        activeUser.sets.append(newSet)
-    }
-    
-}
-
 struct HomeView: View {
     
-    @EnvironmentObject var homeViewModel: HomeViewModel
+    @EnvironmentObject var user: User
     
     @State var showingSet = false
     @State var activeSet: Int = 0
+    
+    @State var showingProfile = false
     
     var body: some View {
         
         VStack {
             
             HStack(spacing: 0) {
-                Text( homeViewModel.activeUser.getFormattedName() )
+                Text( user.getFormattedName() )
+                    .onTapGesture { showingProfile = true }
             }
             
             Spacer()
             
-            ForEach( homeViewModel.activeUser.sets.indices, id: \.self) { index in
+            ForEach( user.sets.indices, id: \.self) { index in
                 SetPreviewView()
-                    .environmentObject( homeViewModel.activeUser.sets[index] )
+                    .environmentObject( user.sets[index] )
                     .padding(.horizontal)
                     .onTapGesture {
                         activeSet = index
@@ -55,13 +41,19 @@ struct HomeView: View {
             
             NamedButton("Create New Set", and: "plus.rectangle.on.rectangle", oriented: .horizontal)
                 .onTapGesture {
-                    homeViewModel.addNewSet(number: homeViewModel.activeUser.sets.count)
-                    activeSet = homeViewModel.activeUser.sets.count - 1
+                    user.addNewSet()
+                    activeSet = user.sets.count - 1
+                }
+            
+            NamedButton("Save User", and: "person.badge.key", oriented: .horizontal)
+                .onTapGesture {
+                    user.userData.save(withUpdateToUser: true)
                 }
             
         }
         .onChange(of: activeSet ) { _ in showingSet = true }
-        .fullScreenCover(isPresented: $showingSet) { SetView(viewModel: homeViewModel.activeUser.sets[activeSet]) }
+        .fullScreenCover(isPresented: $showingSet) { SetView(viewModel: user.sets[activeSet]) }
+        .fullScreenCover(isPresented: $showingProfile) { ProfileView().environmentObject( user ) }
     }
 
 }

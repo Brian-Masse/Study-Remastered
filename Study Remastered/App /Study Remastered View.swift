@@ -18,18 +18,25 @@ struct StudyRemasteredView: View {
     @EnvironmentObject var viewModel: StudyRemasteredViewModel
     @State var size: CGSize = .zero
     @EnvironmentObject var authHandler: AuthenticatorViewModel
+    
+    @StateObject var utilities = RealmManager.shared
 
     var body: some View {
         
         ZStack {
             
-            if authHandler.authenticatorModel.isSignedin {
-                HomeView()
-                    .environmentObject(HomeViewModel(authHandler.authenticatorModel.activeUser))
-//                SetView(viewModel: setViewModel)
-            }else {
-                Authenticator()
-            }  
+            if let _ = utilities.realm {
+                if authHandler.userLoaded {
+                    HomeView()
+                        .environmentObject(authHandler.activeUser.user)
+    //                SetView(viewModel: setViewModel)
+                }else {
+                    Authenticator()
+                }
+            }
+        }.task {
+            await utilities.loadRealm()
+            AuthenticatorViewModel.shared.setupFireBaseHandler()
         }
         
     }

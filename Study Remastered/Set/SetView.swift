@@ -86,6 +86,11 @@ struct SetPreviewView: View {
         .padding()
         .overlay(RoundedRectangle(cornerRadius: 10).stroke())
         .background(Color(red: 1, green: 1, blue: 1, opacity: 0.01))
+        .contextMenu {
+            Button(role: .destructive) {
+                
+            } label: {  Label("Delete Set", systemImage: "delete.backward") }
+        }
     }
 }
 

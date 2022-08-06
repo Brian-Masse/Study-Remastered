@@ -104,13 +104,20 @@ struct SetEditorView: View {
                         .onTapGesture { quickEditor.toggle() }
                 }
                 
-                TextField(setEditorViewModel.name, text: $boundName)
-                    .onChange(of: boundName, perform: { newValue in setEditorViewModel.changeName(with: newValue) })
                 
-                //this needs to be update with the new axis perameter when on Xcode 14
-                TextField("Insert Description", text: $boundDescription)
-                    .frame(maxWidth: globalFrame.width * 0.9)
-                    .onChange(of: boundDescription, perform: { newValue in setEditorViewModel.changeDescription(with: newValue) })
+                VStack {
+                    HStack {
+                        Text("Set Name: ")
+                        TextField(setEditorViewModel.name, text: $boundName).onChange(of: boundName, perform: { newValue in setEditorViewModel.changeName(with: newValue) })
+                    }
+                    
+                    HStack {
+                        Text("Description: ")
+                    //this needs to be update with the new axis perameter when on Xcode 14
+                        TextField("Insert Description", text: $boundDescription)
+                            .onChange(of: boundDescription, perform: { newValue in setEditorViewModel.changeDescription(with: newValue) })
+                    }
+                }.padding(.horizontal)
                 
                 if quickEditor {
                     QuickSetEditorView().environmentObject( setEditorViewModel )

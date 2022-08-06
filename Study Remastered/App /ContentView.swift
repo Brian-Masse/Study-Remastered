@@ -12,7 +12,7 @@ struct ContentView: View {
     var body: some View {
         StudyRemasteredView()
             .environmentObject(appViewModel)
-            .environmentObject(authenticatorHandler)
+            .environmentObject(AuthenticatorViewModel.shared)
     }
 }
 

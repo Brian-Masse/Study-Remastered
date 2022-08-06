@@ -10,7 +10,7 @@ import SwiftUI
 import Combine
 
 //MARK: RichTextFieldViewModel
-class RichTextFieldViewModel: ObservableObject, Equatable {
+class RichTextFieldViewModel: ObservableObject, Equatable, Codable {
 
     static let attributeDidChangeKey: String = "Masse.Brian.attributeDidChange"
 
@@ -170,6 +170,45 @@ class RichTextFieldViewModel: ObservableObject, Equatable {
     
     func copy() -> RichTextFieldViewModel {
         return RichTextFieldViewModel(self.attributedText, with: self.activeAttributes)
+    }
+    
+    //MARK: Serialization
+    
+    enum CodingKeys: String, CodingKey {
+        case attributedText
+        case belongsToHanlder
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        Utilities.shared.encodeData(belongsToHandler, using: encoder, with: CodingKeys.belongsToHanlder)
+        
+        var data: Data? = nil
+        do {
+            data = try attributedText.data(from: .init(location: 0, length: attributedText.length),
+                                       documentAttributes: [.documentType: NSAttributedString.DocumentType.rtf])
+        } catch { print("error encoding AttributedText: \( attributedText ), labeled error: \( error.localizedDescription )") }
+        
+        if data == nil { Utilities.shared.encodeData( attributedText.string.data(using: .ascii), using: encoder, with: CodingKeys.attributedText) }
+        else { Utilities.shared.encodeData( data, using: encoder, with: CodingKeys.attributedText) }
+    }
+    
+    required init(from decoder: Decoder) throws {
+        let values = try! decoder.container(keyedBy: CodingKeys.self)
+        
+        let data: Data = Utilities.shared.decodeData(in: values, with: CodingKeys.attributedText)!
+        
+        if let string = try? JSONDecoder().decode(String.self, from: data) {
+            attributedText = NSAttributedString(string: string)
+        }else {
+            do {
+                attributedText = try NSAttributedString(data: data, options: [ .documentType: NSAttributedString.DocumentType.rtf ], documentAttributes: nil)
+            } catch {
+                print("erorr decodign AttributedText: packaged data was not string or NSAttributedString: \(error.localizedDescription)")
+                attributedText = NSAttributedString(string: "")
+            }
+        }
+        
+        belongsToHandler = Utilities.shared.decodeData(in: values, with: CodingKeys.belongsToHanlder, defaultValue: false)!
     }
 }
 

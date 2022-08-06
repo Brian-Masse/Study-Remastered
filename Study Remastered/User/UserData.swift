@@ -12,31 +12,35 @@ import FirebaseAuth
 class UserData: Object {
     
     //MARK: Authentication Properties
-    @objc dynamic var accessToken: String = ""
     
-    @objc dynamic var firstName: String = ""
-    @objc dynamic var lastName: String = ""
+    @Persisted(primaryKey: true) var _id = "test"
+    @Persisted var accessToken: String = ""
     
-    @objc dynamic var email: String = ""
+    @Persisted var firstName: String = ""
+    @Persisted var lastName: String = ""
     
-    var handler: AuthenticatorViewModel!
+    @Persisted var email: String = ""
+    
+    var user: User!
+    
+    @Persisted var userData: Data!
     
     var fireBaseUser: FirebaseAuth.User? {
         get { Auth.auth().currentUser }
     }
     
-    //MARK: App Properties
-    
-    var sets: [ SetViewModel ] = [ setViewModel ]
-    
-    override static func primaryKey() -> String? {
-        return "accessToken"
+    func load() {
+        if let _  = userData {
+            do { self.user = try JSONDecoder().decode(User.self, from: userData as Data) }
+            catch { self.user = User(userData: self) }
+        } else { self.user = User(userData: self) }
+        user.userData = self
     }
     
     //this needs to do some of the work of init because Realm is silly
     func create(accessToken: String, _ firstName: String, _ lastName: String, _ email: String ) {
+        self._id = accessToken
         self.accessToken = accessToken
-        self.handler = authenticatorHandler
 
         self.firstName = firstName
         self.lastName = lastName
@@ -46,14 +50,23 @@ class UserData: Object {
         
         // add to the realm server
         self.save()
+        
+        // make sure that you have some user object attatched, if none was found in the realm DB
+        self.load()
     }
     
-    func save() {
-        util.saveToDataToRealm(self)
+    func save(withUpdateToUser encodeData: Bool = false) {
+    
+        if encodeData {
+            do { try RealmManager.shared.realm.write { userData = try JSONEncoder().encode( user ) } }
+            catch { print("error encoding User into NSData: \(error.localizedDescription)") }
+        }
+        
+        RealmManager.shared.saveDataToRealm(self)
     }
     
     func delete() {
-        
+    
         if let user = self.fireBaseUser {
             
             //deletes from the FireBase server
@@ -61,10 +74,8 @@ class UserData: Object {
             user.delete() { err in
                 if err != nil { print( "There was an error deleting the user" ); return }
             }
-            
             // deletes user from the Realm server
-            
-            util.removeDataFromRealm(key: accessToken)
+            RealmManager.shared.removeDataFromRealm(key: accessToken)
         }
     }
     
