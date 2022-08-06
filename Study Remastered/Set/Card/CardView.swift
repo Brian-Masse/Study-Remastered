@@ -19,35 +19,27 @@ struct CardView: View {
     }
     
     @EnvironmentObject var appViewModel: StudyRemasteredViewModel
-    @ObservedObject var viewModel: CardViewModel
+    @EnvironmentObject var cardViewModel: CardViewModel
     
     @State var side: Bool = true
     @State var displayType: DisplayType
-    
-    init( _ viewModel: CardViewModel, displayType: DisplayType ) {
-        self.viewModel = viewModel
-        self.displayType = displayType
-    }
     
     var body: some View {
         
         VStack {
             switch displayType {
             case let x where x == .single || x == .singlePresentation :
-                 Side(side: $side, displayType: displayType).environmentObject( side ? viewModel.frontTextViewModel : viewModel.backTextViewModel )
+                 Side(side: $side, displayType: displayType).environmentObject( side ? cardViewModel.frontTextViewModel : cardViewModel.backTextViewModel )
             case .double:
                 HStack() {
                     Side(side: $side,  displayType: displayType)
-                        .environmentObject(viewModel.frontTextViewModel)
+                        .environmentObject(cardViewModel.frontTextViewModel)
                     Side(side: $side,  displayType: displayType)
-                        .environmentObject(viewModel.backTextViewModel)
+                        .environmentObject(cardViewModel.backTextViewModel)
                 }.padding(.horizontal)
             default : Text("")
             }
-        
         }
-        .environmentObject(appViewModel)
-        .environmentObject( viewModel )
     }
     
     struct Side: View {
@@ -78,8 +70,8 @@ struct CardView: View {
 
     //                    ScrollView(.vertical) {
                         CardTextView(size: $size, width: geo.size.width)
-                            .environmentObject(appViewModel)
-                            .environmentObject( cardTextViewModel )
+//                            .environmentObject(appViewModel)
+//                            .environmentObject( cardTextViewModel )
     //                    }
                         .frame(maxHeight: geo.size.height * 0.6)
                     }.rotation3DEffect(Angle(degrees: rotation), axis: (x: 0, y: 1, z: 0))
@@ -94,7 +86,7 @@ struct CardView: View {
                         Spacer()
                         if displayType == .single {
                             richTextEditorSerializeControls(geo: geo) { flipCard() }
-                                .environmentObject( cardTextViewModel )
+//                                .environmentObject( cardTextViewModel )
                         }
                     }
                 }

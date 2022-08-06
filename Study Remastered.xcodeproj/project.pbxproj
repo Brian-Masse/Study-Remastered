@@ -40,6 +40,7 @@
 		C9CE53E9285ACE8E0028A2FF /* UIKitTextUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9CE53E8285ACE8E0028A2FF /* UIKitTextUtilities.swift */; };
 		C9D209F7289B093A006BF413 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C9D209F6289B093A006BF413 /* GoogleService-Info.plist */; };
 		C9D209F9289E0C6C006BF413 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D209F8289E0C6C006BF413 /* Utilities.swift */; };
+		C9D209FB289F0E87006BF413 /* Migrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D209FA289F0E87006BF413 /* Migrator.swift */; };
 		C9DBC2B02880C2D50076E5FA /* QuickSetEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DBC2AF2880C2D50076E5FA /* QuickSetEditor.swift */; };
 		C9DBC2B22880C7E50076E5FA /* Study Remastered Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DBC2B12880C7E50076E5FA /* Study Remastered Model.swift */; };
 		C9DBC2B52880CA0C0076E5FA /* Study Remastered View.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DBC2B42880CA0C0076E5FA /* Study Remastered View.swift */; };
@@ -88,6 +89,7 @@
 		C9CE53E8285ACE8E0028A2FF /* UIKitTextUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKitTextUtilities.swift; sourceTree = "<group>"; };
 		C9D209F6289B093A006BF413 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C9D209F8289E0C6C006BF413 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		C9D209FA289F0E87006BF413 /* Migrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Migrator.swift; sourceTree = "<group>"; };
 		C9DBC2AF2880C2D50076E5FA /* QuickSetEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickSetEditor.swift; sourceTree = "<group>"; };
 		C9DBC2B12880C7E50076E5FA /* Study Remastered Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Study Remastered Model.swift"; sourceTree = "<group>"; };
 		C9DBC2B42880CA0C0076E5FA /* Study Remastered View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Study Remastered View.swift"; sourceTree = "<group>"; };
@@ -139,7 +141,6 @@
 			isa = PBXGroup;
 			children = (
 				C92F309F2875FAD700A7AA87 /* UIUinversal.swift */,
-				C901A93128933480001EF90F /* RealmManager.swift */,
 				C9D209F8289E0C6C006BF413 /* Utilities.swift */,
 				C901A9272892E949001EF90F /* Animations.swift */,
 				C92F30A728760CC000A7AA87 /* Color.swift */,
@@ -150,6 +151,8 @@
 		C901A92A28933416001EF90F /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
+				C901A93128933480001EF90F /* RealmManager.swift */,
+				C9D209FA289F0E87006BF413 /* Migrator.swift */,
 				C901A92B2893342F001EF90F /* Authenticator.swift */,
 				C901A92D2893344D001EF90F /* AuthenticatorManager.swift */,
 			);
@@ -267,7 +270,6 @@
 		C9339B6928933C180066D6F4 /* User */ = {
 			isa = PBXGroup;
 			children = (
-				C9F3CDB0289873DA00DECECD /* ProfileView.swift */,
 				C9F3CDAE289873CD00DECECD /* User.swift */,
 				C9339B6A28933C2F0066D6F4 /* UserData.swift */,
 				C901A92A28933416001EF90F /* Authentication */,
@@ -279,6 +281,7 @@
 			isa = PBXGroup;
 			children = (
 				C9339B6F289346D20066D6F4 /* Home.swift */,
+				C9F3CDB0289873DA00DECECD /* ProfileView.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -422,6 +425,7 @@
 			files = (
 				C919CFA628569F62008135C8 /* ContentView.swift in Sources */,
 				C901A92C2893342F001EF90F /* Authenticator.swift in Sources */,
+				C9D209FB289F0E87006BF413 /* Migrator.swift in Sources */,
 				C9339B6B28933C300066D6F4 /* UserData.swift in Sources */,
 				C919CFC02856A1CD008135C8 /* CardView.swift in Sources */,
 				C92D21BC286F6F1D00FA586C /* CardTextModel.swift in Sources */,

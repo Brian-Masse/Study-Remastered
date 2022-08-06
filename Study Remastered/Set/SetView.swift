@@ -48,7 +48,8 @@ struct SetView: View {
             
             ScrollView(.vertical, showsIndicators: true) {
                 ForEach( Array(viewModel.model.cards.enumerated()), id: \.offset ) { enumeration in
-                    CardView( enumeration.element, displayType: .double )
+                    CardView( displayType: .double )
+                        .environmentObject( enumeration.element )
                 }
             }
         
@@ -56,12 +57,11 @@ struct SetView: View {
         .fullScreenCover(isPresented: $showingEditor) {
             SetEditorView()
                 .environmentObject(viewModel.editorViewModel)
-                .environmentObject(viewModel)
+                .environmentObject(setViewModel)
         }
         .fullScreenCover(isPresented: $showingFlashCards) {
             FlashCardView()
-                .environmentObject(viewModel)
-//                .environmentObject(viewModel)
+                .environmentObject(setViewModel)
         }
     }
 }
@@ -69,6 +69,7 @@ struct SetView: View {
 struct SetPreviewView: View {
     
     @EnvironmentObject var setViewModel: SetViewModel
+    @EnvironmentObject var user: User
     
     var body: some View {
         HStack {
@@ -88,8 +89,8 @@ struct SetPreviewView: View {
         .background(Color(red: 1, green: 1, blue: 1, opacity: 0.01))
         .contextMenu {
             Button(role: .destructive) {
-                
-            } label: {  Label("Delete Set", systemImage: "delete.backward") }
+                user.deleteSet(with: setViewModel) }
+                label: {  Label("Delete Set", systemImage: "delete.backward") }
         }
     }
 }

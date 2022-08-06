@@ -32,7 +32,8 @@ struct FlashCardView: View {
             
             CardScroller(cards: setViewModel.cards, continuousScrolling: false, endFunction: {}) {
             } content: { index in
-                CardView( setViewModel.cards[index] , displayType: .singlePresentation)
+                CardView(displayType: .singlePresentation)
+                    .environmentObject(setViewModel.cards[index])
                     .padding()
             }
         }

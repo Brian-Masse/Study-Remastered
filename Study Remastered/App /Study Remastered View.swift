@@ -16,7 +16,6 @@ let setViewModel = SetViewModel([ card1ViewModel, card2ViewModel ])
 struct StudyRemasteredView: View {
     
     @EnvironmentObject var viewModel: StudyRemasteredViewModel
-    @State var size: CGSize = .zero
     @EnvironmentObject var authHandler: AuthenticatorViewModel
     
     @StateObject var utilities = RealmManager.shared
@@ -24,15 +23,13 @@ struct StudyRemasteredView: View {
     var body: some View {
         
         ZStack {
-            
+    
             if let _ = utilities.realm {
                 if authHandler.userLoaded {
                     HomeView()
                         .environmentObject(authHandler.activeUser.user)
-    //                SetView(viewModel: setViewModel)
-                }else {
-                    Authenticator()
-                }
+                        .environmentObject(utilities)
+                }else { Authenticator() }
             }
         }.task {
             await utilities.loadRealm()

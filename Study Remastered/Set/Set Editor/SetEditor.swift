@@ -120,10 +120,10 @@ struct SetEditorView: View {
                 }.padding(.horizontal)
                 
                 if quickEditor {
-                    QuickSetEditorView().environmentObject( setEditorViewModel )
+                    QuickSetEditorView()
+//                        .environmentObject( setEditorViewModel )
                 }else {
                     FullSetEditor()
-                        .environmentObject( setEditorViewModel )
                         .environmentObject( setViewModel )
                 }
             }

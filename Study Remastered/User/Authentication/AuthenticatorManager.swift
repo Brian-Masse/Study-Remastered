@@ -43,7 +43,6 @@ class AuthenticatorViewModel: ObservableObject {
             
             if let _ = user {
                 self.changeActiveUser()
-                self.isSignedin = true
             } else {
                 self.isSignedin = false
                 self.userLoaded = false
@@ -96,20 +95,22 @@ class AuthenticatorViewModel: ObservableObject {
         let result = cleanFields(email, password)
         if result != nil { print( result! ); return }
         
-        var token: String = ""
-        
         Auth.auth().createUser(withEmail: self.email, password: self.password) { result, err in
             
             if err != nil { print(" ERROR CREATING USER: \(err!.localizedDescription)"); return }
                                   
             if let content = result {
-//                THIS SHOULD BE THE TOKEN, but that requires some formatting / reading what a token even us
-                token = content.user.uid
+                Task.init {
+//                    THIS SHOULD BE THE TOKEN, but that requires some formatting / reading what a token even us
+                    let token = content.user.uid
                 
-                let user = UserData()
-                user.create(accessToken: token , self.firstName, self.lastName, self.email)
-                
-                self.changeActiveUser()
+                    await RealmManager.shared.updatUserDataSubscriptions(with: token)
+                    
+                    let user = UserData()
+                    user.create(accessToken: token , self.firstName, self.lastName, self.email, self.userName)
+                    
+                    self.changeActiveUser()
+                }
             }
         }
     }
@@ -123,16 +124,29 @@ class AuthenticatorViewModel: ObservableObject {
     func delete() {
         isSignedin = false
         userLoaded = false
-        activeUser = UserData()
         
+        let accessToken = self.accessToken
+        
+        activeUser = UserData()
         activeUser.delete()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+            RealmManager.shared.removeDataFromRealm(key: accessToken)
+        }
     }
     
     func changeActiveUser() {
-        if let user = RealmManager.shared.locateDataInRealm(key: accessToken) {
-            user.load()
-            activeUser = user
-            userLoaded = true
+        
+        Task.init {
+            
+            await RealmManager.shared.updatUserDataSubscriptions(with: accessToken)
+            
+            if let user = RealmManager.shared.locateDataInRealm(key: accessToken) {
+                user.load()
+                activeUser = user
+                userLoaded = true
+                isSignedin = true
+            }
         }
 //        else { signout() }
     }

@@ -17,8 +17,8 @@ struct FullSetEditor: View {
         CardScroller(cards: setEditorViewModel.currentCards, continuousScrolling: true, endFunction: setEditorViewModel.addNewCard) {
             NamedButton("Add New Card", and: "plus.app", oriented: .horizontal)
         } content: { index in
-            CardView(setEditorViewModel.currentCards[index], displayType: .single)
-                .environmentObject(appViewModel)
+            CardView(displayType: .single)
+                .environmentObject(setEditorViewModel.currentCards[index])
                 .padding(25)
         }
 

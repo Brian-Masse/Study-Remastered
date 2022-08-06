@@ -11,9 +11,15 @@ import SwiftUI
 class User: ObservableObject, Codable {
     
 
-    var userData: UserData!
+    private var userData: UserData!
     
     var sets: [ SetViewModel ] = [ setViewModel ]
+    
+    var firstName: String { userData.firstName }
+    var lastName: String { userData.lastName }
+    var userName: String { userData.userName }
+    
+    var email: String { userData.email }
     
     init( userData: UserData ) {
         self.userData = userData
@@ -30,6 +36,13 @@ class User: ObservableObject, Codable {
         sets.append(newSet)
     }
     
+    func deleteSet(with setViewModel: SetViewModel) {
+        
+        guard let index = sets.firstIndex(where: { passedModel in passedModel.model.ID == setViewModel.model.ID }) else { return }
+        sets.remove(at: index)
+        
+    }
+    
     //MARK: Serialization
     
     enum CodingKeys: String, CodingKey {
@@ -44,5 +57,15 @@ class User: ObservableObject, Codable {
         let values = try! decoder.container(keyedBy: CodingKeys.self)
         
         sets = Utilities.shared.decodeData(in: values, with: CodingKeys.sets, defaultValue: [ setViewModel ])!
+    }
+    
+    //MARK: Convinience
+    
+    func save(withUpdateToUser: Bool = false) {
+        userData.save(withUpdateToUser: withUpdateToUser)
+    }
+    
+    func setUser(with user: UserData) {
+        self.userData = user
     }
 }

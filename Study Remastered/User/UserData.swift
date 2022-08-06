@@ -19,6 +19,7 @@ class UserData: Object {
     @Persisted var firstName: String = ""
     @Persisted var lastName: String = ""
     
+    @Persisted var userName: String = ""
     @Persisted var email: String = ""
     
     var user: User!
@@ -34,17 +35,18 @@ class UserData: Object {
             do { self.user = try JSONDecoder().decode(User.self, from: userData as Data) }
             catch { self.user = User(userData: self) }
         } else { self.user = User(userData: self) }
-        user.userData = self
+        user.setUser(with: self)
     }
     
     //this needs to do some of the work of init because Realm is silly
-    func create(accessToken: String, _ firstName: String, _ lastName: String, _ email: String ) {
+    func create(accessToken: String, _ firstName: String, _ lastName: String, _ email: String, _ userName: String) {
         self._id = accessToken
         self.accessToken = accessToken
 
         self.firstName = firstName
         self.lastName = lastName
         self.email = email
+        self.userName = userName
         
         // you have already been added to the FireBase server (via the authetnication managaer)
         
@@ -74,8 +76,7 @@ class UserData: Object {
             user.delete() { err in
                 if err != nil { print( "There was an error deleting the user" ); return }
             }
-            // deletes user from the Realm server
-            RealmManager.shared.removeDataFromRealm(key: accessToken)
+            // deletes user from the Realm server (handled by Authentication Manager)
         }
     }
     

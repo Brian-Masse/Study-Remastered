@@ -14,6 +14,8 @@ struct SetModel {
     static let nameCharachterLimit = 50
     static let descriptionCharachterLimit = 500
     
+    let ID = UUID()
+    
     var cards: [ CardViewModel ] = []
     
     init( _ cards: [CardViewModel] ) {

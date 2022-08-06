@@ -26,17 +26,44 @@ class RealmManager: ObservableObject {
             let app = RealmSwift.App(id: "study-remastered-uesnt")
             let user = try await app.login(credentials: .anonymous )
             
-            let config = user.flexibleSyncConfiguration { subs in
-                if let _ = subs.first(named: RealmManager.userDataSubscription) { return }
-                else { subs.append( QuerySubscription<UserData>(name: RealmManager.userDataSubscription) ) }
-            }
+    
+//            let config = user.flexibleSyncConfiguration { subs in
+//                if let _ = subs.first(named: RealmManager.userDataSubscription) { return }
+//                else { subs.append( QuerySubscription<UserData>(name: RealmManager.userDataSubscription) ) }
+//            }
+        
+            let config = Migrator.shared.updateUserDataSchema(version: Migrator.userDataVersion, user: user)
             
             do { realm = try await Realm(configuration: config, downloadBeforeOpen: .always) }
             catch { print( "error creating the Realm: \(error.localizedDescription)" ) }
             
+            //when this runs, no user is signed in, so it passes a blank token
+            //when the authenticatorHandler is initialized, and the callback for userSigning in is called, it will also update the subscriptions with the correct token query
+            await self.updatUserDataSubscriptions(with: "")
+            
         }catch { print("failed to login the database user: \(error.localizedDescription)") }
         
         print( realm.configuration.fileURL! )
+    }
+    
+    func updatUserDataSubscriptions( with accessToken: String ) async {
+        let subscriptions = realm.subscriptions
+        let foundSubscriptions = subscriptions.first(named: RealmManager.userDataSubscription)
+        do {
+            try await subscriptions.update {
+                //already have this subscription, so just update the query
+                if foundSubscriptions != nil {
+                    foundSubscriptions!.updateQuery(toType: UserData.self)
+                        { query in query.accessToken == accessToken }
+                }else {
+                    subscriptions.append(
+                        QuerySubscription<UserData>(name: RealmManager.userDataSubscription,
+                                                    query: { query in query.accessToken == accessToken} )
+                    )
+                }
+            }
+            
+        }catch { print( "erorr generating subscriptions: \(error.localizedDescription)" ) }
     }
     
     func locateDataInRealm( key: String ) -> UserData? {

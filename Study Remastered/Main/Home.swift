@@ -47,13 +47,13 @@ struct HomeView: View {
             
             NamedButton("Save User", and: "person.badge.key", oriented: .horizontal)
                 .onTapGesture {
-                    user.userData.save(withUpdateToUser: true)
+                    user.save(withUpdateToUser: true)
                 }
             
         }
         .onChange(of: activeSet ) { _ in showingSet = true }
         .fullScreenCover(isPresented: $showingSet) { SetView(viewModel: user.sets[activeSet]) }
-        .fullScreenCover(isPresented: $showingProfile) { ProfileView().environmentObject( user ) }
+        .fullScreenCover(isPresented: $showingProfile) { ProfileView() }
     }
 
 }
