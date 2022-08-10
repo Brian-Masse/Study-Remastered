@@ -11,10 +11,11 @@ import SwiftUI
 
 struct SetView: View {
     
-    @ObservedObject var viewModel: SetViewModel
+    @EnvironmentObject var viewModel: SetViewModel
     
     @State var showingEditor = false
     @State var showingFlashCards = false
+    @State var showingSettings = false
     
     @Environment(\.presentationMode) var presentationMode
     
@@ -23,7 +24,9 @@ struct SetView: View {
         VStack {
             
             HStack {
-                NamedButton("Back", and: "chevron.backward", oriented: .horizontal, reversed: true).onTapGesture { presentationMode.wrappedValue.dismiss() }
+                NamedButton("Back", and: "chevron.backward", oriented: .horizontal, reversed: true).onTapGesture {
+                    presentationMode.wrappedValue.dismiss()
+                }
                 Spacer()
                 NamedButton(viewModel.name, and: "rectangle.on.rectangle", oriented: .horizontal)
             }.padding()
@@ -44,6 +47,8 @@ struct SetView: View {
                 NamedButton("listen", and: "beats.headphones", oriented: .vertical)
             }
             
+            NamedButton( "Set Settings", and: "command.square", oriented: .horizontal ).onTapGesture { showingSettings = true }
+            
             Text( viewModel.description )
             
             ScrollView(.vertical, showsIndicators: true) {
@@ -57,11 +62,12 @@ struct SetView: View {
         .fullScreenCover(isPresented: $showingEditor) {
             SetEditorView()
                 .environmentObject(viewModel.editorViewModel)
-                .environmentObject(setViewModel)
         }
         .fullScreenCover(isPresented: $showingFlashCards) {
             FlashCardView()
-                .environmentObject(setViewModel)
+        }
+        .fullScreenCover(isPresented: $showingSettings) {
+            SetSettingsView() { presentationMode.wrappedValue.dismiss() }
         }
     }
 }
@@ -70,6 +76,8 @@ struct SetPreviewView: View {
     
     @EnvironmentObject var setViewModel: SetViewModel
     @EnvironmentObject var user: User
+    
+    @State var showingSet = false
     
     var body: some View {
         HStack {
@@ -86,13 +94,43 @@ struct SetPreviewView: View {
         }
         .padding()
         .overlay(RoundedRectangle(cornerRadius: 10).stroke())
-        .background(Color(red: 1, green: 1, blue: 1, opacity: 0.01))
-        .contextMenu {
-            Button(role: .destructive) {
-                user.deleteSet(with: setViewModel) }
-                label: {  Label("Delete Set", systemImage: "delete.backward") }
+        .background(Color(red: 1, green: 1, blue: 1, opacity: 1))
+        .onTapGesture {
+            showingSet = true
         }
+        .sheet(isPresented: $showingSet) { SetView() }
     }
 }
 
+struct SetSettingsView: View {
+    
+    @EnvironmentObject var setViewModel: SetViewModel
+    @EnvironmentObject var user: User
+    
+    @Environment(\.presentationMode) var presentationMode
+    let toggleSetView: () -> Void
+    
+    var body: some View {
+        
+        VStack {
+            HStack {
+                NamedButton("Back", and: "chevron.backward", oriented: .horizontal, reversed: true).onTapGesture { presentationMode.wrappedValue.dismiss() }
+                Spacer()
+            }.padding()
+            
+            Text( setViewModel.name )
+            
+            Spacer()
+            
+            NamedButton("Delete", and: "trash", oriented: .horizontal)
+                .onTapGesture {
+                    presentationMode.wrappedValue.dismiss()
+                    toggleSetView()
+                    user.deleteSet(with: setViewModel)
+                }
+        }
+        
+    }
+    
+}
 

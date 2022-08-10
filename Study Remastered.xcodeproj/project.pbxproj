@@ -41,6 +41,11 @@
 		C9D209F7289B093A006BF413 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C9D209F6289B093A006BF413 /* GoogleService-Info.plist */; };
 		C9D209F9289E0C6C006BF413 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D209F8289E0C6C006BF413 /* Utilities.swift */; };
 		C9D209FB289F0E87006BF413 /* Migrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D209FA289F0E87006BF413 /* Migrator.swift */; };
+		C9D209FD28A00E61006BF413 /* FileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D209FC28A00E61006BF413 /* FileView.swift */; };
+		C9D20A0128A0203C006BF413 /* Study-Remastered-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C9D20A0028A0203C006BF413 /* Study-Remastered-Info.plist */; };
+		C9D20A0328A049FF006BF413 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D20A0228A049FF006BF413 /* File.swift */; };
+		C9D20A0528A04A20006BF413 /* FileURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D20A0428A04A20006BF413 /* FileURL.swift */; };
+		C9D20A0728A05119006BF413 /* FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D20A0628A05119006BF413 /* FileManager.swift */; };
 		C9DBC2B02880C2D50076E5FA /* QuickSetEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DBC2AF2880C2D50076E5FA /* QuickSetEditor.swift */; };
 		C9DBC2B22880C7E50076E5FA /* Study Remastered Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DBC2B12880C7E50076E5FA /* Study Remastered Model.swift */; };
 		C9DBC2B52880CA0C0076E5FA /* Study Remastered View.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DBC2B42880CA0C0076E5FA /* Study Remastered View.swift */; };
@@ -80,7 +85,6 @@
 		C92F309F2875FAD700A7AA87 /* UIUinversal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIUinversal.swift; sourceTree = "<group>"; };
 		C92F30A12876079600A7AA87 /* CardTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTextView.swift; sourceTree = "<group>"; };
 		C92F30A428760A4700A7AA87 /* Goku.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Goku.ttf; sourceTree = "<group>"; };
-		C92F30A628760AE800A7AA87 /* Study-Remastered-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Study-Remastered-Info.plist"; sourceTree = SOURCE_ROOT; };
 		C92F30A728760CC000A7AA87 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		C9339B6A28933C2F0066D6F4 /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
 		C9339B6F289346D20066D6F4 /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
@@ -90,6 +94,11 @@
 		C9D209F6289B093A006BF413 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C9D209F8289E0C6C006BF413 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		C9D209FA289F0E87006BF413 /* Migrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Migrator.swift; sourceTree = "<group>"; };
+		C9D209FC28A00E61006BF413 /* FileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileView.swift; sourceTree = "<group>"; };
+		C9D20A0028A0203C006BF413 /* Study-Remastered-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "Study-Remastered-Info.plist"; path = "Universals/Study-Remastered-Info.plist"; sourceTree = "<group>"; };
+		C9D20A0228A049FF006BF413 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
+		C9D20A0428A04A20006BF413 /* FileURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileURL.swift; sourceTree = "<group>"; };
+		C9D20A0628A05119006BF413 /* FileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManager.swift; sourceTree = "<group>"; };
 		C9DBC2AF2880C2D50076E5FA /* QuickSetEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickSetEditor.swift; sourceTree = "<group>"; };
 		C9DBC2B12880C7E50076E5FA /* Study Remastered Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Study Remastered Model.swift"; sourceTree = "<group>"; };
 		C9DBC2B42880CA0C0076E5FA /* Study Remastered View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Study Remastered View.swift"; sourceTree = "<group>"; };
@@ -162,6 +171,7 @@
 		C919CF9728569F62008135C8 = {
 			isa = PBXGroup;
 			children = (
+				C9D20A0628A05119006BF413 /* FileManager.swift */,
 				C919CFA228569F62008135C8 /* Study Remastered */,
 				C919CFA128569F62008135C8 /* Products */,
 				C61F8B58894CC1297E2D12A5 /* Pods */,
@@ -180,16 +190,17 @@
 		C919CFA228569F62008135C8 /* Study Remastered */ = {
 			isa = PBXGroup;
 			children = (
+				C919CFA728569F63008135C8 /* Assets.xcassets */,
 				C9339B712893802E0066D6F4 /* Study Remastered.entitlements */,
 				C9D209F6289B093A006BF413 /* GoogleService-Info.plist */,
-				C92F30A628760AE800A7AA87 /* Study-Remastered-Info.plist */,
+				C9D20A0028A0203C006BF413 /* Study-Remastered-Info.plist */,
 				C92F30A328760A1F00A7AA87 /* Fonts */,
 				C9DBC2B32880C7EC0076E5FA /* App  */,
 				C901A9292892E95B001EF90F /* Universals */,
+				C9D209FF28A00EE5006BF413 /* Files */,
 				C919CFC52856A85A008135C8 /* Set */,
 				C9339B6E2893469A0066D6F4 /* Main */,
 				C9339B6928933C180066D6F4 /* User */,
-				C919CFA728569F63008135C8 /* Assets.xcassets */,
 				C919CFA928569F63008135C8 /* Preview Content */,
 			);
 			path = "Study Remastered";
@@ -286,6 +297,16 @@
 			path = Main;
 			sourceTree = "<group>";
 		};
+		C9D209FF28A00EE5006BF413 /* Files */ = {
+			isa = PBXGroup;
+			children = (
+				C9D20A0228A049FF006BF413 /* File.swift */,
+				C9D209FC28A00E61006BF413 /* FileView.swift */,
+				C9D20A0428A04A20006BF413 /* FileURL.swift */,
+			);
+			path = Files;
+			sourceTree = "<group>";
+		};
 		C9DBC2B32880C7EC0076E5FA /* App  */ = {
 			isa = PBXGroup;
 			children = (
@@ -370,6 +391,7 @@
 				C92F30A528760A4700A7AA87 /* Goku.ttf in Resources */,
 				C9D209F7289B093A006BF413 /* GoogleService-Info.plist in Resources */,
 				C919CFAB28569F63008135C8 /* Preview Assets.xcassets in Resources */,
+				C9D20A0128A0203C006BF413 /* Study-Remastered-Info.plist in Resources */,
 				C919CFA828569F63008135C8 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -427,6 +449,7 @@
 				C901A92C2893342F001EF90F /* Authenticator.swift in Sources */,
 				C9D209FB289F0E87006BF413 /* Migrator.swift in Sources */,
 				C9339B6B28933C300066D6F4 /* UserData.swift in Sources */,
+				C9D20A0528A04A20006BF413 /* FileURL.swift in Sources */,
 				C919CFC02856A1CD008135C8 /* CardView.swift in Sources */,
 				C92D21BC286F6F1D00FA586C /* CardTextModel.swift in Sources */,
 				C901A93228933480001EF90F /* RealmManager.swift in Sources */,
@@ -437,9 +460,11 @@
 				C901A92E2893344D001EF90F /* AuthenticatorManager.swift in Sources */,
 				C9F3CDB1289873DA00DECECD /* ProfileView.swift in Sources */,
 				C919CFBB28569FAA008135C8 /* CalculatorFunctions.swift in Sources */,
+				C9D20A0728A05119006BF413 /* FileManager.swift in Sources */,
 				C9F3CDAF289873CD00DECECD /* User.swift in Sources */,
 				C9DBC2B52880CA0C0076E5FA /* Study Remastered View.swift in Sources */,
 				C92EEFF528752F4D00D6A81E /* RichTextEditorViewModel.swift in Sources */,
+				C9D20A0328A049FF006BF413 /* File.swift in Sources */,
 				C919CFA428569F62008135C8 /* Study_RemasteredApp.swift in Sources */,
 				C92F30A02875FAD700A7AA87 /* UIUinversal.swift in Sources */,
 				C92D21BA286E960000FA586C /* RichTextEditorView.swift in Sources */,
@@ -455,6 +480,7 @@
 				C919CFBE2856A079008135C8 /* CardModel.swift in Sources */,
 				C9DBC2B72881D7DB0076E5FA /* FullSetEditor.swift in Sources */,
 				C919CFBA28569FAA008135C8 /* Math Components.swift in Sources */,
+				C9D209FD28A00E61006BF413 /* FileView.swift in Sources */,
 				C919CFC42856A847008135C8 /* SetView.swift in Sources */,
 				C9CE53E7285ACB9E0028A2FF /* RichTextEditor.swift in Sources */,
 				C919CFB928569FAA008135C8 /* CalculatorModelExtension.swift in Sources */,
@@ -515,6 +541,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "/Users/brianmasse/Developer/Xcode /Study Remastered/Study Remastered/Universals/Study-Remastered-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -569,6 +596,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "/Users/brianmasse/Developer/Xcode /Study Remastered/Study Remastered/Universals/Study-Remastered-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -586,13 +614,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Study Remastered/Study Remastered.entitlements";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Study Remastered/Preview Content\"";
 				DEVELOPMENT_TEAM = LN4JU8GNV7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Study-Remastered-Info.plist";
+				INFOPLIST_FILE = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -621,13 +650,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Study Remastered/Study Remastered.entitlements";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Study Remastered/Preview Content\"";
 				DEVELOPMENT_TEAM = LN4JU8GNV7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Study-Remastered-Info.plist";
+				INFOPLIST_FILE = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

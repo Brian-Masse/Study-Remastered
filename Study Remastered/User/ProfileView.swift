@@ -13,10 +13,10 @@ struct ProfileView: View {
     @EnvironmentObject var user: User
     @StateObject var authenticationHandler = AuthenticatorViewModel.shared
     
-//    @State var firstName = user.
-//    @State var lastName
-//    @State var userName
-//    @State var email
+    @State var firstName = ""
+    @State var lastName = ""
+    @State var userName = ""
+    @State var email = ""
     
     @Environment(\.presentationMode) var presentationMode
     
@@ -35,7 +35,31 @@ struct ProfileView: View {
             .padding(.horizontal)
             Spacer()
             
-            Text( user.userName )
+        
+            
+            HStack {
+                Text("firstName: ")
+                TextField(user.firstName, text: $firstName)
+            }
+            HStack {
+                Text("lastName: ")
+                TextField(user.lastName, text: $lastName)
+            }
+            HStack {
+                Text("userName: ")
+                TextField(user.userName, text: $userName)
+            }
+            HStack {
+                Text("email: ")
+                TextField(user.email, text: $email)
+            }
+            
+            NamedButton("Save", and: "checkmark.seal", oriented: .vertical)
+                .onTapGesture {
+                    user.updateCredentials(firstName: firstName, lastName: lastName, userName: userName, email: email)
+                }
+            
+            
             
             HStack {
                 NamedButton("sign out", and: "rectangle.portrait.and.arrow.right", oriented: .vertical)

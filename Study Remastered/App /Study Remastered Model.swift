@@ -13,6 +13,10 @@ struct StudyRemasteredModel {
 
 class StudyRemasteredViewModel: ObservableObject {
     
+    enum CurrentTab: Int {
+        case home
+        case files
+    }
     
     @Published var model: StudyRemasteredModel
     

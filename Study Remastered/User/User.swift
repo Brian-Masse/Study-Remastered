@@ -13,7 +13,7 @@ class User: ObservableObject, Codable {
 
     private var userData: UserData!
     
-    var sets: [ SetViewModel ] = [ setViewModel ]
+    @Published var sets: [ SetViewModel ] = [ setViewModel ]
     
     var firstName: String { userData.firstName }
     var lastName: String { userData.lastName }
@@ -38,7 +38,10 @@ class User: ObservableObject, Codable {
     
     func deleteSet(with setViewModel: SetViewModel) {
         
-        guard let index = sets.firstIndex(where: { passedModel in passedModel.model.ID == setViewModel.model.ID }) else { return }
+        guard let index = sets.firstIndex(where: { passedModel in
+            return passedModel == setViewModel
+            
+        }) else { return }
         sets.remove(at: index)
         
     }
@@ -67,5 +70,9 @@ class User: ObservableObject, Codable {
     
     func setUser(with user: UserData) {
         self.userData = user
+    }
+    
+    func updateCredentials(firstName: String, lastName: String, userName: String, email: String) {
+        userData.updateCredentials(firstName: firstName, lastName: lastName, userName: userName, email: email)
     }
 }

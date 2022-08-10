@@ -19,6 +19,8 @@ struct StudyRemasteredView: View {
     @EnvironmentObject var authHandler: AuthenticatorViewModel
     
     @StateObject var utilities = RealmManager.shared
+    
+    @State var currentTab: StudyRemasteredViewModel.CurrentTab = .files
 
     var body: some View {
         
@@ -26,16 +28,45 @@ struct StudyRemasteredView: View {
     
             if let _ = utilities.realm {
                 if authHandler.userLoaded {
-                    HomeView()
-                        .environmentObject(authHandler.activeUser.user)
-                        .environmentObject(utilities)
+                   
+                    VStack {
+                        switch currentTab {
+                        case .home: HomeView()
+                                .environmentObject(authHandler.activeUser.user)
+                                .environmentObject(utilities)
+                            
+                        case .files:
+                            FileView(objects: data)
+                        }
+                        Spacer()
+                        TabBar(currentTab: $currentTab)
+                    }
+                
                 }else { Authenticator() }
             }
         }.task {
             await utilities.loadRealm()
             AuthenticatorViewModel.shared.setupFireBaseHandler()
         }
-        
     }
+}
+
+struct TabBar: View {
     
+    @Binding var currentTab: StudyRemasteredViewModel.CurrentTab
+    
+    var body: some View {
+            
+        HStack {
+            Spacer()
+            NamedButton("Home", and: "doc.plaintext", oriented: .vertical).onTapGesture { currentTab = .home }
+            Spacer()
+            NamedButton("Files", and: "folder", oriented: .vertical).onTapGesture { currentTab = .files }
+            Spacer()
+        }
+        .padding(.vertical, 3)
+        .padding(.horizontal)
+        .background( RoundedRectangle(cornerRadius: 8 ).stroke() )
+        .padding(.horizontal)
+    }
 }

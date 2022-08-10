@@ -14,8 +14,6 @@ struct SetModel {
     static let nameCharachterLimit = 50
     static let descriptionCharachterLimit = 500
     
-    let ID = UUID()
-    
     var cards: [ CardViewModel ] = []
     
     init( _ cards: [CardViewModel] ) {
@@ -27,9 +25,10 @@ struct SetModel {
     
 }
 
-class SetViewModel: ObservableObject, Codable {
+class SetViewModel: ObservableObject, Codable, Equatable {
     
     @Published private (set) var model: SetModel
+    private let id = UUID()
     
     lazy var editorViewModel: SetEditorViewModel = SetEditorViewModel( self, in: globalFrame.width * 0.45)
     
@@ -91,4 +90,11 @@ class SetViewModel: ObservableObject, Codable {
         description =   Utilities.shared.decodeData(in: values, with: CodingKeys.description, defaultValue: "")!
         cards =         Utilities.shared.decodeData(in: values, with: CodingKeys.cards, defaultValue: [])!
     }
+    
+    //MARK: Utilities
+    
+    static func == (lhs: SetViewModel, rhs: SetViewModel) -> Bool {
+        lhs.id == rhs.id
+    }
+    
 }

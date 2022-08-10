@@ -12,10 +12,6 @@ import SwiftUI
 struct HomeView: View {
     
     @EnvironmentObject var user: User
-    
-    @State var showingSet = false
-    @State var activeSet: Int = 0
-    
     @State var showingProfile = false
     
     var body: some View {
@@ -33,27 +29,17 @@ struct HomeView: View {
                 SetPreviewView()
                     .environmentObject( user.sets[index] )
                     .padding(.horizontal)
-                    .onTapGesture {
-                        activeSet = index
-                        showingSet = true
-                    }
             }
             
             NamedButton("Create New Set", and: "plus.rectangle.on.rectangle", oriented: .horizontal)
-                .onTapGesture {
-                    user.addNewSet()
-                    activeSet = user.sets.count - 1
-                }
+                .onTapGesture { user.addNewSet() }
             
             NamedButton("Save User", and: "person.badge.key", oriented: .horizontal)
-                .onTapGesture {
-                    user.save(withUpdateToUser: true)
-                }
-            
+                .onTapGesture { user.save(withUpdateToUser: true) }
         }
-        .onChange(of: activeSet ) { _ in showingSet = true }
-        .fullScreenCover(isPresented: $showingSet) { SetView(viewModel: user.sets[activeSet]) }
-        .fullScreenCover(isPresented: $showingProfile) { ProfileView() }
+        .background( ZStack { }
+            .fullScreenCover(isPresented: $showingProfile) { ProfileView() }
+        )
     }
 
 }

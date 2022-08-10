@@ -57,16 +57,6 @@ class UserData: Object {
         self.load()
     }
     
-    func save(withUpdateToUser encodeData: Bool = false) {
-    
-        if encodeData {
-            do { try RealmManager.shared.realm.write { userData = try JSONEncoder().encode( user ) } }
-            catch { print("error encoding User into NSData: \(error.localizedDescription)") }
-        }
-        
-        RealmManager.shared.saveDataToRealm(self)
-    }
-    
     func delete() {
     
         if let user = self.fireBaseUser {
@@ -78,6 +68,31 @@ class UserData: Object {
             }
             // deletes user from the Realm server (handled by Authentication Manager)
         }
+    }
+    
+    func updateCredentials( firstName: String, lastName: String, userName: String, email: String ) {
+        do {
+            try RealmManager.shared.realm.write {
+                self.firstName = firstName == "" ? self.firstName : firstName
+                self.lastName = lastName == "" ? self.lastName : lastName
+                self.userName = userName == "" ? self.userName : userName
+                
+                if email != "" { if let user = self.fireBaseUser {
+                    user.updateEmail(to: email )   
+                } }
+            }
+        } catch { print( "error econding User into NSData: \( error.localizedDescription )" ) }
+        save(withUpdateToUser: false)
+    }
+    
+    func save(withUpdateToUser encodeData: Bool = false) {
+    
+        if encodeData {
+            do { try RealmManager.shared.realm.write { userData = try JSONEncoder().encode( user ) } }
+            catch { print("error encoding User into NSData: \(error.localizedDescription)") }
+        }
+        
+        RealmManager.shared.saveDataToRealm(self)
     }
     
     //MARK: Convienience Functions:

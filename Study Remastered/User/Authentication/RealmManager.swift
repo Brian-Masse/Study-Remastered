@@ -17,6 +17,7 @@ class RealmManager: ObservableObject {
     
     static let shared = RealmManager()
     static let userDataSubscription = "User-Data"
+    static let testSubscription = "test"
     
     func loadRealm() async {
         
@@ -47,23 +48,29 @@ class RealmManager: ObservableObject {
     }
     
     func updatUserDataSubscriptions( with accessToken: String ) async {
+        
+        let _: UserData? = await addSubscriptions(RealmManager.userDataSubscription) { query in query.accessToken == accessToken }
+        let _: test? = await addSubscriptions(RealmManager.testSubscription)
+        
+    }
+    
+    private func addSubscriptions<objectType: Object>( _ name: String, query: (( RealmSwift.Query<objectType> ) -> RealmSwift.Query<Bool>)? = nil ) async -> objectType? {
+        
         let subscriptions = realm.subscriptions
-        let foundSubscriptions = subscriptions.first(named: RealmManager.userDataSubscription)
+        let foundSubscriptions = subscriptions.first(named: name)
         do {
             try await subscriptions.update {
                 //already have this subscription, so just update the query
                 if foundSubscriptions != nil {
-                    foundSubscriptions!.updateQuery(toType: UserData.self)
-                        { query in query.accessToken == accessToken }
+                    foundSubscriptions!.updateQuery(toType: objectType.self, where: query )
+                        
                 }else {
-                    subscriptions.append(
-                        QuerySubscription<UserData>(name: RealmManager.userDataSubscription,
-                                                    query: { query in query.accessToken == accessToken} )
-                    )
+                    subscriptions.append( QuerySubscription<objectType>(name: name, query: query ) )
                 }
             }
             
-        }catch { print( "erorr generating subscriptions: \(error.localizedDescription)" ) }
+        }catch { print( "erorr generating subscriptions \( name ): \(error.localizedDescription)" ) }
+        return nil
     }
     
     func locateDataInRealm( key: String ) -> UserData? {
@@ -79,6 +86,12 @@ class RealmManager: ObservableObject {
         
         do { try realm.commitWrite() }
         catch { print("There was an error committing the data: \(error.localizedDescription)") }
+    }
+    
+    func saveSequenceToRealm<anyData: Object>(_ dataSeries: [anyData]) {
+        for data in dataSeries {
+            saveDataToRealm(data)
+        }
     }
     
     func removeDataFromRealm(key: String) {
