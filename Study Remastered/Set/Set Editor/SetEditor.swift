@@ -7,7 +7,7 @@
 
 import Foundation
 import SwiftUI
-
+import RealmSwift
 
 class SetEditorViewModel: ObservableObject {
     
@@ -33,8 +33,8 @@ class SetEditorViewModel: ObservableObject {
     
     func getCopy() {
         getCopyOfCurrentCards()
-        name = setViewModel!.model.name
-        description = setViewModel!.model.description == "" ? SetEditorViewModel.defaultDescription : setViewModel!.model.description
+        name = setViewModel!.name
+        description = setViewModel!.description == "" ? SetEditorViewModel.defaultDescription : setViewModel!.description
     }
     
     private func getCopyOfCurrentCards() {
@@ -61,8 +61,8 @@ class SetEditorViewModel: ObservableObject {
             }
         }
         //update name and description
-        setViewModel!.name = name
-        setViewModel!.description = description
+        if setViewModel!.name != name { setViewModel!.name = name }
+        if setViewModel!.description != description { setViewModel!.description = description }
     }
     
     func addNewCard() {
@@ -71,8 +71,8 @@ class SetEditorViewModel: ObservableObject {
         currentCards.append(newCard)
     }
     
-    func changeName(with name: String) { if name.count <= SetModel.nameCharachterLimit { self.name = name } }
-    func changeDescription(with description: String) { if description.count <= SetModel.descriptionCharachterLimit { self.description = description } }
+    func changeName(with name: String) { if name.count <= SetViewModel.nameCharachterLimit { self.name = name } }
+    func changeDescription(with description: String) { if description.count <= SetViewModel.descriptionCharachterLimit { self.description = description } }
 }
 
 struct SetEditorView: View {
@@ -119,13 +119,8 @@ struct SetEditorView: View {
                     }
                 }.padding(.horizontal)
                 
-                if quickEditor {
-                    QuickSetEditorView()
-//                        .environmentObject( setEditorViewModel )
-                }else {
-                    FullSetEditor()
-                        .environmentObject( setViewModel )
-                }
+                if quickEditor { QuickSetEditorView() }
+                else { FullSetEditor() }
             }
             
             Calculator(shouldDisplayText: false)

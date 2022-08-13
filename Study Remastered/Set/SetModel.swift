@@ -7,61 +7,40 @@
 
 import Foundation
 import SwiftUI
-import RealmSwift
 
-struct SetModel {
-    
+
+class SetViewModel: ObservableObject, Identifiable, Codable, WrappedRealmObject {
+
     static let nameCharachterLimit = 50
     static let descriptionCharachterLimit = 500
     
-    var cards: [ CardViewModel ] = []
+    var id: String = ""
+    var owner: String = ""
     
-    init( _ cards: [CardViewModel] ) {
-        self.cards = cards
-    }
-    
-    var name: String = "New Set"
-    var description: String = ""
-    
-}
+    @Published var cards: [ CardViewModel ] = []
 
-class SetViewModel: ObservableObject, Codable, Equatable {
-    
-    @Published private (set) var model: SetModel
-    private let id = UUID()
+    @Published var name: String = "New Set"
+    @Published var description: String = ""
     
     lazy var editorViewModel: SetEditorViewModel = SetEditorViewModel( self, in: globalFrame.width * 0.45)
     
-    var name: String {
-        get { model.name }
-        set { model.name = newValue }
-    }
-    
-    var description: String {
-        get { model.description }
-        set { model.description = newValue }
-    }
-    
-    var cards: [ CardViewModel ] {
-        get { model.cards }
-        set { model.cards = newValue }
-    }
-    
     init( _ cards: [ CardViewModel ] ) {
-        let model = SetModel(cards)
-        self.model = model
+        self.cards = cards
+        
+        self.setOwnership(AuthenticatorViewModel.shared.accessToken, UUID().uuidString )
     }
     
     init( _ cards: [ CardViewModel ], name: String, description: String ) {
-        let model = SetModel(cards)
-        self.model = model
-//        super.init()
-        self.model.name = name
-        self.model.description = description
+        self.cards = cards
+        self.name = name
+        self.description = description
+        
+        self.setOwnership(AuthenticatorViewModel.shared.accessToken, UUID().uuidString )
     }
     
-    init( model: SetModel ) {
-        self.model = model
+    func setOwnership(_ owner: String, _ id: String) {
+        self.owner = owner
+        self.id = id
     }
     
     func addCard(with card: CardViewModel) {
@@ -70,27 +49,38 @@ class SetViewModel: ObservableObject, Codable, Equatable {
     
     //MARK: Serialization
     
+    func save() {
+        let _ = RealmObjectWrapper(self, type: RealmObjectWrapperKeys.setViewModelKey)
+    }
+    
+//    func decodeCards() {
+//
+//        do { cards = try JSONDecoder().decode( [ CardViewModel ].self, from: self.cardData) }
+//        catch { print( "error decoding cards for set: \(name): \( error.localizedDescription )" ) }
+//
+//    }
+    
+    
     enum CodingKeys: String, CodingKey {
         case cards
         case name
         case description
     }
-    
+
     func encode(to encoder: Encoder) throws {
         Utilities.shared.encodeData(name, using: encoder, with: CodingKeys.name)
         Utilities.shared.encodeData(description, using: encoder, with: CodingKeys.description)
         Utilities.shared.encodeData(cards, using: encoder, with: CodingKeys.cards)
     }
-    
+
     required init(from decoder: Decoder) throws {
         let values = try! decoder.container(keyedBy: CodingKeys.self)
-        
-        model =  SetModel([])
+
         name =          Utilities.shared.decodeData(in: values, with: CodingKeys.name, defaultValue: "")!
         description =   Utilities.shared.decodeData(in: values, with: CodingKeys.description, defaultValue: "")!
         cards =         Utilities.shared.decodeData(in: values, with: CodingKeys.cards, defaultValue: [])!
     }
-    
+//
     //MARK: Utilities
     
     static func == (lhs: SetViewModel, rhs: SetViewModel) -> Bool {

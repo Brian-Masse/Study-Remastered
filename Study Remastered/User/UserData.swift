@@ -35,7 +35,8 @@ class UserData: Object {
             do { self.user = try JSONDecoder().decode(User.self, from: userData as Data) }
             catch { self.user = User(userData: self) }
         } else { self.user = User(userData: self) }
-        user.setUser(with: self)
+        
+        user.load(with: self)
     }
     
     //this needs to do some of the work of init because Realm is silly

@@ -36,6 +36,7 @@
 		C92F30A828760CC000A7AA87 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92F30A728760CC000A7AA87 /* Color.swift */; };
 		C9339B6B28933C300066D6F4 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9339B6A28933C2F0066D6F4 /* UserData.swift */; };
 		C9339B70289346D20066D6F4 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9339B6F289346D20066D6F4 /* Home.swift */; };
+		C9836E4B28A8438B00F00A98 /* RealmObjectWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9836E4A28A8438B00F00A98 /* RealmObjectWrapper.swift */; };
 		C9CE53E7285ACB9E0028A2FF /* RichTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9CE53E6285ACB9E0028A2FF /* RichTextEditor.swift */; };
 		C9CE53E9285ACE8E0028A2FF /* UIKitTextUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9CE53E8285ACE8E0028A2FF /* UIKitTextUtilities.swift */; };
 		C9D209F7289B093A006BF413 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C9D209F6289B093A006BF413 /* GoogleService-Info.plist */; };
@@ -89,6 +90,7 @@
 		C9339B6A28933C2F0066D6F4 /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
 		C9339B6F289346D20066D6F4 /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
 		C9339B712893802E0066D6F4 /* Study Remastered.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Study Remastered.entitlements"; sourceTree = "<group>"; };
+		C9836E4A28A8438B00F00A98 /* RealmObjectWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmObjectWrapper.swift; sourceTree = "<group>"; };
 		C9CE53E6285ACB9E0028A2FF /* RichTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RichTextEditor.swift; sourceTree = "<group>"; };
 		C9CE53E8285ACE8E0028A2FF /* UIKitTextUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKitTextUtilities.swift; sourceTree = "<group>"; };
 		C9D209F6289B093A006BF413 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -160,8 +162,6 @@
 		C901A92A28933416001EF90F /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
-				C901A93128933480001EF90F /* RealmManager.swift */,
-				C9D209FA289F0E87006BF413 /* Migrator.swift */,
 				C901A92B2893342F001EF90F /* Authenticator.swift */,
 				C901A92D2893344D001EF90F /* AuthenticatorManager.swift */,
 			);
@@ -171,7 +171,6 @@
 		C919CF9728569F62008135C8 = {
 			isa = PBXGroup;
 			children = (
-				C9D20A0628A05119006BF413 /* FileManager.swift */,
 				C919CFA228569F62008135C8 /* Study Remastered */,
 				C919CFA128569F62008135C8 /* Products */,
 				C61F8B58894CC1297E2D12A5 /* Pods */,
@@ -200,6 +199,7 @@
 				C9D209FF28A00EE5006BF413 /* Files */,
 				C919CFC52856A85A008135C8 /* Set */,
 				C9339B6E2893469A0066D6F4 /* Main */,
+				C9836E4C28A843B700F00A98 /* Realm */,
 				C9339B6928933C180066D6F4 /* User */,
 				C919CFA928569F63008135C8 /* Preview Content */,
 			);
@@ -297,12 +297,23 @@
 			path = Main;
 			sourceTree = "<group>";
 		};
+		C9836E4C28A843B700F00A98 /* Realm */ = {
+			isa = PBXGroup;
+			children = (
+				C9836E4A28A8438B00F00A98 /* RealmObjectWrapper.swift */,
+				C901A93128933480001EF90F /* RealmManager.swift */,
+				C9D209FA289F0E87006BF413 /* Migrator.swift */,
+			);
+			path = Realm;
+			sourceTree = "<group>";
+		};
 		C9D209FF28A00EE5006BF413 /* Files */ = {
 			isa = PBXGroup;
 			children = (
 				C9D20A0228A049FF006BF413 /* File.swift */,
 				C9D209FC28A00E61006BF413 /* FileView.swift */,
 				C9D20A0428A04A20006BF413 /* FileURL.swift */,
+				C9D20A0628A05119006BF413 /* FileManager.swift */,
 			);
 			path = Files;
 			sourceTree = "<group>";
@@ -453,6 +464,7 @@
 				C919CFC02856A1CD008135C8 /* CardView.swift in Sources */,
 				C92D21BC286F6F1D00FA586C /* CardTextModel.swift in Sources */,
 				C901A93228933480001EF90F /* RealmManager.swift in Sources */,
+				C9836E4B28A8438B00F00A98 /* RealmObjectWrapper.swift in Sources */,
 				C9DBC2B02880C2D50076E5FA /* QuickSetEditor.swift in Sources */,
 				C92F30A22876079600A7AA87 /* CardTextView.swift in Sources */,
 				C9CE53E9285ACE8E0028A2FF /* UIKitTextUtilities.swift in Sources */,

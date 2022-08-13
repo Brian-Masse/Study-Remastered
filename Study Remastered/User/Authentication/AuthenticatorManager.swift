@@ -131,7 +131,7 @@ class AuthenticatorViewModel: ObservableObject {
         activeUser.delete()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-            RealmManager.shared.removeDataFromRealm(key: accessToken)
+            let _ : UserData? = RealmManager.shared.removeDataFromRealm(key: accessToken)
         }
     }
     
@@ -141,7 +141,7 @@ class AuthenticatorViewModel: ObservableObject {
             
             await RealmManager.shared.updatUserDataSubscriptions(with: accessToken)
             
-            if let user = RealmManager.shared.locateDataInRealm(key: accessToken) {
+            if let user: UserData = RealmManager.shared.locateDataInRealm(key: accessToken) {
                 user.load()
                 activeUser = user
                 userLoaded = true

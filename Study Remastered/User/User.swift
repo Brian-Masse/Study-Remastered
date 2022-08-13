@@ -7,6 +7,39 @@
 
 import Foundation
 import SwiftUI
+import RealmSwift
+//
+//struct TestStruct: Codable {
+//    var var1 = "hello"
+//}
+//
+//class SingleObject: Object, Identifiable, Codable {
+//
+//    static let testStatic = 0
+//
+//    @Persisted(primaryKey: true) var _id: ObjectId
+//
+//    @Persisted var var1: String = ""
+//    @Persisted var var2: Int = 0
+//
+//    var cards: [CardViewModel] = []
+//
+//    @Persisted var data: Data!
+//
+//    required convenience init( _ var1: String, _ var2: Int ) {
+//        self.init()
+//
+//        self.var1 = var1
+//        self.var2 = var2
+//
+//        let test = TestStruct()
+//
+//        self.data = try! JSONEncoder().encode(test)
+//
+//    }
+//
+//}
+
 
 class User: ObservableObject, Codable {
     
@@ -38,35 +71,58 @@ class User: ObservableObject, Codable {
     
     func deleteSet(with setViewModel: SetViewModel) {
         
-        guard let index = sets.firstIndex(where: { passedModel in
-            return passedModel == setViewModel
-            
-        }) else { return }
+        guard let index = sets.firstIndex(where: { passedModel in passedModel == setViewModel }) else { return }
+        let _ : RealmObjectWrapper? = RealmManager.shared.removeDataFromRealm(key: sets[index].id )
         sets.remove(at: index)
         
     }
     
-    //MARK: Serialization
+    //MARK: load / save functions
+    /// this objects is responsible for calling all the save functions of individual sets, as well as for loading them from the Realm and calling their init
     
+    func load(with userData: UserData) {
+        self.userData = userData
+        self.sets = loadWrappedObjects()
+    }
+    
+    private func loadWrappedObjects<T: WrappedRealmObject>() -> [ T ] where T: Codable, T: AnyObject {
+        
+        var returning: [T] = []
+        let wrappers: [ RealmObjectWrapper ] = RealmManager.shared.locateObjectsInRealm() // the RealmSync should be filtering this so it is only the active user's sets
+        for wrapper in wrappers {
+            if let object: T = wrapper.decodeObject() { returning.append( object ) }
+        }
+        return returning
+
+    }
+    
+    func save(withUpdateToUser: Bool = false) {
+        userData.save(withUpdateToUser: withUpdateToUser) // compiles this class into Data
+        self.saveSets()
+    }
+    
+    private func saveSets() { for setModel in sets { setModel.save() } }
+    
+    
+    
+    
+    
+    //MARK: Serialization
     enum CodingKeys: String, CodingKey {
         case sets
     }
     
     func encode(to encoder: Encoder) throws {
-        Utilities.shared.encodeData(sets, using: encoder, with: CodingKeys.sets)
+//        Utilities.shared.encodeData(sets, using: encoder, with: CodingKeys.sets)
     }
     
     required init(from decoder: Decoder) throws {
-        let values = try! decoder.container(keyedBy: CodingKeys.self)
+//        let values = try! decoder.container(keyedBy: CodingKeys.self)
         
-        sets = Utilities.shared.decodeData(in: values, with: CodingKeys.sets, defaultValue: [ setViewModel ])!
+//        sets = Utilities.shared.decodeData(in: values, with: CodingKeys.sets, defaultValue: [ setViewModel ])!
     }
     
     //MARK: Convinience
-    
-    func save(withUpdateToUser: Bool = false) {
-        userData.save(withUpdateToUser: withUpdateToUser)
-    }
     
     func setUser(with user: UserData) {
         self.userData = user

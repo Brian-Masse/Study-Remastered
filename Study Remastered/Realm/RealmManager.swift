@@ -17,7 +17,7 @@ class RealmManager: ObservableObject {
     
     static let shared = RealmManager()
     static let userDataSubscription = "User-Data"
-    static let testSubscription = "test"
+    static let sharedSetsSubscription = "Shared-Data-Sets"
     
     func loadRealm() async {
         
@@ -50,7 +50,11 @@ class RealmManager: ObservableObject {
     func updatUserDataSubscriptions( with accessToken: String ) async {
         
         let _: UserData? = await addSubscriptions(RealmManager.userDataSubscription) { query in query.accessToken == accessToken }
-        let _: test? = await addSubscriptions(RealmManager.testSubscription)
+        let _: RealmObjectWrapper? = await addSubscriptions(RealmManager.sharedSetsSubscription) { query in
+            print( query.owner, accessToken )
+            return query.owner == accessToken
+            
+        }
         
     }
     
@@ -73,16 +77,26 @@ class RealmManager: ObservableObject {
         return nil
     }
     
-    func locateDataInRealm( key: String ) -> UserData? {
-        if let locatedData = realm.object(ofType: UserData.self, forPrimaryKey: key) {
+    func locateDataInRealm<T: Object>( key: String ) -> T? {
+        if let locatedData = realm.object(ofType: T.self, forPrimaryKey: key) {
             return locatedData
         } else { print( "There was an error finding the data in the realm database" ) }
         return nil
     }
     
+    func locateObjectsInRealm<objectType: Object>( include filter: (( RealmSwift.Query<objectType> ) -> RealmSwift.Query<Bool>)? = nil ) -> [objectType] {
+        
+        var results = realm.objects(objectType.self)
+        
+        if let filter = filter { results = results.where(filter) }
+        
+        return Array( results )
+    }
+    
     func saveDataToRealm<anyData: Object>(_ data: anyData) {
         realm.beginWrite()
-        realm.add(data)
+        
+        realm.add(data, update: .modified)
         
         do { try realm.commitWrite() }
         catch { print("There was an error committing the data: \(error.localizedDescription)") }
@@ -94,12 +108,13 @@ class RealmManager: ObservableObject {
         }
     }
     
-    func removeDataFromRealm(key: String) {
-        if let data = locateDataInRealm(key: key) {
+    func removeDataFromRealm<T: Object>(key: String) -> T? {
+        if let data: T = locateDataInRealm(key: key) {
             realm.beginWrite()
             realm.delete(data)
             do { try realm.commitWrite() }
             catch { print("There was an error committing the deletion of data: \(error.localizedDescription)") }
         }
+        return nil
     }
 }

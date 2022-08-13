@@ -8,7 +8,6 @@
 import Foundation
 import SwiftUI
 
-
 struct SetView: View {
     
     @EnvironmentObject var viewModel: SetViewModel
@@ -52,7 +51,7 @@ struct SetView: View {
             Text( viewModel.description )
             
             ScrollView(.vertical, showsIndicators: true) {
-                ForEach( Array(viewModel.model.cards.enumerated()), id: \.offset ) { enumeration in
+                ForEach( Array(viewModel.cards.enumerated()), id: \.offset ) { enumeration in
                     CardView( displayType: .double )
                         .environmentObject( enumeration.element )
                 }
@@ -82,9 +81,9 @@ struct SetPreviewView: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
-                Text( setViewModel.model.name )
+                Text( setViewModel.name )
                 if setViewModel.description != "" {
-                    Text( setViewModel.model.description )
+                    Text( setViewModel.description )
                         .padding(.bottom)
                 }
             }
