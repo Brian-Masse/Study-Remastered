@@ -17,7 +17,7 @@ class SetViewModel: ObservableObject, Identifiable, Codable, WrappedRealmObject 
     var id: String = ""
     var owner: String = ""
     
-    @Published var cards: [ CardViewModel ] = []
+    var cards: [ CardViewModel ] = []
 
     @Published var name: String = "New Set"
     @Published var description: String = ""
@@ -52,14 +52,6 @@ class SetViewModel: ObservableObject, Identifiable, Codable, WrappedRealmObject 
     func save() {
         let _ = RealmObjectWrapper(self, type: RealmObjectWrapperKeys.setViewModelKey)
     }
-    
-//    func decodeCards() {
-//
-//        do { cards = try JSONDecoder().decode( [ CardViewModel ].self, from: self.cardData) }
-//        catch { print( "error decoding cards for set: \(name): \( error.localizedDescription )" ) }
-//
-//    }
-    
     
     enum CodingKeys: String, CodingKey {
         case cards

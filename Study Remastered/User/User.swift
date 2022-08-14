@@ -8,38 +8,6 @@
 import Foundation
 import SwiftUI
 import RealmSwift
-//
-//struct TestStruct: Codable {
-//    var var1 = "hello"
-//}
-//
-//class SingleObject: Object, Identifiable, Codable {
-//
-//    static let testStatic = 0
-//
-//    @Persisted(primaryKey: true) var _id: ObjectId
-//
-//    @Persisted var var1: String = ""
-//    @Persisted var var2: Int = 0
-//
-//    var cards: [CardViewModel] = []
-//
-//    @Persisted var data: Data!
-//
-//    required convenience init( _ var1: String, _ var2: Int ) {
-//        self.init()
-//
-//        self.var1 = var1
-//        self.var2 = var2
-//
-//        let test = TestStruct()
-//
-//        self.data = try! JSONEncoder().encode(test)
-//
-//    }
-//
-//}
-
 
 class User: ObservableObject, Codable {
     

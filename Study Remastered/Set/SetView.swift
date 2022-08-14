@@ -97,7 +97,7 @@ struct SetPreviewView: View {
         .onTapGesture {
             showingSet = true
         }
-        .sheet(isPresented: $showingSet) { SetView() }
+        .fullScreenCover(isPresented: $showingSet) { SetView() }
     }
 }
 

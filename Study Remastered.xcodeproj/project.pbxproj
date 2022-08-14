@@ -32,18 +32,17 @@
 		C92EEFF528752F4D00D6A81E /* RichTextEditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92EEFF428752F4D00D6A81E /* RichTextEditorViewModel.swift */; };
 		C92F30A02875FAD700A7AA87 /* UIUinversal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92F309F2875FAD700A7AA87 /* UIUinversal.swift */; };
 		C92F30A22876079600A7AA87 /* CardTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92F30A12876079600A7AA87 /* CardTextView.swift */; };
-		C92F30A528760A4700A7AA87 /* Goku.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C92F30A428760A4700A7AA87 /* Goku.ttf */; };
 		C92F30A828760CC000A7AA87 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92F30A728760CC000A7AA87 /* Color.swift */; };
 		C9339B6B28933C300066D6F4 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9339B6A28933C2F0066D6F4 /* UserData.swift */; };
 		C9339B70289346D20066D6F4 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9339B6F289346D20066D6F4 /* Home.swift */; };
 		C9836E4B28A8438B00F00A98 /* RealmObjectWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9836E4A28A8438B00F00A98 /* RealmObjectWrapper.swift */; };
+		C9836E4E28A8690900F00A98 /* Goku.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C92F30A428760A4700A7AA87 /* Goku.ttf */; };
 		C9CE53E7285ACB9E0028A2FF /* RichTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9CE53E6285ACB9E0028A2FF /* RichTextEditor.swift */; };
 		C9CE53E9285ACE8E0028A2FF /* UIKitTextUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9CE53E8285ACE8E0028A2FF /* UIKitTextUtilities.swift */; };
 		C9D209F7289B093A006BF413 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C9D209F6289B093A006BF413 /* GoogleService-Info.plist */; };
 		C9D209F9289E0C6C006BF413 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D209F8289E0C6C006BF413 /* Utilities.swift */; };
 		C9D209FB289F0E87006BF413 /* Migrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D209FA289F0E87006BF413 /* Migrator.swift */; };
 		C9D209FD28A00E61006BF413 /* FileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D209FC28A00E61006BF413 /* FileView.swift */; };
-		C9D20A0128A0203C006BF413 /* Study-Remastered-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C9D20A0028A0203C006BF413 /* Study-Remastered-Info.plist */; };
 		C9D20A0328A049FF006BF413 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D20A0228A049FF006BF413 /* File.swift */; };
 		C9D20A0528A04A20006BF413 /* FileURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D20A0428A04A20006BF413 /* FileURL.swift */; };
 		C9D20A0728A05119006BF413 /* FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D20A0628A05119006BF413 /* FileManager.swift */; };
@@ -91,13 +90,13 @@
 		C9339B6F289346D20066D6F4 /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
 		C9339B712893802E0066D6F4 /* Study Remastered.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Study Remastered.entitlements"; sourceTree = "<group>"; };
 		C9836E4A28A8438B00F00A98 /* RealmObjectWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmObjectWrapper.swift; sourceTree = "<group>"; };
+		C9836E4D28A868A800F00A98 /* Study-Remastered-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Study-Remastered-Info.plist"; sourceTree = SOURCE_ROOT; };
 		C9CE53E6285ACB9E0028A2FF /* RichTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RichTextEditor.swift; sourceTree = "<group>"; };
 		C9CE53E8285ACE8E0028A2FF /* UIKitTextUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKitTextUtilities.swift; sourceTree = "<group>"; };
 		C9D209F6289B093A006BF413 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C9D209F8289E0C6C006BF413 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		C9D209FA289F0E87006BF413 /* Migrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Migrator.swift; sourceTree = "<group>"; };
 		C9D209FC28A00E61006BF413 /* FileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileView.swift; sourceTree = "<group>"; };
-		C9D20A0028A0203C006BF413 /* Study-Remastered-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "Study-Remastered-Info.plist"; path = "Universals/Study-Remastered-Info.plist"; sourceTree = "<group>"; };
 		C9D20A0228A049FF006BF413 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		C9D20A0428A04A20006BF413 /* FileURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileURL.swift; sourceTree = "<group>"; };
 		C9D20A0628A05119006BF413 /* FileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManager.swift; sourceTree = "<group>"; };
@@ -189,10 +188,10 @@
 		C919CFA228569F62008135C8 /* Study Remastered */ = {
 			isa = PBXGroup;
 			children = (
+				C9836E4D28A868A800F00A98 /* Study-Remastered-Info.plist */,
 				C919CFA728569F63008135C8 /* Assets.xcassets */,
 				C9339B712893802E0066D6F4 /* Study Remastered.entitlements */,
 				C9D209F6289B093A006BF413 /* GoogleService-Info.plist */,
-				C9D20A0028A0203C006BF413 /* Study-Remastered-Info.plist */,
 				C92F30A328760A1F00A7AA87 /* Fonts */,
 				C9DBC2B32880C7EC0076E5FA /* App  */,
 				C901A9292892E95B001EF90F /* Universals */,
@@ -399,10 +398,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C92F30A528760A4700A7AA87 /* Goku.ttf in Resources */,
 				C9D209F7289B093A006BF413 /* GoogleService-Info.plist in Resources */,
 				C919CFAB28569F63008135C8 /* Preview Assets.xcassets in Resources */,
-				C9D20A0128A0203C006BF413 /* Study-Remastered-Info.plist in Resources */,
+				C9836E4E28A8690900F00A98 /* Goku.ttf in Resources */,
 				C919CFA828569F63008135C8 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -633,7 +631,7 @@
 				DEVELOPMENT_TEAM = LN4JU8GNV7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "";
+				INFOPLIST_FILE = "Study-Remastered-Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -669,7 +667,7 @@
 				DEVELOPMENT_TEAM = LN4JU8GNV7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "";
+				INFOPLIST_FILE = "Study-Remastered-Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

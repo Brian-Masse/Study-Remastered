@@ -34,20 +34,6 @@ struct HomeView: View {
             NamedButton("Create New Set", and: "plus.rectangle.on.rectangle", oriented: .horizontal)
                 .onTapGesture { user.addNewSet() }
             
-//            ForEach(user.test, id: \.self) { object in
-//                Text("\(object.var1), \(object.var2)")
-//            }
-//            
-//            NamedButton("TEST", and: "plus.rectangle.on.rectangle", oriented: .horizontal)
-//                .onTapGesture {
-//                    
-//                    let count = user.test.count
-//                    let newObject = SingleObject("object \(count)", count)
-//                    
-//                    user.test.append( newObject )
-//                    
-//                }
-            
             NamedButton("Save User", and: "person.badge.key", oriented: .horizontal)
                 .onTapGesture { user.save(withUpdateToUser: true) }
         }

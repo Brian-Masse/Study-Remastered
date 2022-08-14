@@ -50,11 +50,7 @@ class RealmManager: ObservableObject {
     func updatUserDataSubscriptions( with accessToken: String ) async {
         
         let _: UserData? = await addSubscriptions(RealmManager.userDataSubscription) { query in query.accessToken == accessToken }
-        let _: RealmObjectWrapper? = await addSubscriptions(RealmManager.sharedSetsSubscription) { query in
-            print( query.owner, accessToken )
-            return query.owner == accessToken
-            
-        }
+        let _: RealmObjectWrapper? = await addSubscriptions(RealmManager.sharedSetsSubscription) { query in query.owner == accessToken }
         
     }
     
