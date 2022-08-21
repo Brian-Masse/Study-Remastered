@@ -11,57 +11,78 @@ import SwiftUI
 
 struct FileView: View {
     
-    let objects: [ File ]
+    @State var url: FileURL
+    
+    @State var shownPaths: [FileURL]
+    
+    init( url: FileURL ) {
+        self.url = url
+        self.shownPaths = url.splitIntoURLs()
+    }
     
     var body: some View {
         
-        DirectoryView()
-            .environmentObject( DirectoryManager(path: mainDirectory, passedObjects: data) )
-        
+        VStack {
+            ForEach( shownPaths.indices, id: \.self ) { index in
+                let url = shownPaths[index]
+                DirectoryView(url: url, directory: FileManager.shared[url], activeURL: $url )
+                
+            }
+            
+        }
+        .onChange(of: url) { newValue in
+            shownPaths = newValue.splitIntoURLs()
+        }
     }
+    
+    
 }
 
 
 
 struct DirectoryView: View {
     
-    @EnvironmentObject var directoryManager: DirectoryManager
+    let url: FileURL
+    
+    @ObservedObject var directory: Directory
+    @Binding var activeURL: FileURL
     
     var body: some View {
-        
+    
         VStack {
             
-            HStack {
-                ForEach( directoryManager.objects ) { object in
-                    VStack {
-                        Text( object.name )
-                        Text( object.path.string() )
-                    }
-                    .padding()
-                    .background(RoundedRectangle(cornerRadius: 8).stroke())
-                }
-            }
-            
-            Text("sync test to realm")
-                .onTapGesture {
-                    RealmManager.shared.saveSequenceToRealm( dummyData )
-                }
-            
-            Text("In SubFolders")
+            Text( url.string(withFileName: true) )
             
             HStack {
-                ForEach( directoryManager.containedObjects ) { object in
+                
+                ForEach( directory.files, id: \.data.name ) { file in
+                    
                     VStack {
-                        Text( object.name )
-                        Text( object.path.string() )
+                        Text( file.data.name )
+                        Text( file.data.path.string() )
+                        
                     }
                     .padding()
-                    .background(RoundedRectangle(cornerRadius: 8).stroke())
+                    .overlay(RoundedRectangle(cornerRadius: 15).stroke())
+                }
+                
+                ForEach( directory.directories, id: \.name ) { directory in
+                    
+                    VStack {
+                        Text( directory.name )
+                        Text( directory.url.string() )
+                    }
+                    .padding()
+                    .background(RoundedRectangle(cornerRadius: 15).foregroundColor(.gray)  )
+                    .overlay(RoundedRectangle(cornerRadius: 15).stroke())
+                    .onTapGesture {
+                        activeURL = directory.url
+                    }
                 }
             }
-            
         }
+        .padding()
+        .overlay(RoundedRectangle(cornerRadius: 15).stroke())
         
     }
-    
 }

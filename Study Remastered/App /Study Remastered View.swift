@@ -36,7 +36,7 @@ struct StudyRemasteredView: View {
                                 .environmentObject(utilities)
                             
                         case .files:
-                            FileView(objects: data)
+                            FileView(url: mainDirectory)
                         }
                         Spacer()
                         TabBar(currentTab: $currentTab)

@@ -63,5 +63,6 @@ protocol WrappedRealmObject {
     var id: String { get set }
     
     func setOwnership(_ : String, _: String) -> Void
+    // set both the owner and the id to the passed values
     
 }

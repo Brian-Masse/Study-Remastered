@@ -8,68 +8,71 @@
 import Foundation
 import RealmSwift
 
-struct File: Fileable {
+struct File {
     
     enum FileType: String {
         case set
         case group
     }
     
-    var id: String
+    var data: Fileable
     
-    var path: FileURL = .init([])
-    
-    var name: String
-    
-    let type: FileType
-    
-    
-    init( _ name: String, at path: FileURL, ofType type: FileType ) {
-        
-        self.name = name
-        self.path = path.copy()
-        self.path.setFile(with: name)
-
-        self.type = type
-
-        self.id = self.path.string(withFileName: true)
-        
+    init( _ data: Fileable ) {
+        self.data = data
     }
-    
 }
 
-protocol Fileable: Identifiable {
+/// conform any object that wants to be saved into the filing system to `fileable`
+/// when loaded into the app, these filable objects must be wrapped in a file and added to the shared FIleManager
+protocol Fileable {
     
-    var path: FileURL { get set }
+    var path: FileURL { get }
     
     var name: String { get set }
     
-    var type: File.FileType { get }
+    func changeURL(with : FileURL) -> Void
     
 }
 
-
-
-let dummyData = [
-
-    test("one", 1),
-    test("two", 2),
-    test("three", 3)
-
-]
-
-class test: Object {
+class test: Fileable {
     
-    @Persisted(primaryKey: true) var _id = ""
-    @Persisted var test1: String = "hello"
-    @Persisted var test2: Int = 5
+    private(set) var path: FileURL
     
-    required convenience init( _ test1: String, _ test2: Int ) {
-        self.init()
-        self.test1 = test1
-        self.test2 = test2
+    var name: String
+    
+    init( at path: FileURL, name: String ) {
         
-        self._id = "\( test1 ) \(test2)"
+        self.path = path
+        self.name = name
+    }
+    
+    func changeURL(with url: FileURL) {
+        self.path = url
     }
     
 }
+
+
+let unkownDirectory = FileURL( [  "unkown" ] )
+let mainDirectory = FileURL( [  "main" ] )
+let first = FileURL(startPath: mainDirectory, adding: "first")
+let second = FileURL(startPath: mainDirectory, adding: "second")
+let third = FileURL(startPath: second, adding: "third")
+let fourth = FileURL(startPath: mainDirectory, adding: "fourth")
+
+let object1 = test(at: mainDirectory, name: "object1")
+let object2 = test(at: second, name: "object2")
+let object3 = test(at: mainDirectory, name: "object3")
+let object4 = test(at: third, name: "object4")
+let object5 = test(at: fourth, name: "object5")
+
+
+let data: [ File ] = [
+
+    File(object1),
+    File(object2),
+    File(object3),
+    File(object4),
+    File(object5)
+
+]

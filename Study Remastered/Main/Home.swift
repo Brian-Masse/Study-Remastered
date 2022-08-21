@@ -37,6 +37,7 @@ struct HomeView: View {
             NamedButton("Save User", and: "person.badge.key", oriented: .horizontal)
                 .onTapGesture { user.save(withUpdateToUser: true) }
         }
+        .transition(.slide)
         .background( ZStack { }
             .fullScreenCover(isPresented: $showingProfile) { ProfileView() }
         )

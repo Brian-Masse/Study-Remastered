@@ -93,7 +93,7 @@ struct SetPreviewView: View {
         }
         .padding()
         .overlay(RoundedRectangle(cornerRadius: 10).stroke())
-        .background(Color(red: 1, green: 1, blue: 1, opacity: 1))
+        .background(Color(red: 1, green: 1, blue: 1, opacity: 0.01))
         .onTapGesture {
             showingSet = true
         }

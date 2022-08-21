@@ -8,12 +8,10 @@
 import Foundation
 import SwiftUI
 
-class FileURL { //acts as a linked list
+///when this list grows / shrinks, the file name must be given to the tail to ensure proper comparison
+///this only happens in append as of now
+class FileURL: Equatable { //acts as a linked list
     
-    enum MatchDirection: Int {
-        case foward
-        case backward
-    }
     
     enum MatchType: String {
         case equals
@@ -24,9 +22,9 @@ class FileURL { //acts as a linked list
     
     private(set) var file: String? = nil
     var head: FileURLNode!
-    var tail: FileURLNode! { didSet { length = getLength() }}
-    
-    lazy var length: Int = getLength()
+    var tail: FileURLNode!
+//    { didSet { length = getLength() }}
+//    lazy var length: Int = getLength()
     
     init( head: String ) {
         let node = FileURLNode( head )
@@ -53,7 +51,6 @@ class FileURL { //acts as a linked list
     }
 
     init(startPath: FileURL, adding name: String) {
-
         let copy = startPath.copy()
         
         copy.append( name )
@@ -72,11 +69,28 @@ class FileURL { //acts as a linked list
         return count
     }
     
-    func setFile(with file: String?) {
+    ///creates a list containg a URL of every link in this URL object
+    ///ie. /main/second -> [ /main, /main/second ]
+    ///this is used for displaying all directories in the UI
+    func splitIntoURLs() -> [ FileURL ] {
+        
+        var node = self.head
+        let url = FileURL( [] )
+        var returning: [FileURL] = []
+        
+        while node != nil {
+            url.append(node!.name)
+            returning.append(url.copy())
+            node = node!.next
+        }
+        return returning
+    }
+    
+    ///this should only be used when copying
+    private func setFile(with file: String?) {
         self.file = file
         guard let tail = self.tail else { return }
         tail.file = file
-        
     }
     
     func string(withFileName: Bool = false) -> String {
@@ -88,9 +102,7 @@ class FileURL { //acts as a linked list
             base += ("/" + node!.name)
             
             if let file = node?.file { if withFileName { base += file } }
-            
             node = node!.next
-            
         }
     
         return base
@@ -98,7 +110,11 @@ class FileURL { //acts as a linked list
     
     func append( _ component: String ) {
         let node = FileURLNode(component)
-        self.tail.next = node
+        if self.tail == nil {
+            self.head = node
+            self.tail = node
+        }
+        else { self.tail.next = node }
         self.tail.file = nil
         self.tail = node
         self.tail.file = file
@@ -124,6 +140,7 @@ class FileURL { //acts as a linked list
         return ( matchCount, .firstInSecond )
     }
     
+    ///makes a copy sharing not pointers
     func copy() -> FileURL {
         
         let copy = FileURL(head: self.head.name)
@@ -140,8 +157,13 @@ class FileURL { //acts as a linked list
         copy.setFile(with: file)
         return copy
     }
+    
+    static func == (lhs: FileURL, rhs: FileURL) -> Bool { lhs.matches(secondURL: rhs).1 == .equals }
 }
 
+
+/// if a `URLNode` has a non nil `file` property, then it will not be considered automatically when matching with other urls:
+///:/main/second/third/fileName == :/main/second/third
 class FileURLNode: Equatable {
 
     var file: String? = nil
@@ -155,19 +177,3 @@ class FileURLNode: Equatable {
     
     static func == (lhs: FileURLNode, rhs: FileURLNode) -> Bool { lhs.name == rhs.name }
 }
-
-
-let mainDirectory = FileURL( [  "main" ] )
-let first = FileURL(startPath: mainDirectory, adding: "first")
-let second = FileURL(startPath: mainDirectory, adding: "second")
-let third = FileURL(startPath: mainDirectory, adding: "third")
-let final = FileURL(startPath: mainDirectory, adding: "final")
-
-let data: [ File ] = [
-
-    File("object1", at: first, ofType: .set),
-    File("object2", at: second, ofType: .set),
-    File("object4", at: third, ofType: .set),
-    File("object5", at: final, ofType: .set)
-                
-]
