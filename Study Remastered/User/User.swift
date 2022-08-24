@@ -46,22 +46,28 @@ class User: ObservableObject, Codable {
     }
     
     //MARK: load / save functions
-    /// this objects is responsible for calling all the save functions of individual sets, as well as for loading them from the Realm and calling their init
-    
+    /// this object is responsible for calling all the save functions of individual sets, as well as for loading them from the Realm and calling their init
+
     func load(with userData: UserData) {
         self.userData = userData
-        self.sets = loadWrappedObjects()
+        self.sets               = loadWrappedObjects(ofType: .setViewModelKey)
+        let _ : [ HiddenFile ]  = loadWrappedObjects(ofType: .hiddenFileKey) ///this will load all of the Hidden Files into the FileManager
     }
     
-    private func loadWrappedObjects<T: WrappedRealmObject>() -> [ T ] where T: Codable, T: AnyObject {
+    private func loadWrappedObjects<T: WrappedRealmObject>(ofType objectType: RealmObjectWrapperKeys.Key) -> [ T ] where T: Codable, T: AnyObject {
         
         var returning: [T] = []
-        let wrappers: [ RealmObjectWrapper ] = RealmManager.shared.locateObjectsInRealm() // the RealmSync should be filtering this so it is only the active user's sets
+        let wrappers: [ RealmObjectWrapper ] = RealmManager.shared.locateObjectsInRealm() // the RealmSync should be filtering this so it is only the active user's data
         for wrapper in wrappers {
-            if let object: T = wrapper.decodeObject() { returning.append( object ) }
+            if wrapper.type == objectType.rawValue {
+                if let object: T = wrapper.decodeObject() {
+                    returning.append( object )
+                    /// this will automatically add the object to the filing system if it belongs
+                    if let fileData = object as? Fileable { FileManager.shared.insertFile(File(fileData), createDirectory: true) }
+                }
+            }
         }
         return returning
-
     }
     
     func save(withUpdateToUser: Bool = false) {

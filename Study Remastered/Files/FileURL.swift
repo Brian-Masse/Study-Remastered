@@ -8,10 +8,11 @@
 import Foundation
 import SwiftUI
 
+
+//MARK: FILEURL
 ///when this list grows / shrinks, the file name must be given to the tail to ensure proper comparison
 ///this only happens in append as of now
-class FileURL: Equatable { //acts as a linked list
-    
+class FileURL: Equatable, Codable { //acts as a linked list
     
     enum MatchType: String {
         case equals
@@ -23,9 +24,11 @@ class FileURL: Equatable { //acts as a linked list
     private(set) var file: String? = nil
     var head: FileURLNode!
     var tail: FileURLNode!
+    
 //    { didSet { length = getLength() }}
 //    lazy var length: Int = getLength()
     
+    //MARK: Init
     init( head: String ) {
         let node = FileURLNode( head )
         self.head = node
@@ -33,21 +36,7 @@ class FileURL: Equatable { //acts as a linked list
     }
     
     init(_ components: [ String ]) {
-        //goes through componetns and links them
-        if !components.isEmpty {
-            for index in components.indices {
-                
-                let node = FileURLNode(components[index])
-                
-                if index == 0 {
-                    self.head = node
-                    self.tail = node
-                }else {
-                    self.tail.next = node
-                    self.tail = node
-                }
-            }
-        }
+        linkList(components)
     }
 
     init(startPath: FileURL, adding name: String) {
@@ -59,14 +48,20 @@ class FileURL: Equatable { //acts as a linked list
         self.tail = copy.tail
     }
     
-    private func getLength() -> Int {
-        var count = 0
+    private func linkList( _ list: [ String ] ) {
+        
+        //goes through componetns and links them
+        if list.isEmpty { return }
+        self.head = FileURLNode( list.first! )
         var node = self.head
-        while node != nil {
-            count += 1
+        
+        for index in 1..<list.count {
+            node!.next = FileURLNode( list[index] )
             node = node!.next
         }
-        return count
+        
+        node!.file = file
+        self.tail = node
     }
     
     ///creates a list containg a URL of every link in this URL object
@@ -74,20 +69,18 @@ class FileURL: Equatable { //acts as a linked list
     ///this is used for displaying all directories in the UI
     func splitIntoURLs() -> [ FileURL ] {
         
-        var node = self.head
         let url = FileURL( [] )
         var returning: [FileURL] = []
         
-        while node != nil {
-            url.append(node!.name)
+        loopThrough { node in
+            url.append(node.name)
             returning.append(url.copy())
-            node = node!.next
         }
+
         return returning
     }
     
-    ///this should only be used when copying
-    private func setFile(with file: String?) {
+    func setFile(with file: String?) {
         self.file = file
         guard let tail = self.tail else { return }
         tail.file = file
@@ -95,14 +88,10 @@ class FileURL: Equatable { //acts as a linked list
     
     func string(withFileName: Bool = false) -> String {
         var base = ":"
-        var node: FileURLNode? = self.head
         
-        while node != nil {
-            
-            base += ("/" + node!.name)
-            
-            if let file = node?.file { if withFileName { base += file } }
-            node = node!.next
+        loopThrough { node in
+            base += ("/" + node.name)
+            if let file = node.file { if withFileName { base += "/\(file)" } }
         }
     
         return base
@@ -120,48 +109,75 @@ class FileURL: Equatable { //acts as a linked list
         self.tail.file = file
     }
     
-    func matches(secondURL: FileURL) -> (Int, FileURL.MatchType) {
+    func removeLast() {
         
-        var matchCount = 0
-        var node: FileURLNode? = self.head
-        var secondNode: FileURLNode? = secondURL.head
+        if self.head == nil || self.head.next == nil { return }
+        var node = self.head
         
-        while node != nil {
-            
-            if secondNode == nil { return ( matchCount, .secondInFirst ) }
-            
-            if node == secondNode { matchCount += 1 }
-            else { return ( matchCount, .forked ) }
-            
-            node = node!.next
-            secondNode = secondNode!.next
-        }
-        if secondNode == nil { return ( matchCount, .equals )  }
-        return ( matchCount, .firstInSecond )
+        //this will stop when you are one before the tail
+        while node!.next!.next != nil { node = node!.next }
+        self.tail = node
+        self.tail.file = file
+        self.tail.next = nil
     }
     
     ///makes a copy sharing not pointers
     func copy() -> FileURL {
-        
         let copy = FileURL(head: self.head.name)
-        var node: FileURLNode? = self.head.next
         
-        while node != nil {
-            let copiedNode = FileURLNode(node!.name)
+        loopThrough(startAtHead: false) { node in
+            let copiedNode = FileURLNode(node.name)
             copy.tail.next = copiedNode
             copy.tail = copiedNode
-            
-            node = node!.next
         }
-        
         copy.setFile(with: file)
         return copy
     }
     
-    static func == (lhs: FileURL, rhs: FileURL) -> Bool { lhs.matches(secondURL: rhs).1 == .equals }
+    private func loopThrough( startAtHead: Bool = true, _ action: ( FileURLNode ) -> Void ) {
+        if self.head == nil { return }
+        
+        var node = self.head
+        if !startAtHead { node = self.head!.next }
+        
+        while node != nil {
+            action( node! )
+            node = node!.next
+        }
+    }
+    
+    //MARK: Serialization
+    
+    enum CodingKeys: String, CodingKey {
+        case names
+        case file
+    }
+    
+    func encode(to encoder: Encoder) throws {
+    
+        var strings: [String] = []
+        loopThrough { node in strings.append( node.name ) }
+        
+        Utilities.shared.encodeData(strings, using: encoder, with: CodingKeys.names)
+        Utilities.shared.encodeData(file, using: encoder, with: CodingKeys.file)
+        
+    }
+    
+    required init(from decoder: Decoder) throws {
+    
+        let values = try! decoder.container(keyedBy: CodingKeys.self)
+        
+        let names: [String] = Utilities.shared.decodeData(in: values, with: CodingKeys.names, defaultValue: [])!
+        self.file = Utilities.shared.decodeData(in: values, with: CodingKeys.names)
+        
+        linkList(names)
+    }
+    
+    static func == (lhs: FileURL, rhs: FileURL) -> Bool { lhs.string() == rhs.string() }
 }
 
 
+//MARK: FileURLNode
 /// if a `URLNode` has a non nil `file` property, then it will not be considered automatically when matching with other urls:
 ///:/main/second/third/fileName == :/main/second/third
 class FileURLNode: Equatable {

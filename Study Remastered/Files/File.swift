@@ -19,18 +19,25 @@ struct File {
     
     init( _ data: Fileable ) {
         self.data = data
+        self.data.path.setFile(with: self.data.name)
     }
 }
 
 /// conform any object that wants to be saved into the filing system to `fileable`
 /// when loaded into the app, these filable objects must be wrapped in a file and added to the shared FIleManager
-protocol Fileable {
+protocol Fileable: Codable {
     
     var path: FileURL { get }
     
     var name: String { get set }
     
     func changeURL(with : FileURL) -> Void
+    
+    /// this needs to delete the object in whatever other objects / dbs its apart of it, AS WELL AS delete itself from the FileManager
+    func delete() -> Void
+    
+    /// this needs to change the name of the object (such as changing a set name), change the name property under `fileable`
+    func changeName(_ newName: String) -> Void
     
 }
 
@@ -42,7 +49,7 @@ class test: Fileable {
     
     init( at path: FileURL, name: String ) {
         
-        self.path = path
+        self.path = path.copy()
         self.name = name
     }
     
@@ -50,6 +57,54 @@ class test: Fileable {
         self.path = url
     }
     
+    func delete() {
+        FileManager.shared.deleteFile( at: self.path, name: self.name )
+    }
+    
+    func changeName(_ newName: String) {
+        name = newName
+        path.setFile(with: newName)
+    }
+    
+    
+}
+
+class HiddenFile: Fileable, WrappedRealmObject {
+    
+    static let hiddenFileName = "$$_HIDDEN-FILE_$$"
+    
+    var owner: String = ""
+    var id: String = ""
+    
+    var path: FileURL
+    
+    var name: String
+    
+    init(at url: FileURL ) {
+        
+        self.name = HiddenFile.hiddenFileName
+        self.path = url.copy()
+        
+        self.setOwnership(AuthenticatorViewModel.shared.accessToken, UUID().uuidString)
+        let _ = RealmObjectWrapper(self, type: .hiddenFileKey) // saves the object to the Realm Database
+        
+    }
+    
+    func changeURL(with newURL: FileURL) {
+        self.path = newURL
+        let _ = RealmObjectWrapper(self, type: .hiddenFileKey) // updates the object in the Realm Database
+    }
+    
+    func delete() {
+        let _ : RealmObjectWrapper? = RealmManager.shared.removeDataFromRealm(key: id)
+    }
+    
+    func setOwnership(_ owner: String, _ id: String) {
+        self.owner = owner
+        self.id = id
+    }
+    
+    func changeName(_ newName: String) { }
 }
 
 

@@ -37,6 +37,7 @@ struct StudyRemasteredView: View {
                             
                         case .files:
                             FileView(url: mainDirectory)
+                                .environmentObject(FileManager.shared)
                         }
                         Spacer()
                         TabBar(currentTab: $currentTab)

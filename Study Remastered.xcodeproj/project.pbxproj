@@ -14,6 +14,9 @@
 		C901A92C2893342F001EF90F /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C901A92B2893342F001EF90F /* Authenticator.swift */; };
 		C901A92E2893344D001EF90F /* AuthenticatorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C901A92D2893344D001EF90F /* AuthenticatorManager.swift */; };
 		C901A93228933480001EF90F /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C901A93128933480001EF90F /* RealmManager.swift */; };
+		C9087FBF28B4335B00DA9370 /* FileListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9087FBE28B4335B00DA9370 /* FileListView.swift */; };
+		C9087FC128B4384B00DA9370 /* FileColumnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9087FC028B4384A00DA9370 /* FileColumnView.swift */; };
+		C9087FC428B43C0500DA9370 /* IndividualFileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9087FC328B43C0500DA9370 /* IndividualFileView.swift */; };
 		C919CFA428569F62008135C8 /* Study_RemasteredApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C919CFA328569F62008135C8 /* Study_RemasteredApp.swift */; };
 		C919CFA628569F62008135C8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C919CFA528569F62008135C8 /* ContentView.swift */; };
 		C919CFA828569F63008135C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C919CFA728569F63008135C8 /* Assets.xcassets */; };
@@ -65,6 +68,9 @@
 		C901A92B2893342F001EF90F /* Authenticator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Authenticator.swift; sourceTree = "<group>"; };
 		C901A92D2893344D001EF90F /* AuthenticatorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatorManager.swift; sourceTree = "<group>"; };
 		C901A93128933480001EF90F /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
+		C9087FBE28B4335B00DA9370 /* FileListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileListView.swift; sourceTree = "<group>"; };
+		C9087FC028B4384A00DA9370 /* FileColumnView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileColumnView.swift; sourceTree = "<group>"; };
+		C9087FC328B43C0500DA9370 /* IndividualFileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndividualFileView.swift; sourceTree = "<group>"; };
 		C919CFA028569F62008135C8 /* Study Remastered.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Study Remastered.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C919CFA328569F62008135C8 /* Study_RemasteredApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Study_RemasteredApp.swift; sourceTree = "<group>"; };
 		C919CFA528569F62008135C8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -165,6 +171,17 @@
 				C901A92D2893344D001EF90F /* AuthenticatorManager.swift */,
 			);
 			path = Authentication;
+			sourceTree = "<group>";
+		};
+		C9087FC228B4385500DA9370 /* FileView */ = {
+			isa = PBXGroup;
+			children = (
+				C9D209FC28A00E61006BF413 /* FileView.swift */,
+				C9087FC328B43C0500DA9370 /* IndividualFileView.swift */,
+				C9087FBE28B4335B00DA9370 /* FileListView.swift */,
+				C9087FC028B4384A00DA9370 /* FileColumnView.swift */,
+			);
+			path = FileView;
 			sourceTree = "<group>";
 		};
 		C919CF9728569F62008135C8 = {
@@ -310,7 +327,7 @@
 			isa = PBXGroup;
 			children = (
 				C9D20A0228A049FF006BF413 /* File.swift */,
-				C9D209FC28A00E61006BF413 /* FileView.swift */,
+				C9087FC228B4385500DA9370 /* FileView */,
 				C9D20A0428A04A20006BF413 /* FileURL.swift */,
 				C9D20A0628A05119006BF413 /* FileManager.swift */,
 			);
@@ -457,6 +474,7 @@
 				C919CFA628569F62008135C8 /* ContentView.swift in Sources */,
 				C901A92C2893342F001EF90F /* Authenticator.swift in Sources */,
 				C9D209FB289F0E87006BF413 /* Migrator.swift in Sources */,
+				C9087FC428B43C0500DA9370 /* IndividualFileView.swift in Sources */,
 				C9339B6B28933C300066D6F4 /* UserData.swift in Sources */,
 				C9D20A0528A04A20006BF413 /* FileURL.swift in Sources */,
 				C919CFC02856A1CD008135C8 /* CardView.swift in Sources */,
@@ -485,6 +503,7 @@
 				C9D209F9289E0C6C006BF413 /* Utilities.swift in Sources */,
 				C9DBC2B22880C7E50076E5FA /* Study Remastered Model.swift in Sources */,
 				C92F30A828760CC000A7AA87 /* Color.swift in Sources */,
+				C9087FC128B4384B00DA9370 /* FileColumnView.swift in Sources */,
 				C919CFB828569FAA008135C8 /* CalculatorModel.swift in Sources */,
 				C9339B70289346D20066D6F4 /* Home.swift in Sources */,
 				C919CFBE2856A079008135C8 /* CardModel.swift in Sources */,
@@ -492,6 +511,7 @@
 				C919CFBA28569FAA008135C8 /* Math Components.swift in Sources */,
 				C9D209FD28A00E61006BF413 /* FileView.swift in Sources */,
 				C919CFC42856A847008135C8 /* SetView.swift in Sources */,
+				C9087FBF28B4335B00DA9370 /* FileListView.swift in Sources */,
 				C9CE53E7285ACB9E0028A2FF /* RichTextEditor.swift in Sources */,
 				C919CFB928569FAA008135C8 /* CalculatorModelExtension.swift in Sources */,
 				C919CFC22856A7C4008135C8 /* SetModel.swift in Sources */,

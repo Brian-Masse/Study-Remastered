@@ -50,7 +50,7 @@ class SetViewModel: ObservableObject, Identifiable, Codable, WrappedRealmObject 
     //MARK: Serialization
     
     func save() {
-        let _ = RealmObjectWrapper(self, type: RealmObjectWrapperKeys.setViewModelKey)
+        let _ = RealmObjectWrapper(self, type: .setViewModelKey)
     }
     
     enum CodingKeys: String, CodingKey {

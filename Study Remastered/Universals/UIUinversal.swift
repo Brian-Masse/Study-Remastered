@@ -16,6 +16,24 @@ struct GlobalTextConstants {
     static let UIFontFamily = "Goku"
 }
 
+struct NamedLabel: View {
+    
+    var text: String
+    var icon: String
+    
+    init( _ text: String, and icon: String ) {
+        self.text = text
+        self.icon = icon
+    }
+    
+    var body: some View {
+        HStack {
+            Image(systemName: icon )
+            Text(text)
+        }
+    }
+}
+
 struct NamedButton: View {
     
     enum Direction {

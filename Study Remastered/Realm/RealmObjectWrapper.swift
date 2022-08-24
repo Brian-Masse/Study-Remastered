@@ -21,11 +21,11 @@ class RealmObjectWrapper: Object {
     @Persisted var type: String = ""
     
     //create the object when saving the real data, it will automatically check for duplicate wrappers in the database
-    required convenience init<T: AnyObject>( _ object: T, type: String ) where T: WrappedRealmObject, T: Codable {
+    required convenience init<T: AnyObject>( _ object: T, type: RealmObjectWrapperKeys.Key ) where T: WrappedRealmObject, T: Codable {
         self.init()
         
         self.owner = object.owner
-        self.type = type
+        self.type = type.rawValue
         
         self.data = encodeObject(object)
         self._id = object.id
@@ -54,7 +54,11 @@ class RealmObjectWrapper: Object {
 }
 
 struct RealmObjectWrapperKeys {
-    static let setViewModelKey: String = "Brian.Masse.StudySetViewModel"
+    
+    enum Key: String {
+        case setViewModelKey = "Brian.Masse.StudySetViewModel"
+        case hiddenFileKey   = "Brian.Masse.HiddenFile"
+    }
 }
 
 protocol WrappedRealmObject {
