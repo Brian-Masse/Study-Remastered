@@ -39,6 +39,10 @@ class UserData: Object {
         user.load(with: self)
     }
     
+    func unload() {
+        user.unload()
+    }
+    
     //this needs to do some of the work of init because Realm is silly
     func create(accessToken: String, _ firstName: String, _ lastName: String, _ email: String, _ userName: String) {
         self._id = accessToken
@@ -52,10 +56,12 @@ class UserData: Object {
         // you have already been added to the FireBase server (via the authetnication managaer)
         
         // add to the realm server
-        self.save()
-        
-        // make sure that you have some user object attatched, if none was found in the realm DB
-        self.load()
+        DispatchQueue.main.sync {
+            self.save()
+            
+            // make sure that you have some user object attatched, if none was found in the realm DB
+            self.load()
+        }
     }
     
     func delete() {
@@ -87,7 +93,6 @@ class UserData: Object {
     }
     
     func save(withUpdateToUser encodeData: Bool = false) {
-    
         if encodeData {
             do { try RealmManager.shared.realm.write { userData = try JSONEncoder().encode( user ) } }
             catch { print("error encoding User into NSData: \(error.localizedDescription)") }

@@ -82,7 +82,7 @@ struct IndividualDirectoryView: View {
     var body: some View {
     
         FileItemView(name: directory.name, icon: "tray.2", url: directory.url,
-                     backgroundColor: isActive() ? .blue : Color(red: 0.85, green: 0.85, blue: 0.85),
+                     backgroundColor: isActive() ? .blue : Color(red: 0.5, green: 0.5, blue: 0.5, opacity: 0.15),
                      displayType: displayType)
         
         .onTapGesture {

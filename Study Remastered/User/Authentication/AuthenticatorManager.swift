@@ -116,12 +116,14 @@ class AuthenticatorViewModel: ObservableObject {
     }
     
     func signout() {
+        activeUser.unload()
         do {
             try Auth.auth().signOut()
         } catch { print(error.localizedDescription) }
     }
     
     func delete() {
+        activeUser.unload()
         isSignedin = false
         userLoaded = false
         
@@ -135,6 +137,7 @@ class AuthenticatorViewModel: ObservableObject {
         }
     }
     
+    //called whenever there is a sign in
     func changeActiveUser() {
         
         Task.init {

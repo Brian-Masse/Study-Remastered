@@ -67,6 +67,10 @@ class FileManager: ObservableObject {
         containingDirectory.directories.remove(at: index)
     }
     
+    func clearFileManager() {
+        main.clearDirectory()
+    }
+    
     // MARK: Create Functions
 
     func createDirectory(at url: FileURL) {
@@ -241,6 +245,16 @@ class Directory: ObservableObject {
     
     func delete() {
         FileManager.shared.deleteDirectory(at: url)
+    }
+    
+    func clearDirectory() {
+        
+        files.removeAll()
+        for directory in directories {
+            directory.clearDirectory()
+        }
+        directories.removeAll()
+        
     }
     
     func string() {

@@ -54,11 +54,11 @@ struct FileView: View {
                     HStack {
                         NamedButton("list", and: "list.dash.header.rectangle", oriented: .vertical)
                             .onTapGesture { fileViewType = .list }
-                            .foregroundColor( fileViewType == .list ? .black : .gray )
+                            .foregroundColor( fileViewType == .list ? .primary : .gray )
                         
                         NamedButton("column", and: "rectangle.grid.1x2", oriented: .vertical)
                             .onTapGesture { fileViewType = .column }
-                            .foregroundColor( fileViewType == .column ? .black : .gray )
+                            .foregroundColor( fileViewType == .column ? .primary : .gray )
                     }
                     
                     

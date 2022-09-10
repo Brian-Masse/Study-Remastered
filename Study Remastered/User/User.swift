@@ -52,8 +52,12 @@ class User: ObservableObject, Codable {
 
     func load(with userData: UserData) {
         self.userData = userData
-        self.sets               = loadWrappedObjects(ofType: .setViewModelKey)
+        self.sets               = loadWrappedObjects(ofType: .setViewModelKey) /// implicitly this loads the sets into the FileManager
         let _ : [ HiddenFile ]  = loadWrappedObjects(ofType: .hiddenFileKey) ///this will load all of the Hidden Files into the FileManager
+    }
+    
+    func unload() {
+        FileManager.shared.clearFileManager()
     }
     
     private func loadWrappedObjects<T: WrappedRealmObject>(ofType objectType: RealmObjectWrapperKeys.Key) -> [ T ] where T: Codable, T: AnyObject {

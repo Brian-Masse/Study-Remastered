@@ -88,46 +88,47 @@ struct SetEditorView: View {
     @State var boundDescription: String = ""
     
     var body: some View {
-        
-        ZStack {
-            VStack {
-                Text( setEditorViewModel.name )
-                HStack(spacing: 10) {
-                    NamedButton("save", and: "checkmark.seal", oriented: .vertical).onTapGesture   {
-                        setEditorViewModel.saveEdits()
-                        presentationMode.wrappedValue.dismiss()
+        GeometryReader { geo in
+            ZStack {
+                VStack {
+                    Text( setEditorViewModel.name )
+                    
+                    if quickEditor { QuickSetEditorView() }
+                    else { FullSetEditor() }
+                    
+                    VStack {
+                        HStack {
+                            Text("Set Name: ")
+                            TextField(setEditorViewModel.name, text: $boundName).onChange(of: boundName, perform: { newValue in setEditorViewModel.changeName(with: newValue) })
+                        }
+                        
+                        HStack {
+                            Text("Description: ")
+                            //this needs to be update with the new axis perameter when on Xcode 14
+                            TextField("Insert Description", text: $boundDescription)
+                                .onChange(of: boundDescription, perform: { newValue in setEditorViewModel.changeDescription(with: newValue) })
+                        }
+                    }.padding(.horizontal)
+                    
+                    HStack(spacing: 10) {
+                        NamedButton("save", and: "checkmark.seal", oriented: .vertical).onTapGesture   {
+                            setEditorViewModel.saveEdits()
+                            presentationMode.wrappedValue.dismiss()
+                        }
+                        
+                        NamedButton( "dicard edits", and: "trash", oriented: .vertical ).onTapGesture { presentationMode.wrappedValue.dismiss() }
+                        
+                        NamedButton(!quickEditor ? "Quick Set Editor" : "Full Set Editor", and: "arrow.2.squarepath", oriented: .vertical)
+                            .onTapGesture { quickEditor.toggle() }
                     }
-                    
-                    NamedButton( "dicard edits", and: "trash", oriented: .vertical ).onTapGesture { presentationMode.wrappedValue.dismiss() }
-                    
-                    NamedButton(!quickEditor ? "Quick Set Editor" : "Full Set Editor", and: "arrow.2.squarepath", oriented: .vertical)
-                        .onTapGesture { quickEditor.toggle() }
                 }
                 
-                
-                VStack {
-                    HStack {
-                        Text("Set Name: ")
-                        TextField(setEditorViewModel.name, text: $boundName).onChange(of: boundName, perform: { newValue in setEditorViewModel.changeName(with: newValue) })
-                    }
-                    
-                    HStack {
-                        Text("Description: ")
-                    //this needs to be update with the new axis perameter when on Xcode 14
-                        TextField("Insert Description", text: $boundDescription)
-                            .onChange(of: boundDescription, perform: { newValue in setEditorViewModel.changeDescription(with: newValue) })
-                    }
-                }.padding(.horizontal)
-                
-                if quickEditor { QuickSetEditorView() }
-                else { FullSetEditor() }
+                Calculator(shouldDisplayText: false)
+                    .environmentObject( appViewModel )
+            }.onAppear() {
+                boundName = setEditorViewModel.name
             }
-            
-            Calculator(shouldDisplayText: false)
-                .environmentObject( appViewModel )
-        }.onAppear() {
-            boundName = setEditorViewModel.name
-        }
+        }.ignoresSafeArea(.keyboard)
         
     }
 }
@@ -181,7 +182,7 @@ struct CardScroller<someView: View, contentView: View>: View {
             VStack {
                 Spacer()
                 if currentCardIndex + 1 < cards.count {
-                    content(currentCardIndex + 1)
+                    content(currentCardIndex + 1)                        
                         .transition( .asymmetric(insertion: .scale, removal: .opacity) )
                         .offset(y: globalFrame.height * (7/10))
                 }else { endButton }

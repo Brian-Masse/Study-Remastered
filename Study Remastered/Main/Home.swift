@@ -16,31 +16,38 @@ struct HomeView: View {
     
     var body: some View {
         
-        VStack {
-            
-            HStack(spacing: 0) {
-                Text( user.getFormattedName() )
-                    .onTapGesture { showingProfile = true }
+        GeometryReader { geo in
+            VStack {
+                
+                HStack(spacing: 0) {
+                    Text( user.getFormattedName() )
+                        .onTapGesture { showingProfile = true }
+                }
+                
+                NamedButton("Save User", and: "person.badge.key", oriented: .horizontal)
+                    .onTapGesture { user.save(withUpdateToUser: true) }
+                
+                Spacer()
+                
+                ScrollView(.vertical) {
+                    ForEach( user.sets.indices, id: \.self) { index in
+                        SetPreviewView()
+                            .environmentObject( user.sets[index] )
+                    }
+                }
+                .frame(maxHeight: geo.size.height / 2)
+                .padding(5)
+                .overlay( RoundedRectangle(cornerRadius: 15).stroke() )
+                .padding(5)
+                
+                NamedButton("Create New Set", and: "plus.rectangle.on.rectangle", oriented: .horizontal)
+                    .onTapGesture { user.addNewSet() }
+        
             }
-            
-            Spacer()
-            
-            ForEach( user.sets.indices, id: \.self) { index in
-                SetPreviewView()
-                    .environmentObject( user.sets[index] )
-                    .padding(.horizontal)
-            }
-            
-            NamedButton("Create New Set", and: "plus.rectangle.on.rectangle", oriented: .horizontal)
-                .onTapGesture { user.addNewSet() }
-            
-            NamedButton("Save User", and: "person.badge.key", oriented: .horizontal)
-                .onTapGesture { user.save(withUpdateToUser: true) }
+            .transition(.slide)
+            .background( ZStack { }
+                .fullScreenCover(isPresented: $showingProfile) { ProfileView() })
         }
-        .transition(.slide)
-        .background( ZStack { }
-            .fullScreenCover(isPresented: $showingProfile) { ProfileView() }
-        )
     }
 
 }
