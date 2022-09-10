@@ -9,20 +9,29 @@ import Foundation
 import SwiftUI
 
 
-class SetViewModel: ObservableObject, Identifiable, Codable, WrappedRealmObject {
+class SetViewModel: ObservableObject, Identifiable, Codable, WrappedRealmObject, Fileable {
 
     static let nameCharachterLimit = 50
     static let descriptionCharachterLimit = 500
     
+    //MARK: WrappedRealmObject Conformance
     var id: String = ""
     var owner: String = ""
     
+    func setOwnership(_ owner: String, _ id: String) {
+        self.owner = owner
+        self.id = id
+    }
+    
+    //MARK: Set Properties
     var cards: [ CardViewModel ] = []
 
-    @Published var name: String = "New Set"
+    @Published private(set) var name: String = "New Set"
     @Published var description: String = ""
     
     lazy var editorViewModel: SetEditorViewModel = SetEditorViewModel( self, in: globalFrame.width * 0.45)
+    
+    //MARK: init
     
     init( _ cards: [ CardViewModel ] ) {
         self.cards = cards
@@ -38,13 +47,36 @@ class SetViewModel: ObservableObject, Identifiable, Codable, WrappedRealmObject 
         self.setOwnership(AuthenticatorViewModel.shared.accessToken, UUID().uuidString )
     }
     
-    func setOwnership(_ owner: String, _ id: String) {
-        self.owner = owner
-        self.id = id
-    }
-    
     func addCard(with card: CardViewModel) {
         cards.append(card)
+    }
+    
+    //MARK: Fileable Conformance
+    
+    private(set) var path: FileURL = mainDirectory
+    
+    var icon: String = "photo.on.rectangle.angled"
+    
+    func changeURL(with url: FileURL) {
+        print(url.string())
+        self.path = url
+        self.save()
+    }
+    
+    func delete() {
+        let user = AuthenticatorViewModel.shared.activeUser.user!
+        user.deleteSet(with: self)
+        FileManager.shared.deleteFile(at: path, name: name)
+    }
+    
+    func changeName(_ newName: String) {
+        self.name = newName
+        self.save()
+    }
+    
+    @ViewBuilder func tapGesture() -> AnyView? {
+        AnyView(SetView()
+            .environmentObject(self))
     }
     
     //MARK: Serialization
@@ -57,12 +89,14 @@ class SetViewModel: ObservableObject, Identifiable, Codable, WrappedRealmObject 
         case cards
         case name
         case description
+        case url
     }
 
     func encode(to encoder: Encoder) throws {
         Utilities.shared.encodeData(name, using: encoder, with: CodingKeys.name)
         Utilities.shared.encodeData(description, using: encoder, with: CodingKeys.description)
         Utilities.shared.encodeData(cards, using: encoder, with: CodingKeys.cards)
+        Utilities.shared.encodeData(path, using: encoder, with: CodingKeys.url)
     }
 
     required init(from decoder: Decoder) throws {
@@ -71,6 +105,7 @@ class SetViewModel: ObservableObject, Identifiable, Codable, WrappedRealmObject 
         name =          Utilities.shared.decodeData(in: values, with: CodingKeys.name, defaultValue: "")!
         description =   Utilities.shared.decodeData(in: values, with: CodingKeys.description, defaultValue: "")!
         cards =         Utilities.shared.decodeData(in: values, with: CodingKeys.cards, defaultValue: [])!
+        path =          Utilities.shared.decodeData(in: values, with: CodingKeys.url, defaultValue: mainDirectory)!
     }
 //
     //MARK: Utilities

@@ -7,6 +7,7 @@
 
 import Foundation
 import RealmSwift
+import SwiftUI
 
 struct File {
     
@@ -29,7 +30,8 @@ protocol Fileable: Codable {
     
     var path: FileURL { get }
     
-    var name: String { get set }
+    var name: String { get }
+    var icon: String { get set }
     
     func changeURL(with : FileURL) -> Void
     
@@ -39,6 +41,8 @@ protocol Fileable: Codable {
     /// this needs to change the name of the object (such as changing a set name), change the name property under `fileable`
     func changeName(_ newName: String) -> Void
     
+    func tapGesture() -> AnyView?
+    
 }
 
 class test: Fileable {
@@ -46,6 +50,7 @@ class test: Fileable {
     private(set) var path: FileURL
     
     var name: String
+    var icon: String = "doc.richtext"
     
     init( at path: FileURL, name: String ) {
         
@@ -66,7 +71,7 @@ class test: Fileable {
         path.setFile(with: newName)
     }
     
-    
+    func tapGesture() -> AnyView? { return nil }
 }
 
 class HiddenFile: Fileable, WrappedRealmObject {
@@ -79,6 +84,7 @@ class HiddenFile: Fileable, WrappedRealmObject {
     var path: FileURL
     
     var name: String
+    var icon: String = ""
     
     init(at url: FileURL ) {
         
@@ -105,6 +111,8 @@ class HiddenFile: Fileable, WrappedRealmObject {
     }
     
     func changeName(_ newName: String) { }
+    func tapGesture() -> AnyView? { return nil }
+    
 }
 
 

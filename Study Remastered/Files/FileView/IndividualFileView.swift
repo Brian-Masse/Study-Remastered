@@ -14,24 +14,41 @@ struct IndividualFileView: View {
     let file: File
     let displayType: FileView.FileViewType
 
+    @Binding var activeURL: FileURL
     @Binding var activeFile: String
     @Binding var trigger: FileView.TriggerType
+    
+    @State var displayView: Bool = false
+    
+    @ObservedObject var viewWrapper: ViewWrapper = ViewWrapper()
+    
+    class ViewWrapper: ObservableObject {
+        @Published var view: AnyView!
+    }
     
     let interactable: Bool
     
     var body: some View {
     
-        FileItemView(name: file.data.name, icon: "doc.richtext", url: file.data.path,
+        FileItemView(name: file.data.name, icon: file.data.icon, url: file.data.path,
                      backgroundColor: .clear,
                      displayType: displayType)
         
+        .onTapGesture() {
+            if let view = file.data.tapGesture() {
+                viewWrapper.view = view
+                displayView = true
+            }
+        }
         .contextMenu {
             if interactable {
                 Button {
+                    activeURL = file.data.path
                     activeFile = file.data.name
                     trigger = .file
                 } label: { NamedLabel("Rename File", and: "square.and.pencil") }
                 Button {
+                    activeURL = file.data.path
                     activeFile = file.data.name
                     trigger = .moveFile
                 } label: { NamedLabel("Move File", and: "arrow.up.arrow.down") }
@@ -40,6 +57,7 @@ struct IndividualFileView: View {
                 } label: { NamedLabel("Delete File", and: "trash") }
             }
         }
+        .fullScreenCover(isPresented: $displayView) { viewWrapper.view }
     }
 }
 
@@ -109,6 +127,7 @@ struct FileItemView: View {
                 VStack {
                     Text( name )
                         .fontWeight(.bold)
+                        .minimumScaleFactor(0.7)
                         .padding(.top, 5)
                     
                     Spacer()

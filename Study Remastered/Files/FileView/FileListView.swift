@@ -60,7 +60,7 @@ struct FileListView: View {
                         }
                         
                         ForEach( directory.files.indices, id: \.self ) { index in
-                            IndividualFileView(file: directory.files[index], displayType: .list,
+                            IndividualFileView(file: directory.files[index], displayType: .list, activeURL: $activeURL,
                                                activeFile: $activeFile, trigger: $trigger, interactable: interactable)
                         }
                     }

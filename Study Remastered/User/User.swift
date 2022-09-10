@@ -34,7 +34,9 @@ class User: ObservableObject, Codable {
         let number = sets.count + 1
         let newName = "New Set \(number)"
         let newSet = SetViewModel([ newCardViewModel ], name: newName, description: "")
+        
         sets.append(newSet)
+        FileManager.shared.insertFile(File(newSet), createDirectory: false)
     }
     
     func deleteSet(with setViewModel: SetViewModel) {

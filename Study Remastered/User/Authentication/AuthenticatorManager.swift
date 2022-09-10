@@ -141,11 +141,13 @@ class AuthenticatorViewModel: ObservableObject {
             
             await RealmManager.shared.updatUserDataSubscriptions(with: accessToken)
             
-            if let user: UserData = RealmManager.shared.locateDataInRealm(key: accessToken) {
-                user.load()
-                activeUser = user
-                userLoaded = true
-                isSignedin = true
+            DispatchQueue.main.async{
+                if let user: UserData = RealmManager.shared.locateDataInRealm(key: self.accessToken) {
+                    user.load()
+                    self.activeUser = user
+                    self.userLoaded = true
+                    self.isSignedin = true
+                }
             }
         }
 //        else { signout() }

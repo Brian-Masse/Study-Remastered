@@ -61,7 +61,7 @@ class SetEditorViewModel: ObservableObject {
             }
         }
         //update name and description
-        if setViewModel!.name != name { setViewModel!.name = name }
+        if setViewModel!.name != name { setViewModel!.changeName(name)}
         if setViewModel!.description != description { setViewModel!.description = description }
     }
     

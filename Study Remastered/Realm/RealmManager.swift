@@ -35,8 +35,16 @@ class RealmManager: ObservableObject {
         
             let config = Migrator.shared.updateUserDataSchema(version: Migrator.userDataVersion, user: user)
             
-            do { realm = try await Realm(configuration: config, downloadBeforeOpen: .always) }
+            var tempRealm: Realm?
+            
+            do { tempRealm = try await Realm(configuration: config, downloadBeforeOpen: .always) }
             catch { print( "error creating the Realm: \(error.localizedDescription)" ) }
+            
+            if let realm = tempRealm {
+                DispatchQueue.main.sync {
+                    self.realm = realm
+                }
+            }
             
             //when this runs, no user is signed in, so it passes a blank token
             //when the authenticatorHandler is initialized, and the callback for userSigning in is called, it will also update the subscriptions with the correct token query

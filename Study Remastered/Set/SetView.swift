@@ -125,7 +125,7 @@ struct SetSettingsView: View {
                 .onTapGesture {
                     presentationMode.wrappedValue.dismiss()
                     toggleSetView()
-                    user.deleteSet(with: setViewModel)
+                    setViewModel.delete()
                 }
         }
         

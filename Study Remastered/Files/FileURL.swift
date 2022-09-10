@@ -7,7 +7,7 @@
 
 import Foundation
 import SwiftUI
-
+import Combine
 
 //MARK: FILEURL
 ///when this list grows / shrinks, the file name must be given to the tail to ensure proper comparison
@@ -22,8 +22,8 @@ class FileURL: Equatable, Codable { //acts as a linked list
     }
     
     private(set) var file: String? = nil
-    var head: FileURLNode!
-    var tail: FileURLNode!
+    @Published var head: FileURLNode!
+    @Published var tail: FileURLNode!
     
 //    { didSet { length = getLength() }}
 //    lazy var length: Int = getLength()
@@ -180,10 +180,10 @@ class FileURL: Equatable, Codable { //acts as a linked list
 //MARK: FileURLNode
 /// if a `URLNode` has a non nil `file` property, then it will not be considered automatically when matching with other urls:
 ///:/main/second/third/fileName == :/main/second/third
-class FileURLNode: Equatable {
+class FileURLNode: Equatable, ObservableObject {
 
     var file: String? = nil
-    var name: String
+    @Published var name: String
     var next: FileURLNode?
     
     init(_ name: String, _ next: FileURLNode? = nil) {

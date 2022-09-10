@@ -69,7 +69,7 @@ struct FileView: View {
                         .onTapGesture { FileManager.shared.createDirectory(at: url) }
                 }
                 
-                if trigger != .none {
+                if trigger == .file || trigger == .directory {
                     ZStack {
                         RoundedRectangle(cornerRadius: 20)
                             .foregroundColor(.white)
@@ -81,8 +81,7 @@ struct FileView: View {
                                 NamedButton("done", and: "checkmark.square", oriented: .horizontal)
                                     .onTapGesture { if checkDirectoryName() {
                                         if trigger == .directory {
-                                            fileManager.changeDirectoryName(at: url, to: enteredText)
-                                            url = fileManager.main.url
+                                            url = fileManager.changeDirectoryName(at: url, to: enteredText)
                                         }
                                         if trigger == .file { fileManager.changeFileName(at: url, name: activeFile, to: enteredText) }
                                         trigger = .none

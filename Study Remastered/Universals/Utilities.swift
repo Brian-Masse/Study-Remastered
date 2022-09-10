@@ -15,13 +15,13 @@ class Utilities {
         var values = encoder.container(keyedBy: K.self)
         
         do { try values.encode(data, forKey: key) }
-        catch { print( "there was en error encoding the data, keyed by: \( key.stringValue ) using: \( values )" ) }
+        catch { print( "there was en error encoding the data, keyed by: \( key.stringValue ) using: \( values ): \(error.localizedDescription)" ) }
     }
     
     func decodeData<T: Decodable, K: CodingKey>( in values: KeyedDecodingContainer<K>, with key: KeyedDecodingContainer<K>.Key, defaultValue: T? = nil ) -> T? {
         var value: T? = defaultValue
         do { value = try values.decode(T.self, forKey: key) }
-        catch { print( "there was an error decoding the data, keyed by: \( key.stringValue ), using: \(values)" ) }
+        catch { print( "there was an error decoding the data, keyed by: \( key.stringValue ), using: \(values): \(error.localizedDescription)" ) }
         return value
     }
 }

@@ -64,7 +64,7 @@ struct FileColumnView: View {
                 LazyVGrid(columns: [ .init(.adaptive(minimum: width, maximum: .infinity), spacing: Constants.space, alignment: .center) ], alignment: .leading, spacing: 10) {
                     
                     ForEach( directory.files, id: \.data.name ) { file in
-                        IndividualFileView(file: file, displayType: .column,
+                        IndividualFileView(file: file, displayType: .column, activeURL: $activeURL,
                                            activeFile: $activeFile, trigger: $trigger, interactable: true)
                         .aspectRatio(Constants.ratio, contentMode: .fit)
                     }

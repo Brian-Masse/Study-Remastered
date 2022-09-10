@@ -19,14 +19,7 @@ class FileManager: ObservableObject {
     var observer: AnyCancellable!
     
     init() {
-    
-        
-        for file in data {
-            insertFiles( [file], createDirectory: true)
-        }
-        
         self.observer = main.objectWillChange.sink() { self.objectWillChange.send() }
-        
     }
     
     subscript( url: FileURL ) -> Directory {
@@ -86,13 +79,13 @@ class FileManager: ObservableObject {
     
     //MARK: Change Functions
     
-    func changeDirectoryName(at url: FileURL, to newName: String) {
+    func changeDirectoryName(at url: FileURL, to newName: String) -> FileURL {
         
-        guard let directory = findFileURLMatch(at: url) else { return }
+        guard let directory = findFileURLMatch(at: url) else { return mainDirectory }
         
         let containingURL = directory.getContainerDirectory().url
         
-        directory.changeURL(with: containingURL, name: newName)
+        return directory.changeURL(with: containingURL, name: newName)
     }
     
     func changeFileName( at url: FileURL, name: String, to newName: String ) {
@@ -141,7 +134,7 @@ class FileManager: ObservableObject {
         containingDirectory.directories.remove(at: index)
         
         newDirectory.directories.append( directory )
-        directory.changeURL(with: newURL)
+        let _ = directory.changeURL(with: newURL)
         
     
     }
@@ -162,7 +155,7 @@ class FileManager: ObservableObject {
         
         guard let newDirectory = findFileURLMatch(at: url) else { return }
         
-        for directory in directory.directories { directory.changeURL(with: url) }
+        for directory in directory.directories { let _ = directory.changeURL(with: url) }
         for file in directory.files { file.data.changeURL(with: url) }
         
         newDirectory.directories.append(contentsOf: directory.directories )
@@ -190,7 +183,7 @@ class FileManager: ObservableObject {
 //MARK: Directory
 class Directory: ObservableObject {
     
-    private(set) var url: FileURL
+    @Published private(set) var url: FileURL
     
     var name: String { url.tail.name }
     
@@ -198,6 +191,8 @@ class Directory: ObservableObject {
     @Published var files: [ File ] = []
     
     var hiddenFile: File!
+    
+    var observer: AnyCancellable!
     
     init( at path: FileURL ) {
         self.url = path
@@ -234,13 +229,14 @@ class Directory: ObservableObject {
         return FileManager.shared[containingURL]
     }
     
-    func changeURL(with url: FileURL, name: String? = nil) {
+    func changeURL(with url: FileURL, name: String? = nil) -> FileURL {
         let newURL = FileURL(startPath: url, adding: name == nil ? self.name : name!  )
         for file in files { file.data.changeURL(with: newURL) }
-        for directory in directories { directory.changeURL(with: newURL) }
+        for directory in directories { let _ = directory.changeURL(with: newURL) }
         hiddenFile.data.changeURL(with: newURL)
         
         self.url = newURL
+        return newURL
     }
     
     func delete() {
